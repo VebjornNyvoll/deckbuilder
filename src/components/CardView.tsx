@@ -87,8 +87,8 @@ export default function CardView() {
     const listItem = (card: Card) => {
         return (
             <div className="col-12">
-                <div className="flex flex-column rem xl:flex-row xl:align-items-start p-4 gap-4">
-                    <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={placeholder} alt={card.name} />
+                <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
+                    <img className="w-10rem shadow-2 block xl:block mx-auto border-round" src={placeholder} alt={card.name} />
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                         <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                             <div className="text-2xl font-bold text-900">{card.name}</div>
@@ -100,7 +100,10 @@ export default function CardView() {
                                 </span>
                                 <Tag value={card.faction} severity={getSeverity(card)}></Tag>
                             </div>
-                            {card.flavor}
+                            <div>
+                                <p className='p-0 m-0'>Attack: {card.attack}</p>
+                                <p>Health: {card.health}</p>
+                            </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                             <span className="text-2xl font-semibold">Cost: {card.cost}</span>
@@ -127,7 +130,11 @@ export default function CardView() {
                         <img className="w-9 shadow-2 border-round" src={placeholder} alt={card.name} />
                         <div className="text-2xl font-bold">{card.name}</div>
                         {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
-                        <p>{card.flavor}</p>
+                        <div>
+                            <p className='p-0 m-0'>Attack: {card.attack}</p>
+                            <p>Health: {card.health}</p>
+                            <p>{card.flavor}</p>
+                        </div>
                     </div>
                     <div className="flex align-items-center justify-content-between">
                         <span className="text-2xl font-semibold">Cost: {card.cost}</span>
