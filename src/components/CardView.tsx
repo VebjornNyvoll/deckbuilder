@@ -92,7 +92,7 @@ export default function CardView() {
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                         <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                             <div className="text-2xl font-bold text-900">{card.name}</div>
-                            <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating>
+                            {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
                             <div className="flex align-items-center gap-3">
                                 <span className="flex align-items-center gap-2">
                                     <i className="pi pi-book"></i>
@@ -126,7 +126,7 @@ export default function CardView() {
                     <div className="flex flex-column align-items-center gap-3 py-5">
                         <img className="w-9 shadow-2 border-round" src={placeholder} alt={card.name} />
                         <div className="text-2xl font-bold">{card.name}</div>
-                        <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating>
+                        {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
                         <p>{card.flavor}</p>
                     </div>
                     <div className="flex align-items-center justify-content-between">
