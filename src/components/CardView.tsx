@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { CardService } from '../service/CardService';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
-import { Rating } from 'primereact/rating';
 import { Tag } from 'primereact/tag';
 import placeholder from '../img/placeholder.jpg';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
@@ -57,13 +56,18 @@ export default function CardView() {
         switch (card.faction) {
             case 'Alliance':
                 return 'success';
-
-            case 'LOWSTOCK':
+            case 'Scourge':
+                return 'success';
+            case 'Explorer':
                 return 'warning';
-
-            case 'OUTOFSTOCK':
+            case 'Legion':
+                return 'warning';
+            case 'Horde':
                 return 'danger';
-
+            case 'Empire':
+                 return 'danger';
+            case 'Pirate':
+                return 'danger';
             default:
                 return null;
         }
@@ -121,7 +125,7 @@ export default function CardView() {
                 <div className="p-4 border-1 surface-border surface-card border-round">
                     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                         <div className="flex align-items-center gap-2">
-                            <i className="pi pi-tag"></i>
+                            <i className="pi pi-book"></i>
                             <span className="font-semibold">{card.cardSet}</span>
                         </div>
                         <Tag value={card.faction} severity={getSeverity(card)}></Tag>
