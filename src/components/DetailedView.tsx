@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { CardService } from '../service/CardService';
 import { Card } from './CardView';
+import Navbar from './Navbar';
 interface Review {
     user: string;
     rating: number;
@@ -31,6 +32,8 @@ export default function DetailedView() {
     if (!card) return <div>Loading...</div>;
 
     return (
+        <>
+        <Navbar/>
         <div className="detailed-view">
             <h1>{card.name}</h1>
 
@@ -60,5 +63,6 @@ export default function DetailedView() {
                 ))}
             </div>
         </div>
+        </>
     );
 }

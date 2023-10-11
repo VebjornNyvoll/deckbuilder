@@ -4,6 +4,7 @@ import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { classNames } from 'primereact/utils';
 import { OverlayPanel } from 'primereact/overlaypanel';
+import Navbar from './components/Navbar';
 
 
 export default function Deck() {
@@ -32,7 +33,7 @@ export default function Deck() {
                           New deck
                       </button>
                       <OverlayPanel ref={overlayPanel}>
-                        <p>test</p>
+                        <p>Unfortunately, the deck page is not finished yet</p>
                       </OverlayPanel>
                     </div>
                   )
@@ -42,11 +43,15 @@ export default function Deck() {
      
     ];
     return (
+      <>
+      <Navbar/>
       <div className="flex">
+        
         <Menu model={items}/>
         <div className='w-12'>
           <CardView/>
         </div>
       </div>
+      </>
     )
 }

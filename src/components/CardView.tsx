@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
-import ToolTipComponent from './ToolTipComponent';
+import CardTooltip from './CardTooltip';
 import { Link } from 'react-router-dom';
 
 
@@ -141,7 +141,7 @@ export default function CardView() {
                         <div className="text-2xl font-bold">{card.name}</div>
                         {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
                         <div>
-                            <ToolTipComponent card={card}></ToolTipComponent>
+                            <CardTooltip card={card}></CardTooltip>
                             <p className='p-0 m-0'>{card.attack ? "Attack: " + card.attack.toString() : "No attack"}</p>
                             <p>{card.health ? "Health: " + card.health.toString() : "No health"}</p>
                             <p>{card.flavor ? "Flavor: " + card.flavor.toString() : "No flavor"}</p>
