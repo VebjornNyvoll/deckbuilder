@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import CardView from './components/CardView';
+import ReactRouter from './components/ReactRouter';
 
-
-export default function App() {
+function App() {
     return (
-        <div className="card">
-            <CardView/>
-        </div>
-    )
+        <ReactRouter />
+    );
 }
+
+export default App;
