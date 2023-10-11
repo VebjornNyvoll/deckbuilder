@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Tooltip } from 'primereact/tooltip';
-import { Button } from 'primereact/button';
 
 
 interface Mechanic {
@@ -34,7 +33,7 @@ interface ToolTipProps {
     card: Card
 }
 
-const ToolTipComponent: React.FC<ToolTipProps> = ({ card }) => {
+const CardTooltip: React.FC<ToolTipProps> = ({ card }) => {
     const whitelistedKeys = ['cardId', 'name', 'type', 'faction', 'rarity']; // Add or remove keys as needed
 
     return (
@@ -61,7 +60,7 @@ const ToolTipComponent: React.FC<ToolTipProps> = ({ card }) => {
 
 }
 
-export default ToolTipComponent
+export default CardTooltip
 
 
 
