@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { CardService } from '../service/CardService';
 import { Button } from 'primereact/button';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
-import placeholder from '../img/placeholder.jpg';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import ToolTipComponent from './ToolTipComponent';
+import { Link } from 'react-router-dom';
+
+
 interface SortOption {
     label: string;
     value: string;
@@ -14,7 +16,7 @@ interface SortOption {
 interface Mechanic {
     name: string;
 }
-interface Card {
+export interface Card {
     cardId: string;
     dbfId: number;
     name: string;
@@ -92,7 +94,9 @@ export default function CardView() {
         return (
             <div className="col-12">
                 <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
+                    <Link to={`/detail/${card.cardId}`}>
                     <img className="w-10rem shadow-2 block xl:block mx-auto border-round" src={card.img} alt={card.name} />
+                    </Link>
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                         <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                             <div className="text-2xl font-bold text-900">{card.name}</div>
@@ -131,7 +135,9 @@ export default function CardView() {
                         <Tag value={card.faction} severity={getSeverity(card)}></Tag>
                     </div>
                     <div className="flex flex-column align-items-center gap-3 py-5">
+                        <Link to={`/detail/${card.cardId}`}>
                         <img className={"w-9 shadow-2 border-round" + " " + card.cardId} src={card.img} alt={card.name} />
+                        </Link>
                         <div className="text-2xl font-bold">{card.name}</div>
                         {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
                         <div>
