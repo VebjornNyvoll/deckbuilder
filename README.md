@@ -1,27 +1,30 @@
-# React + TypeScript + Vite
+Introduksjon
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dette prosjektet er en applikasjon bygd på toppen av en Hearthstone API. Den lar brukere utforske ulike Hearthstone-kort basert på mockdata hentet direkte fra API-en.
 
-Currently, two official plugins are available:
+Forutsetninger
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+    Node 20
+    npm (som følger med Node.js)
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Klone Repositoriet:
 
-- Configure the top-level `parserOptions` property like this:
+`git clone https://gitlab.stud.idi.ntnu.no/it2810-h23/team-66/prosjekt-2.git`
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+Naviger til Prosjektmappe:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+   `cd prosjekt-2`
+
+Installer Avhengigheter:
+
+   `npm i`
+
+Nåværende Funksjonalitet
+
+Applikasjonen er for øyeblikket basert på mockdata. Dette betyr at all data som blir presentert er hentet fra en tidligere tilstand av API-en og lagret lokalt i stedet for å bli hentet i sanntid.
+
+
+Fremtidige Planer
+
+I fremtiden planlegger vi å utvide denne applikasjonen ved å implementere en egen "deckbuilder" -funksjon. Denne vil tillate brukere å lage egendefinerte kortstokker, og vi vil støtte denne funksjonaliteten med vår egen backend. Backended vil også erstette mockupdataen.
