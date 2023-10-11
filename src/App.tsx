@@ -7,66 +7,60 @@ import { Tag } from 'primereact/tag';
 import placeholder from './img/placeholder.jpg';
 import { HearthStoneInfo } from './service/HearthStoneInfo';
 
-interface Card {
-    id: number;
-    image: string;
+import { Tooltip } from 'primereact/tooltip';
+
+
+interface Mechanic {
     name: string;
-    attack: number;
-    health: number;
-    type: string;
-    rarity: string;
-    mana: number;
-    description: string;
 }
 
-interface Product {
-    id: string;
-    code: string;
-    name: string;
-    description: string;
-    image: string;
-    price: number;
-    category: string;
-    quantity: number;
-    inventoryStatus: string;
-    rating: number;
+interface HearthStoneCardProps {
+    cardId?: string;
+    dbfId?: number;
+    name?: string;
+    cardSet?: string;
+    type?: string;
+    faction?: string;
+    rarity?: string;
+    cost?: number;
+    attack?: number;
+    health?: number;
+    text?: string;
+    flavor?: string;
+    artist?: string;
+    collectible?: boolean;
+    elite?: boolean;
+    playerClass?: string;
+    img?: string;
+    imgGold?: string;
+    locale?: string;
+    mechanics?: Mechanic[];
+    spellSchool?: string;
+    race?:string;
 }
 
-export default function BasicDemo() {
-    const [products, setProducts] = useState<Product[]>([]);
+
+const BasicDemo: React.FC<HearthStoneCardProps> =   () => {
     const [layout, setLayout] = useState('grid');
-    const [cards, setCards] = useState<Card[]>([]);
-
-    useEffect(() => {
-        HearthStoneInfo.getCards().then((data) => setCards(data.slice(0, 12)));
-    }, []);
+    const [cards, setCards] = useState<HearthStoneCardProps[]>();
 
 
     useEffect(() => {
-        ProductService.getProducts().then((data) => setProducts(data.slice(0, 12)));
-    }, []);
-
-    const getSeverity = ({product}: { product: any }) => {
-        switch (product.inventoryStatus) {
-            case 'INSTOCK':
-                return 'success';
-
-            case 'LOWSTOCK':
-                return 'warning';
-
-            case 'OUTOFSTOCK':
-                return 'danger';
-
-            default:
-                return null;
+        const fetchData = async () => {
+            setCards(await HearthStoneInfo.getCards())
         }
-    };
+        fetchData();
+    }, [])
 
-    const listItem = (card: Card) => {
+    console.log(cards);
+    
+
+
+    const listItem = (card: HearthStoneCardProps) => {
         return (
             <div className="col-12">
                 <div className="flex flex-column rem xl:flex-row xl:align-items-start p-4 gap-4">
-                    <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={placeholder} alt={card.name} />
+                    <img className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" src={card.img} alt={card.name} />
                     <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                         <div className="text-2xl font-bold text-900">{card.name}</div>
                         <div className="flex align-items-center gap-3">
@@ -78,46 +72,44 @@ export default function BasicDemo() {
                         </div>
                     </div>
                     <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                        <span className="text-2xl font-semibold">{card.mana} Mana</span>
+                        <span className="text-2xl font-semibold">Attack: {card.attack} </span>
                     </div>
                 </div>
             </div>
         );
     };
 
-
-    const gridItem = (product: Product) => {
+    const gridItem = (card: HearthStoneCardProps) => {
         return (
             <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
                 <div className="p-4 border-1 surface-border surface-card border-round">
                     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                         <div className="flex align-items-center gap-2">
-                            <i className="pi pi-tag"></i>
-                            <span className="font-semibold">{product.category}</span>
+                           
+                            <span className="font-semibold">{card.artist ? card.artist : "No artist"}</span>
                         </div>
-                        <Tag value={product.inventoryStatus} severity={getSeverity({product: product})}></Tag>
                     </div>
                     <div className="flex flex-column align-items-center gap-3 py-5">
-                        <img className="w-9 shadow-2 border-round" src={placeholder} alt={product.name} />
-                        <div className="text-2xl font-bold">{product.name}</div>
-                        <Rating value={product.rating} readOnly cancel={false}></Rating>
+                        <img className="w-9 shadow-2 border-round" src={card.img ? card.img : placeholder} alt={card.cardId} />
+                        <div className="text-2xl font-bold">{card.name}</div>
+                        
                     </div>
                     <div className="flex align-items-center justify-content-between">
-                        <span className="text-2xl font-semibold">${product.price}</span>
-                        <Button icon="pi pi-shopping-cart" className="p-button-rounded" disabled={product.inventoryStatus === 'OUTOFSTOCK'}></Button>
+                        <span className="text-2xl font-semibold">Attack: {card.attack}</span>
+
                     </div>
                 </div>
             </div>
         );
     };
 
-    const itemTemplate = (product: Product, layout: string) => {
-        if (!product) {
+    const itemTemplate = (card: HearthStoneCardProps, layout: string) => {
+        if (!card) {
             return;
         }
 
-        if (layout === 'list') return listItem(product);
-        else if (layout === 'grid') return gridItem(product);
+        if (layout === 'list') return listItem(card);
+        else if (layout === 'grid') return gridItem(card);
     };
 
     const header = () => {
@@ -130,7 +122,9 @@ export default function BasicDemo() {
 
     return (
         <div className="card">
-            <DataView value={products} itemTemplate={itemTemplate} layout={layout} header={header()} />
+            <DataView value={cards} itemTemplate={itemTemplate} layout={layout} header={header()} />
         </div>
     )
 }
+
+export default BasicDemo
