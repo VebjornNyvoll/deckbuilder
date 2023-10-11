@@ -5,7 +5,7 @@ import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Tag } from 'primereact/tag';
 import placeholder from '../img/placeholder.jpg';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
-
+import ToolTipComponent from './ToolTipComponent';
 interface SortOption {
     label: string;
     value: string;
@@ -92,7 +92,7 @@ export default function CardView() {
         return (
             <div className="col-12">
                 <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
-                    <img className="w-10rem shadow-2 block xl:block mx-auto border-round" src={placeholder} alt={card.name} />
+                    <img className="w-10rem shadow-2 block xl:block mx-auto border-round" src={card.img} alt={card.name} />
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
                         <div className="flex flex-column align-items-center sm:align-items-start gap-3">
                             <div className="text-2xl font-bold text-900">{card.name}</div>
@@ -105,12 +105,12 @@ export default function CardView() {
                                 <Tag value={card.faction} severity={getSeverity(card)}></Tag>
                             </div>
                             <div>
-                                <p className='p-0 m-0'>Attack: {card.attack}</p>
-                                <p>Health: {card.health}</p>
+                                <p className='p-0 m-0'>{card.attack ? "Attack: " + card.attack.toString() : "No attack"}</p>
+                                <p>{card.health ? "Health: " + card.health.toString() : "No health"}</p>
                             </div>
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                            <span className="text-2xl font-semibold">Cost: {card.cost}</span>
+                            <span className="text-2xl font-semibold">{card.cost ? "Cost: " + card.cost.toString() : "No cost"}</span>
                             <Button icon="pi pi-plus" className="p-button-rounded" disabled={card.faction === 'OUTOFSTOCK'}></Button>
                         </div>
                     </div>
@@ -131,17 +131,18 @@ export default function CardView() {
                         <Tag value={card.faction} severity={getSeverity(card)}></Tag>
                     </div>
                     <div className="flex flex-column align-items-center gap-3 py-5">
-                        <img className="w-9 shadow-2 border-round" src={placeholder} alt={card.name} />
+                        <img className={"w-9 shadow-2 border-round" + " " + card.cardId} src={card.img} alt={card.name} />
                         <div className="text-2xl font-bold">{card.name}</div>
                         {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
                         <div>
-                            <p className='p-0 m-0'>Attack: {card.attack}</p>
-                            <p>Health: {card.health}</p>
-                            <p>{card.flavor}</p>
+                            <ToolTipComponent card={card}></ToolTipComponent>
+                            <p className='p-0 m-0'>{card.attack ? "Attack: " + card.attack.toString() : "No attack"}</p>
+                            <p>{card.health ? "Health: " + card.health.toString() : "No health"}</p>
+                            <p>{card.flavor ? "Flavor: " + card.flavor.toString() : "No flavor"}</p>
                         </div>
                     </div>
                     <div className="flex align-items-center justify-content-between">
-                        <span className="text-2xl font-semibold">Cost: {card.cost}</span>
+                        <span className="text-2xl font-semibold">{card.cost ? "Cost: " + card.cost.toString() : "No cost"}</span>
                         <Button icon="pi pi-plus" className="p-button-rounded" disabled={card.faction === 'OUTOFSTOCK'}></Button>
                     </div>
                 </div>
