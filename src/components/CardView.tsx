@@ -6,6 +6,8 @@ import { Tag } from 'primereact/tag';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import CardTooltip from './CardTooltip';
 import { Link } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog'
+
 
 
 interface SortOption {
@@ -45,6 +47,7 @@ export default function CardView() {
     const [sortKey, setSortKey] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<number>(0);
     const [sortField, setSortField] = useState<string>('');
+    const [popupView, setVisible] = useState(false);
     const sortOptions: SortOption[] = [
         { label: 'Cost: High to Low', value: '!cost' },
         { label: 'Cost: Low to High', value: 'cost' }
@@ -89,6 +92,10 @@ export default function CardView() {
       }
   };
 
+    function handleAddCardClick(event: { preventDefault: () => void; }) {
+        event.preventDefault();
+    }
+    
 
     const listItem = (card: Card) => {
         return (
@@ -115,7 +122,7 @@ export default function CardView() {
                         </div>
                         <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                             <span className="text-2xl font-semibold">{card.cost ? "Cost: " + card.cost.toString() : "No cost"}</span>
-                            <Button icon="pi pi-plus" className="p-button-rounded" disabled={card.faction === 'OUTOFSTOCK'}></Button>
+                            <Button icon="pi pi-plus" className="p-button-rounded"  onClick={handleAddCardClick} disabled={card.faction === 'OUTOFSTOCK'}></Button>
                         </div>
                     </div>
                 </div>
@@ -123,21 +130,25 @@ export default function CardView() {
         );
     };
 
+    
+
     const gridItem = (card: Card) => {
         return (
             <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
+                <Link to={`/detail/${card.cardId}`}>
                 <div className="p-4 border-1 surface-border surface-card border-round">
+                    
                     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                         <div className="flex align-items-center gap-2">
                             <i className="pi pi-book"></i>
                             <span className="font-semibold">{card.cardSet}</span>
                         </div>
-                        <Tag value={card.faction} severity={getSeverity(card)}></Tag>
+                        <Tag value={card.faction || "No Faction"} severity={getSeverity(card)}></Tag>
                     </div>
                     <div className="flex flex-column align-items-center gap-3 py-5">
-                        <Link to={`/detail/${card.cardId}`}>
+                        
                         <img className={"w-9 shadow-2 border-round" + " " + card.cardId} src={card.img} alt={card.name} />
-                        </Link>
+                        
                         <div className="text-2xl font-bold">{card.name}</div>
                         {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
                         <div>
@@ -147,11 +158,13 @@ export default function CardView() {
                             <p>{card.flavor ? "Flavor: " + card.flavor.toString() : "No flavor"}</p>
                         </div>
                     </div>
+                    
                     <div className="flex align-items-center justify-content-between">
                         <span className="text-2xl font-semibold">{card.cost ? "Cost: " + card.cost.toString() : "No cost"}</span>
-                        <Button icon="pi pi-plus" className="p-button-rounded" disabled={card.faction === 'OUTOFSTOCK'}></Button>
+                        <Button icon="pi pi-plus" className="p-button-rounded" onClick={handleAddCardClick} disabled={card.faction === 'OUTOFSTOCK'}></Button>
                     </div>
                 </div>
+                </Link>
             </div>
         );
     };
