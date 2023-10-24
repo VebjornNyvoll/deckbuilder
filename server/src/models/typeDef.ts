@@ -7,8 +7,8 @@ const typeDefs = `
   type User{
     id: ID
     username: String
-    password: String
     decks: [Deck]
+    error: Error!
   }
 
   type Deck{
@@ -16,8 +16,21 @@ const typeDefs = `
   }
 
   type Mutation {
-    createUser(username: String, password: String): User
+    createUser(username: String!, password: String!): User!
+    login(username: String!, password: String!): AuthPayload!
   }
+
+  type AuthPayload {
+    token: String
+    user: User
+    error: Error!
+  }
+
+  type Error {
+    message: String!
+    error: Boolean!
+  }
+
 `;
 
-export {typeDefs};
+export { typeDefs };
