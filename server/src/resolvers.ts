@@ -35,7 +35,10 @@ const resolvers = {
           decks: [],
         });
         await newUser.save();
-        return newUser;
+        payload.username = newUser.username;
+        payload.decks = newUser.decks;
+        payload.id = newUser.id;
+        return payload;
       }
     },
 
