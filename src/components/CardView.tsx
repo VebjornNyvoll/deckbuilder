@@ -4,7 +4,9 @@ import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 
-import {ListItem, GridItem, Card} from './CardItem';
+import {ListItem, GridItem, Card, CardPopUp} from './CardItem';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 
 interface SortOption {
     label: string;
@@ -13,6 +15,7 @@ interface SortOption {
 
 export default function CardView() {
     const [cards, setCards] = useState<Card[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [layout, setLayout] = useState('grid');
     const [sortKey, setSortKey] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<number>(0);
@@ -21,6 +24,7 @@ export default function CardView() {
         { label: 'Cost: High to Low', value: '!cost' },
         { label: 'Cost: Low to High', value: 'cost' }
     ];
+
 
     useEffect(() => {
         CardService.getCards().then((data) => setCards(data.slice(0, 12)));
@@ -41,12 +45,21 @@ export default function CardView() {
       }
     };
 
+    const openDialog = () => {
+        setIsDialogOpen(true)
+    };
+
+    const closeDialog = () => {
+        setIsDialogOpen(false);
+    };
+
+
     const itemTemplate = (card: Card, layout: string) => {
         if (!card) {
             return;
         }
-        if (layout === 'list') return <ListItem card = {card}  />;
-        else if (layout === 'grid') return <GridItem card = {card}  />;
+        if (layout === 'list') return (<ListItem card = {card} onClick={openDialog} />);
+        else if (layout === 'grid') return (<GridItem card = {card} onClick={openDialog} />);
     };
 
     const header = () => {
@@ -61,6 +74,7 @@ export default function CardView() {
     return (
         <div className="card">
             <DataView value={cards} itemTemplate={itemTemplate} sortField={sortField} sortOrder={sortOrder} layout={layout} header={header()} />
+            <CardPopUp open = {isDialogOpen} onClose={closeDialog}></CardPopUp>
         </div>
     )
 }
