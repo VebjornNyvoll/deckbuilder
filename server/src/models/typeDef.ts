@@ -3,6 +3,12 @@ const typeDefs = `
     user(id: ID): User
     users: [User]
     cards: [Card]
+    getPaginatedCards(limit: Int, skip: Int): PaginatedCards
+  }
+
+  type PaginatedCards {
+    cards: [Card]
+    hasNextPage: Boolean
   }
 
   type User{
@@ -13,7 +19,7 @@ const typeDefs = `
   }
 
   type Deck {
-    id: ID
+    id: ID!
     deckName: String!
     cards: [Card]
   }
