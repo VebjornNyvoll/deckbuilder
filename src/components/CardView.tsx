@@ -16,6 +16,7 @@ interface SortOption {
 export default function CardView() {
     const [cards, setCards] = useState<Card[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [popCard, pressedCard] = useState<Card>();
     const [layout, setLayout] = useState('grid');
     const [sortKey, setSortKey] = useState<string>('');
     const [sortOrder, setSortOrder] = useState<number>(0);
@@ -45,8 +46,9 @@ export default function CardView() {
       }
     };
 
-    const openDialog = () => {
-        setIsDialogOpen(true)
+    const openDialog = (card: Card) => {
+        pressedCard(card)
+        setIsDialogOpen(true);
     };
 
     const closeDialog = () => {
@@ -55,11 +57,15 @@ export default function CardView() {
 
 
     const itemTemplate = (card: Card, layout: string) => {
+        const handleClick = (card: Card) => {
+            openDialog(card);
+        };
+
         if (!card) {
             return;
         }
-        if (layout === 'list') return (<ListItem card = {card} onClick={openDialog} />);
-        else if (layout === 'grid') return (<GridItem card = {card} onClick={openDialog} />);
+        if (layout === 'list') { return (<ListItem card = {card} onClick={handleClick} />)}
+        else if (layout === 'grid') { return (<GridItem card = {card} onClick={handleClick} />)};
     };
 
     const header = () => {
@@ -74,7 +80,7 @@ export default function CardView() {
     return (
         <div className="card">
             <DataView value={cards} itemTemplate={itemTemplate} sortField={sortField} sortOrder={sortOrder} layout={layout} header={header()} />
-            <CardPopUp open = {isDialogOpen} onClose={closeDialog}></CardPopUp>
+            {popCard && (<CardPopUp card = {popCard} open = {isDialogOpen} onClose={closeDialog}></CardPopUp>)}
         </div>
     )
 }
