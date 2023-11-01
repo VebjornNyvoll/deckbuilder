@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import CardTooltip from './CardTooltip';
 import { Dialog } from 'primereact/dialog';
-import CardView from './CardView';
-import DetailedView from './DetailedView';
+import ReactHtmlParser from 'react-html-parser';
 
 interface CardItemProps {
   card: Card;
@@ -64,31 +62,39 @@ const getSeverity = (card: Card) => {
 export function CardPopUp(props: {card: Card; open: any; onClose: any;}) {
   const { open, onClose, card } = props
   const footerContent = (
-    <div>
-        <Button label="Yes" icon="pi pi-check" onClick={onClose} autoFocus />
+    <div >
+      <Button icon="pi pi-plus" style={{padding: "15px"}} className="p-button-rounded" onClick={addCardToDeck} autoFocus></Button>
     </div>
   );
+  const headerContent = (
+    <div style={{textAlign: 'center'}}>{card.name}</div>
+  )
 
   return (
-    <Dialog open ={open} onClose={onClose} header="Header" visible={open} style={{ width: '50vw' }} onHide={onClose} footer={footerContent}>
-    <p>{card.name}</p>
+    <Dialog headerStyle = {{height: "70px"}} header={headerContent} visible={open} style={{ width: '60vw', maxWidth: '400px'}} onHide={onClose} footer={footerContent}>
+    <div style ={{marginTop: "0px"}}></div>
+    <div className="flex align-items-center justify-content-between">
+      <p>{card.rarity}</p>
+      <p>{ReactHtmlParser(card.text)}</p>
+      <p>{card.flavor}</p>
+    </div>
+
     </Dialog>
   )
 }
 
-function addCardToDeck(event){
+function addCardToDeck(event: { stopPropagation: () => void; }){
   event.stopPropagation();
 }
 
-
-export const ListItem: React.FC<CardItemProps>  = ({card, onClick}) => {
+export const ListItem: React.FC<CardItemProps>  = ({card, onClick}) => { //The onClick as defined in Props must take in a argument card
   const handleItemClick = () => {
     if (onClick) {
       onClick(card);
     }
   };
-  return (
-    <div className="col-12" onClick={handleItemClick}>
+  return ( //Needs to send to const to do the onClick that has been sent.
+    <div className="col-12" onClick={handleItemClick}> 
         <div className="flex rem flex-row xl:align-items-start p-4 gap-4" >
             <img className="w-10rem shadow-2 block xl:block mx-auto border-round align-items-center" src={card.img} alt={card.name} />
             <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
@@ -110,7 +116,7 @@ export const ListItem: React.FC<CardItemProps>  = ({card, onClick}) => {
                 </div>
               <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                   <span className="text-2xl font-semibold">{card.cost ? "Cost: " + card.cost.toString() : "No cost"}</span>
-                  <Button icon="pi pi-plus" className="p-button-rounded" onClick={addCardToDeck} disabled={card.faction === 'OUTOFSTOCK'}></Button>
+                  <Button icon="pi pi-plus" className="p-button-rounded" onClick={addCardToDeck}></Button>
               </div>
             </div>  
           </div> 
@@ -125,9 +131,9 @@ export const GridItem: React.FC<CardItemProps>  = ({card, onClick}) => {
     }
   };
   return (
-      <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2" onClick={handleItemClick}>
-          <div className="p-4 border-1 surface-border surface-card border-round">
-              <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+      <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2" >
+          <div className="p-4 border-1 surface-border surface-card border-round"onClick={handleItemClick}>
+          <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                   <div className="flex align-items-center gap-2">
                       <i className="pi pi-book"></i> <span className="font-semibold">{card.cardSet}</span>
                   </div>
@@ -145,7 +151,7 @@ export const GridItem: React.FC<CardItemProps>  = ({card, onClick}) => {
               </div>
               <div className="flex align-items-center justify-content-between">
                   <span className="text-2xl font-semibold">{card.cost ? "Cost: " + card.cost.toString() : "No cost"}</span>
-                  <Button icon="pi pi-plus" className="p-button-rounded" onClick={addCardToDeck} disabled={card.faction === 'OUTOFSTOCK'}></Button>
+                  <Button icon="pi pi-plus" className="p-button-rounded" onClick={addCardToDeck}></Button>
               </div>
           </div>
       </div>

@@ -5,8 +5,6 @@ import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 
 import {ListItem, GridItem, Card, CardPopUp} from './CardItem';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
 
 interface SortOption {
     label: string;
@@ -17,9 +15,9 @@ export default function CardView() {
     const [cards, setCards] = useState<Card[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [popCard, pressedCard] = useState<Card>();
-    const [layout, setLayout] = useState('grid');
+    const [layout, setLayout] = useState<"grid" | "list" | (string & Record<string, unknown>)>('grid');
     const [sortKey, setSortKey] = useState<string>('');
-    const [sortOrder, setSortOrder] = useState<number>(0);
+    const [sortOrder, setSortOrder] = useState<0 | 1 | -1>(0); 
     const [sortField, setSortField] = useState<string>('');
     const sortOptions: SortOption[] = [
         { label: 'Cost: High to Low', value: '!cost' },
@@ -47,8 +45,8 @@ export default function CardView() {
     };
 
     const openDialog = (card: Card) => {
-        pressedCard(card)
-        setIsDialogOpen(true);
+        pressedCard(card)                   //Save what card is pressed
+        setIsDialogOpen(true);              //Set to true so it will show dialog
     };
 
     const closeDialog = () => {
@@ -57,14 +55,14 @@ export default function CardView() {
 
 
     const itemTemplate = (card: Card, layout: string) => {
-        const handleClick = (card: Card) => {
+        const handleClick = (card: Card) => {     //To send parameter card with the onClick, we have handleClick const that takes in card and send to open dialog. Can not do directly!
             openDialog(card);
         };
 
         if (!card) {
             return;
         }
-        if (layout === 'list') { return (<ListItem card = {card} onClick={handleClick} />)}
+        if (layout === 'list') { return (<ListItem card = {card} onClick={handleClick}/>)} //onClick is defined in CardItemProps to take in card param and return void, (to match handleClick)
         else if (layout === 'grid') { return (<GridItem card = {card} onClick={handleClick} />)};
     };
 
