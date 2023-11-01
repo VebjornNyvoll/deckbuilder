@@ -26,7 +26,7 @@ export default function CardView() {
 
 
     useEffect(() => {
-        CardService.getCards().then((data) => setCards(data.slice(0, 12)));
+        CardService.getCards().then((data) => setCards(data.slice(0, 25)));
     }, []);
 
 

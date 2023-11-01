@@ -3,7 +3,7 @@ import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import CardTooltip from './CardTooltip';
 import { Dialog } from 'primereact/dialog';
-import ReactHtmlParser from 'react-html-parser';
+import parse from 'html-react-parser';
 
 interface CardItemProps {
   card: Card;
@@ -57,8 +57,6 @@ const getSeverity = (card: Card) => {
   }
 };
 
-
-
 export function CardPopUp(props: {card: Card; open: any; onClose: any;}) {
   const { open, onClose, card } = props
   const footerContent = (
@@ -73,12 +71,9 @@ export function CardPopUp(props: {card: Card; open: any; onClose: any;}) {
   return (
     <Dialog headerStyle = {{height: "70px"}} header={headerContent} visible={open} style={{ width: '60vw', maxWidth: '400px'}} onHide={onClose} footer={footerContent}>
     <div style ={{marginTop: "0px"}}></div>
-    <div className="flex align-items-center justify-content-between">
       <p>{card.rarity}</p>
-      <p>{ReactHtmlParser(card.text)}</p>
+      <p>{parse(card.text? card.text.replace("[x]", ""): "\n")}</p>
       <p>{card.flavor}</p>
-    </div>
-
     </Dialog>
   )
 }
