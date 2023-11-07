@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import CardView from './components/CardView';
+import CardView from '../components/CardView';
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { classNames } from 'primereact/utils';
 import { OverlayPanel } from 'primereact/overlaypanel';
-import Navbar from './components/Navbar';
+import Navbar from '../components/Navbar';
 
 
 export default function Deck() {
@@ -44,7 +44,6 @@ export default function Deck() {
     ];
     return (
       <>
-      <Navbar/>
       <div className="flex">
         
         <Menu model={items}/>

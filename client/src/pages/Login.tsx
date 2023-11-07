@@ -2,9 +2,9 @@ import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
-import Navbar from "./components/Navbar";
+import Navbar from "../components/Navbar";
 import { Avatar } from "primereact/avatar";
-import placeholder_avatar from './img/placeholder_avatar.png'
+import placeholder_avatar from '../img/placeholder_avatar.png'
 import { Link, useNavigate } from "react-router-dom";
 import {gql, useMutation} from '@apollo/client';
 
@@ -36,7 +36,6 @@ const [password, setPassword] = useState<string>('');
 
 return(
 <>
-<Navbar/>
     <div className="flex align-items-center justify-content-center">
         <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
             <div className="text-center mb-5">

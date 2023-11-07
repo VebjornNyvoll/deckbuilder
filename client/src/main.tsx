@@ -12,7 +12,7 @@ import { BrowserRouter } from 'react-router-dom';
 import {AuthProvider} from './context/authContext';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <AuthProvider>
+    <AuthProvider>
   <ApolloProvider client={client}>
     <BrowserRouter>
       <React.StrictMode>

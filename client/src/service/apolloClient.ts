@@ -5,7 +5,7 @@ const httpLink = createHttpLink({
     uri: "http://localhost:1001/Hearthstone"
 });
 
-const authLink = setContext((_, { header }) => {
+const authLink = setContext((_, { headers }) => {
     return {
         headers: {
             ...headers,
