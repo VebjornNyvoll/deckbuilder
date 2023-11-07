@@ -1,5 +1,5 @@
-interface IDeck{
-    deckId: String
+interface IDeck {
+  deckId: String;
 }
 
-export {IDeck}
+export { IDeck };
