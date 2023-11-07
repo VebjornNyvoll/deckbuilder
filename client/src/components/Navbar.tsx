@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Menubar } from "primereact/menubar";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
-import { func } from "prop-types";
 
 
 var sortorder:boolean = true
 var datasaver:boolean = false
 var darkmode:boolean = false;
 
+
+import { PrimeReactContext } from 'primereact/api';
+
+//Use in a component
+const { changeTheme } = useContext(PrimeReactContext);
+
+//changeTheme(currentTheme: "string", newTheme: "string", linkElementId: "string", callback: Function)
+        
+
 export default function Navbar() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   function LogOut() {
     //Code to log out and route to loginpage
@@ -67,7 +75,7 @@ export default function Navbar() {
       ]
     },
     {
-      label: "Ordering",
+      label: "",
       icon: "pi pi-fw pi-sort-alt",
       command: () => {
         sortorder = !sortorder;
