@@ -4,6 +4,7 @@ import { DataView, DataViewLayoutOptions } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
+import FilterComponent from "./FilterComponent";
 
 interface SortOption {
   label: string;
@@ -69,24 +70,7 @@ export default function CardView() {
     }
   };
 
-  const header = () => {
-    return (
-      <div className="flex justify-content-end">
-        <Dropdown
-          options={sortOptions}
-          value={sortKey}
-          optionLabel="label"
-          placeholder="Sort By Cost"
-          onChange={onSortChange}
-          className="w-full sm:w-14rem"
-        />
-        <DataViewLayoutOptions
-          layout={layout}
-          onChange={(e) => setLayout(e.value)}
-        />
-      </div>
-    );
-  };
+  
 
   return (
     <div className="card">
@@ -96,7 +80,7 @@ export default function CardView() {
         sortField={sortField}
         sortOrder={sortOrder}
         layout={layout}
-        header={header()}
+        header={FilterComponent()}
       />
       {popCard && (
         <CardPopUp
