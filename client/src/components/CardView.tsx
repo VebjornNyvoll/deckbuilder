@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { CardService } from "../service/CardService";
-import { DataView, DataViewLayoutOptions } from "primereact/dataview";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import { useState, useEffect, useRef } from 'react';
+import { CardService } from '../service/CardService';
+import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
-import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
+import { ListItem, GridItem, Card, CardPopUp } from './CardItem';
 
 interface SortOption {
   label: string;
@@ -13,39 +13,65 @@ interface SortOption {
 export default function CardView() {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [popCard, pressedCard] = useState<Card>();
-  const [layout, setLayout] = useState<
-    "grid" | "list" | (string & Record<string, unknown>)
-  >("grid");
-  const [sortKey, setSortKey] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<0 | 1 | -1>(0);
-  const [sortField, setSortField] = useState<string>("");
+  const [popCard, setPopCard] = useState<Card | undefined>();
+  const [layout, setLayout] = useState<'grid' | 'list' | (string & Record<string, unknown>)>('grid');
+  const [sortKey, setSortKey] = useState<string>('');
+  const [sortField, setSortField] = useState<string>('');
+  const [sortOrder] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
+
   const sortOptions: SortOption[] = [
-    { label: "Cost: High to Low", value: "!cost" },
-    { label: "Cost: Low to High", value: "cost" },
+    { label: 'Cost: High to Low', value: '!cost' },
+    { label: 'Cost: Low to High', value: 'cost' },
   ];
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    CardService.getCards().then((data) => setCards(data.slice(0, 25)));
+    loadInitialCards();
+
+    // Add an event listener to the window for scrolling.
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
-  const onSortChange = (event: DropdownChangeEvent) => {
-    const value = event.value;
+  const loadInitialCards = () => {
+    CardService.getCards().then((data) => setCards(data.slice(0, 99)));
+  };
 
-    if (value.indexOf("!") === 0) {
-      setSortOrder(-1);
-      setSortField(value.substring(1, value.length));
-      setSortKey(value);
-    } else {
-      setSortOrder(1);
-      setSortField(value);
-      setSortKey(value);
+  const loadMoreCards = () => {
+    if (loading) return;
+    setLoading(true);
+    const startIndex = cards.length;
+    const numberOfCardsToLoad = 200;
+
+    CardService.getCards().then((data) => {
+      const newCards = data.slice(startIndex, startIndex + numberOfCardsToLoad);
+      setCards([...cards, ...newCards]);
+      setLoading(false);
+    });
+  };
+
+  const handleScroll = () => {
+    if (loading) return;
+
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const contentHeight = document.body.scrollHeight;
+    const distanceFromBottom = contentHeight - (scrollY + windowHeight);
+
+    if (distanceFromBottom < 1000) {
+      loadMoreCards();
     }
   };
 
+
   const openDialog = (card: Card) => {
-    pressedCard(card); //Save what card is pressed
-    setIsDialogOpen(true); //Set to true so it will show dialog
+    setPopCard(card);
+    setIsDialogOpen(true);
   };
 
   const closeDialog = () => {
@@ -53,58 +79,58 @@ export default function CardView() {
   };
 
   const itemTemplate = (card: Card, layout: string) => {
-    const handleClick = (card: Card) => {
-      //To send parameter card with the onClick, we have handleClick const that takes in card and send to open dialog. Can not do directly!
+    const handleClick = () => {
       openDialog(card);
     };
 
     if (!card) {
-      return;
+      return null;
     }
-    if (layout === "list") {
+    if (layout === 'list') {
       return <ListItem card={card} onClick={handleClick} />;
-    } //onClick is defined in CardItemProps to take in card param and return void, (to match handleClick)
-    else if (layout === "grid") {
+    } else if (layout === 'grid') {
       return <GridItem card={card} onClick={handleClick} />;
     }
   };
 
   const header = () => {
     return (
-      <div className="flex justify-content-end">
-        <Dropdown
-          options={sortOptions}
-          value={sortKey}
-          optionLabel="label"
-          placeholder="Sort By Cost"
-          onChange={onSortChange}
-          className="w-full sm:w-14rem"
-        />
-        <DataViewLayoutOptions
-          layout={layout}
-          onChange={(e) => setLayout(e.value)}
-        />
-      </div>
+        <div className="flex justify-content-end">
+          <Dropdown
+              options={sortOptions}
+              value={sortKey}
+              optionLabel="label"
+              placeholder="Sort By Cost"
+              onChange={onSortChange}
+              className="w-full sm:w-14rem"
+          />
+          <DataViewLayoutOptions
+              layout={layout}
+              onChange={(e) => setLayout(e.value)}
+          />
+        </div>
     );
   };
 
+  const onSortChange = (event: DropdownChangeEvent) => {
+    const value = event.value;
+    setSortField(value);
+    setSortKey(value);
+  };
+
   return (
-    <div className="card">
-      <DataView
-        value={cards}
-        itemTemplate={itemTemplate}
-        sortField={sortField}
-        sortOrder={sortOrder}
-        layout={layout}
-        header={header()}
-      />
-      {popCard && (
-        <CardPopUp
-          card={popCard}
-          open={isDialogOpen}
-          onClose={closeDialog}
-        ></CardPopUp>
-      )}
-    </div>
+      <div className="card" ref={scrollContainerRef} style={{ overflow: 'auto' }}>
+        <DataView
+            value={cards}
+            itemTemplate={itemTemplate}
+            sortField={sortField}
+            sortOrder={sortOrder}
+            layout={layout}
+            header={header()}
+        />
+        {popCard && (
+            <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />
+        )}
+      </div>
   );
 }
