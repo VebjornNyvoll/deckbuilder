@@ -31,14 +31,15 @@ function CreateAccount(props) {
         const errors = [];
     
         if (!values.username || values.username.length < 3) {
-            errors.push('Username is required (minimum 3 characters)');
+            errors.push('Username needs to be minimum 3 characters');
         }
     
         if (!values.password || values.password.length < 3) {
-            errors.push('Password is required (minimum 3 characters)');
+            errors.push('Password needs to be minimum 3 characters');
         }
     
         if (!checked) {
+
             errors.push('You must accept the Terms of Service');
         }
     
@@ -94,6 +95,7 @@ function CreateAccount(props) {
                         <span className="text-600 font-medium line-height-3">Already have an account?</span>
                         <Link to="../login" className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Log in here!</Link>
                     </div>
+                        <form onSubmit={validateForm}>
                         <div className="card flex justify-content-center w-full mb-2">
                             <span className="p-float-label w-full mb-3">
                                 <InputText required={true} type="username" name="username" id="username" className="w-full mb-3" onChange={onChange}/>
@@ -120,8 +122,9 @@ function CreateAccount(props) {
                                 </>
                             )
                         })}
-                        <Button type="submit" label="Create account" icon="pi pi-user" className="w-full" onClick={validateForm}/>
-                    
+                        <Button type="submit" label="Create account" icon="pi pi-user" className="w-full"/>
+                        </form>
+                        
                     
                 </div>
             </div>
