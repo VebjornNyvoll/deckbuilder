@@ -39,7 +39,7 @@ function Login(props) {
         event.preventDefault();
     
         const errors = [];
-    
+        // Ideally neither of these errors will appear due to the HTML5 required attribute, but it's good to have a backup
         if (!values.username) {
             errors.push('Username is required');
         }
