@@ -85,6 +85,11 @@ const resolvers = {
     },
     
     createUser: async (parent, args) => {
+      const outerPayload = {
+        token: null,
+        error: null,
+        user: null,
+      }
       const payload = {
         id: null,
         username: null,
@@ -96,14 +101,16 @@ const resolvers = {
       if (user) {
         payload.error.message = "User already exists";
         payload.error.error = true;
-        return payload;
+        outerPayload.user = payload;
+        return outerPayload;
       }
 
       const password = await Authenticate.hash(args.password);
       if (password.error) {
         payload.error.message = "An error has occured occured";
         payload.error.error = true;
-        return payload;
+        outerPayload.user = payload;
+        return outerPayload;
       } else {
         const newUser = new User({
           username: args.username,
@@ -114,7 +121,11 @@ const resolvers = {
         payload.username = newUser.username;
         payload.decks = newUser.decks;
         payload.id = newUser.id;
-        return payload;
+        outerPayload.user = payload;
+        const token = Authenticate.createToken(newUser.id);
+        
+        outerPayload.token = token.result;
+        return outerPayload;
       }
     },
     login: async (parent, args, contextValue) => {

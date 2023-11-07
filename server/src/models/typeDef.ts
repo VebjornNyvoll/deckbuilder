@@ -34,9 +34,9 @@ const typeDefs = `
   }
   
   type Mutation {
-    createUser(username: String!, password: String!): User!
+    createUser(username: String!, password: String!): AuthPayload!
     login(username: String!, password: String!): AuthPayload!
-
+    
     createDeck(deckName: String!): User!
     removeDeck(deckId: String!): User!
     addCards(cardIds: [ID!]!, deckId: ID!): User!
