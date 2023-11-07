@@ -15,59 +15,73 @@ export default function CardView() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, setPopCard] = useState<Card | undefined>();
   const [layout, setLayout] = useState<'grid' | 'list' | (string & Record<string, unknown>)>('grid');
-  const [sortKey, setSortKey] = useState<string>('');
-  const [sortField, setSortField] = useState<string>('');
-  const [sortOrder] = useState<number>(1);
+  const [sortKey, setSortKey] = useState<string>('cost'); // Set the initial sort key
+  const [, setSortOrder] = useState<number>(1);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true); // Track if there are more cards to load
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const sortOptions: SortOption[] = [
     { label: 'Cost: High to Low', value: '!cost' },
     { label: 'Cost: Low to High', value: 'cost' },
   ];
 
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     loadInitialCards();
-
-    // Add an event listener to the window for scrolling.
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  }, []); // Removed the event listener for window scroll
 
   const loadInitialCards = () => {
-    CardService.getCards().then((data) => setCards(data.slice(0, 99)));
-  };
-
-  const loadMoreCards = () => {
-    if (loading) return;
+    if (!hasMore || loading) return; // Don't load more if no more cards or already loading
     setLoading(true);
     const startIndex = cards.length;
-    const numberOfCardsToLoad = 200;
 
-    CardService.getCards().then((data) => {
-      const newCards = data.slice(startIndex, startIndex + numberOfCardsToLoad);
-      setCards([...cards, ...newCards]);
-      setLoading(false);
-    });
+    // You need to send additional parameters to your backend for pagination, e.g., skip and limit.
+    CardService.getCards()
+        .then((data) => {
+          console.log("Fetched cards data:", data); // Log the fetched data
+          if (data) {
+            const newCards = data.slice(startIndex, startIndex + 99);
+            setCards((prevCards) => [...prevCards, ...newCards]);
+          } else {
+            setCards([]); // Set an empty array or handle the error appropriately
+          }
+          setHasMore(data.length > startIndex + 99);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching cards:", error);
+          setCards([]); // Set an empty array or handle the error appropriately
+          setLoading(false);
+        });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScroll = () => {
-    if (loading) return;
+    if (loading || !hasMore) return;
 
-    const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const contentHeight = document.body.scrollHeight;
-    const distanceFromBottom = contentHeight - (scrollY + windowHeight);
+    const scrollY = scrollContainerRef.current.scrollTop;
+    const windowHeight = scrollContainerRef.current.clientHeight;
+    const contentHeight = scrollContainerRef.current.scrollHeight;
 
-    if (distanceFromBottom < 1000) {
+    if (contentHeight - (scrollY + windowHeight) < 1000) {
       loadMoreCards();
     }
   };
 
+  useEffect(() => {
+    // Add an event listener to the scroll container (ref) instead of the window.
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      // Remove the event listener when the component unmounts.
+      if (scrollContainerRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        scrollContainerRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [handleScroll, scrollContainerRef]);
 
   const openDialog = (card: Card) => {
     setPopCard(card);
@@ -104,33 +118,25 @@ export default function CardView() {
               onChange={onSortChange}
               className="w-full sm:w-14rem"
           />
-          <DataViewLayoutOptions
-              layout={layout}
-              onChange={(e) => setLayout(e.value)}
-          />
+          <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
         </div>
     );
   };
 
   const onSortChange = (event: DropdownChangeEvent) => {
     const value = event.value;
-    setSortField(value);
     setSortKey(value);
+    setSortOrder(1); // Reset the sort order to ascending (1) when changing the sort key
+    // You can also load the cards here with the new sort key
+    setCards([]); // Clear the existing cards
+    setHasMore(true); // Reset the hasMore flag
+    loadInitialCards();
   };
 
   return (
-      <div className="card" ref={scrollContainerRef} style={{ overflow: 'auto' }}>
-        <DataView
-            value={cards}
-            itemTemplate={itemTemplate}
-            sortField={sortField}
-            sortOrder={sortOrder}
-            layout={layout}
-            header={header()}
-        />
-        {popCard && (
-            <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />
-        )}
+      <div className="card" ref={scrollContainerRef} style={{ overflow: 'auto', height: '500px' }}>
+        <DataView value={cards} itemTemplate={itemTemplate} layout={layout} header={header()} />
+        {popCard && <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />}
       </div>
   );
 }
