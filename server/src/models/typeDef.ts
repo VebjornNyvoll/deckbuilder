@@ -4,11 +4,20 @@ const typeDefs = `
     users: [User]
     cards: [Card]
     getPaginatedCards(limit: Int, skip: Int): PaginatedCards
+    getReviewsByCardId(cardId: ID!): [Review]!
+    filteredCards(field: String!, value: String, gt: Int, lt: Int, sortBy: String): [Card]
   }
 
   type PaginatedCards {
     cards: [Card]
     hasNextPage: Boolean
+  }
+
+  type Review{
+    cardId: ID!
+    text: String!
+    rating: Int!
+    user: User!
   }
 
   type User{
@@ -32,6 +41,7 @@ const typeDefs = `
     removeDeck(deckId: String!): User!
     addCards(cardIds: [ID!]!, deckId: ID!): User!
     removeCards(cardIds: [ID!]!, deckId: ID!): User!
+    addReview(cardId: ID!, text: String!, rating: Int!): [Review]
   }
 
   type AuthPayload {
@@ -44,6 +54,8 @@ const typeDefs = `
     message: String!
     error: Boolean!
   }
+
+  
 
   type Card {
     id: ID
@@ -78,6 +90,7 @@ const typeDefs = `
     howToGetDiamond: String
     multiClassGroup: String
     classes: [String]
+
   }
 
   type Mechanics {

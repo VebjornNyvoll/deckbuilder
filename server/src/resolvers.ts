@@ -1,7 +1,9 @@
 import { User } from "./models/User.js";
 import { Authenticate } from "./helpers/authentication.js";
 import { Cards } from "./models/Card.js"; 
+import { Review } from "./models/Review.js";
 import mongoose from "mongoose";
+import { error } from "console";
 const resolvers = {
   Query: {
     user: async (parent, args) => await User.findById(args.id),
@@ -9,7 +11,6 @@ const resolvers = {
     cards:  async (parent, args) => await Cards.find({}),
     getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
-      
       const cards = await Cards.find().skip(skip).limit(limit);
   
       const totalCards = await Cards.countDocuments();
@@ -18,9 +19,73 @@ const resolvers = {
           cards,
           hasNextPage,
       };
-  }
+  },
+
+  getReviewsByCardId: async (parent, args) => {
+    try{
+      const cardId = args.cardId;
+      const reviews = await Review.find({ cardId: cardId });
+      return reviews;
+    }catch(error){
+      return error;
+    }
+  },
+
+  filteredCards: async (parent, args) => {
+    const { field, value, gt, lt, sortBy } = args;
+    let query = {};
+
+    // If value is provided, perform a string match
+    if (value) {
+      query[field] = new RegExp(value, 'i'); // Case-insensitive matching
+    }
+
+    // If gt or lt is provided, perform numerical comparisons
+    if (gt !== undefined || lt !== undefined) {
+      query[field] = {};
+      if (gt !== undefined) query[field]['$gt'] = gt;
+      if (lt !== undefined) query[field]['$lt'] = lt;
+    }
+
+    try {
+      // Base query with possibility of sorting
+      let itemsQuery = Cards.find(query);
+      if (sortBy) {
+        itemsQuery = itemsQuery.sort({ [sortBy]: 1 }); // 1 for ascending order
+      }
+
+      // Execute the query
+      const items = await itemsQuery.exec();
+      return items;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to fetch items');
+    }
+  },
+  
   },
   Mutation: {
+    addReview: async(parent, args, contextValue) => {
+
+      try{
+        if(contextValue.error){
+         throw "Authenticate user"
+        }
+        const user = await User.findById(contextValue.result); // Make sure to await this
+    
+        if (!user) {
+          throw "User not found";
+        }
+        
+        await Review.create({ cardId: args.cardId, text: args.text, rating: args.rating, user: user.toObject() });
+        
+        return await Review.find({ cardId: args.cardId });
+      }catch(error){
+        console.log(error);
+        return []
+      }
+    },
+    
     createUser: async (parent, args) => {
       const payload = {
         id: null,
@@ -54,7 +119,6 @@ const resolvers = {
         return payload;
       }
     },
-
     login: async (parent, args, contextValue) => {
       const payload = {
         token: null,
@@ -111,7 +175,7 @@ const resolvers = {
               payload.error.error = true;
               return payload;
           }
-  
+
           // Fetching the card documents that you want to add
           const cardsToAdd = await Cards.find({
               _id: { $in: args.cardIds }
@@ -121,18 +185,18 @@ const resolvers = {
           if (!cardsToAdd.length) {
               throw new Error('No cards found with the provided IDs.');
           }
-  
+
           // Update user's deck to include the new card documents
           const updatedUser = await User.findOneAndUpdate(
               { _id: contextValue.result, "decks._id": args.deckId },
               { $push: { "decks.$.cards": { $each: cardsToAdd } } },
               { new: true } // This option returns the modified document
           );
-  
+
           if (!updatedUser) {
               throw new Error('User or deck not found.');
           }
-  
+
           payload.id = updatedUser._id;
           payload.username = updatedUser.username;
           payload.decks = updatedUser.decks;
