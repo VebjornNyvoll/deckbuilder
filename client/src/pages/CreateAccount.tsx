@@ -13,11 +13,9 @@ import {gql} from 'graphql-tag';
 import { useNavigate } from "react-router-dom";
 
 const CREATE_USER = gql`
-    mutation CreateUser($email: String!, $username: String!, $password: String!){
-        createUser(email: $email, username: $username, password: $password){
-            email
+    mutation CreateUser($username: String!, $password: String!){
+        createUser(username: $username, password: $password){
             username
-            token
         }
     }
 `;
@@ -27,14 +25,40 @@ function CreateAccount(props) {
     const navigate = useNavigate();
     const [errors, setErrors] = useState([]);
 
-    function createUserCallback() {
-        console.log("createUserCallback");
-        createUser();
-        
-    }
+    const validateForm = (event) => {
+        event.preventDefault();
+    
+        const errors = [];
+    
+        if (!values.username || values.username.length < 3) {
+            errors.push('Username is required (minimum 3 characters)');
+        }
+    
+        if (!values.password || values.password.length < 3) {
+            errors.push('Password is required (minimum 3 characters)');
+        }
+    
+        if (!checked) {
+            errors.push('You must accept the Terms of Service');
+        }
+    
+        console.log('Validation Errors:', errors);
+    
+        if (errors.length === 0) {
+            createUser();
+        } else {
+            console.log('Validation failed');
+            // Display validation errors using the toast
+            errors.forEach(error => {
+                toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error });
+            });
+        }
+    };
+    
+    
+    
 
-    const { onChange, onSubmit, values } = useForm(createUserCallback, {
-        email: '',
+    const { onChange, values } = useForm( {
         username: '',
         password: '',
     });
@@ -48,7 +72,7 @@ function CreateAccount(props) {
         onError({graphQLErrors}) {
             setErrors(graphQLErrors)
         },
-        variables: {createUser: values}
+        variables: {username: values.username, password: values.password}
     });
 
     const [checked, setChecked] = useState(false);
@@ -61,6 +85,7 @@ function CreateAccount(props) {
     
     return (
         <>
+         <Toast ref={toast} />
             <div className="flex align-items-center justify-content-center">
                 <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
                     <div className="text-center mb-5">
@@ -69,13 +94,6 @@ function CreateAccount(props) {
                         <span className="text-600 font-medium line-height-3">Already have an account?</span>
                         <Link to="../login" className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Log in here!</Link>
                     </div>
-                    
-                        <div className="card flex justify-content-center w-full mb-2">
-                            <span className="p-float-label w-full mb-3">
-                                <InputText aria-labelledby="emailLabel" required={true} name="email" type="email" id="email" className="w-full mb-3" onChange={onChange}/>
-                                <label id="emailLabel" htmlFor="email">Email</label>
-                            </span>
-                        </div>
                         <div className="card flex justify-content-center w-full mb-2">
                             <span className="p-float-label w-full mb-3">
                                 <InputText required={true} type="username" name="username" id="username" className="w-full mb-3" onChange={onChange}/>
@@ -90,20 +108,20 @@ function CreateAccount(props) {
                         </div>
                         <div className="flex align-items-center justify-content-between mb-6">
                             <div className="flex align-items-center">
-                                <Checkbox aria-labelledby="rememberMeLabel" required={true} type="checkbox" name="rememberMe" id="rememberMe" onChange={e => setChecked(e.checked)} checked={checked} className="mr-2" />
-                                <Toast ref={toast} />
-                                <label id="rememberMeLabel" htmlFor="rememberMe">I accept the <a href="javascript:undefined;" onClick={show}>Terms of Service</a></label>
+                                <Checkbox aria-labelledby="termsOfServiceLabel" required={true} type="checkbox" name="termsOfService" id="termsOfService" onChange={e => setChecked(e.checked)} checked={checked} className="mr-2" />
+                               
+                                <label id="termsOfServiceLabel" htmlFor="termsOfService">I accept the <a href="javascript:undefined;" onClick={show}>Terms of Service</a></label>
                             </div>
                         </div>
                         {errors.map(function(error){
                             return (
                                 <>
-                                <Toast ref={toast} />
-                                    {toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error.message })};
+                                    {toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
                                 </>
                             )
                         })}
-                        <Button label="Create account" icon="pi pi-user" className="w-full" onClick={onSubmit}/>
+                        <Button type="submit" label="Create account" icon="pi pi-user" className="w-full" onClick={validateForm}/>
+                    
                     
                 </div>
             </div>

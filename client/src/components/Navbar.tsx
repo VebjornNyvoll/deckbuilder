@@ -1,9 +1,16 @@
 import { Menubar } from 'primereact/menubar';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
 
 
 export default function Navbar() {
     const navigate = useNavigate();
+    const {user, logout} = useContext(AuthContext);
+    const onLogout = () => {
+        logout();
+        navigate('/');
+    }
 
     const items = [
         {
@@ -17,10 +24,14 @@ export default function Navbar() {
             icon: 'pi pi-fw pi-database',
             command: () => { navigate('/decks'); }
             
-        }
-        ,
+        },
+        {
+            label: user ? 'Logout' : 'Login',
+            icon: 'pi pi-fw pi-user',
+            command: () => { user ? onLogout() : navigate('/login'); },
+        },
     ];
-
+    console.log(user);
     return (
         <div className="card relative z-2">
             <Menubar

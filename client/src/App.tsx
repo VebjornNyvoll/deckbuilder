@@ -5,6 +5,7 @@ import CreateAccount from "./pages/CreateAccount";
 import Index from "./pages/Index";
 import Deck from "./pages/Deck";
 import Navbar from "./components/Navbar";
+import RequireAuth from "./service/RequireAuth";
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
             <Route path="/login" element={<Login/>} />
             <Route path="/create-account" element={<CreateAccount/>}/>
             <Route index element={<Index />} />
-            <Route path="/decks" element={<Deck/>}/>
+            <Route path="/decks" element={<RequireAuth><Deck/></RequireAuth>}/>
         </Routes>
         </>
     );

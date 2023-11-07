@@ -5,7 +5,8 @@ const initialState = {
     user: null
 }
 
-if(localStorage.getItem("token")) {
+if(localStorage.getItem("token") && localStorage.getItem("token") != "undefined" && localStorage.getItem("token") != "null") {
+    console.log("AUTHCONTEXT: " + localStorage.getItem("token"));
     const token = localStorage.getItem("token");
     const decodedToken = jwtDecode<JwtPayload>(token);
 
@@ -51,7 +52,7 @@ function AuthProvider(props) {
     }
 
     function logout() {
-        localStorage.remove("token");
+        localStorage.removeItem("token");
         dispatch({type: "LOGOUT"});
     }
 

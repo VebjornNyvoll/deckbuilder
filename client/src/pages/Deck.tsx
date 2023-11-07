@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import CardView from '../components/CardView';
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { classNames } from 'primereact/utils';
 import { OverlayPanel } from 'primereact/overlaypanel';
-import Navbar from '../components/Navbar';
+import {useContext} from 'react';
+import { AuthContext } from '../context/authContext';
+
 
 
 export default function Deck() {
+    const {user} = useContext(AuthContext);
     const overlayPanel = useRef(null);
     const items: MenuItem = [
       {
