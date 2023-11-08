@@ -29,7 +29,7 @@ const resolvers = {
           hasNextPage,
       };
   },
-  
+
   getReviewsByCardId: async (parent, args) => {
     try{
       const cardId = args.cardId;
@@ -40,7 +40,7 @@ const resolvers = {
     }
   },
   filteredCards: async (parent, args) => {
-    const { field, value, gt, lt, sortBy } = args;
+    const { skip=10, limit=0, field, value, gt, lt, sortBy } = args;
     let query = {};
     // If value is provided, perform a string match
     if (value) {
@@ -56,7 +56,7 @@ const resolvers = {
 
     try {
       // Base query with possibility of sorting
-      let itemsQuery = Cards.find(query);
+      let itemsQuery = Cards.find(query).skip(skip).limit(limit);
       if (sortBy) {
         itemsQuery = itemsQuery.sort({ [sortBy]: 1 }); // 1 for ascending order
       }

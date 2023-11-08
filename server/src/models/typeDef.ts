@@ -5,9 +5,9 @@ const typeDefs = `
     cards: [Card]
     getPaginatedCards(limit: Int, skip: Int): PaginatedCards
     getReviewsByCardId(cardId: ID!): [Review]!
-    filteredCards(field: String!, value: String, gt: Int, lt: Int, sortBy: String): [Card]
+    filteredCards(limit: Int, skip: Int, field: String!, value: String, gt: Int, lt: Int, sortBy: String): [Card]
   }
-  
+
   type PaginatedCards {
     cards: [Card]
     hasNextPage: Boolean
