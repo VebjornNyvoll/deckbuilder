@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Menubar } from "primereact/menubar";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
@@ -19,6 +19,7 @@ export default function Navbar({
 }) {
 
   const navigate = useNavigate();
+  const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   var page: boolean = false;
   switch (window.location.pathname) {
@@ -144,7 +145,7 @@ export default function Navbar({
     { //Searchbar
       visible: page,
       template: (
-        <InputText placeholder="Search" type="text" className="w-full" />
+        <InputText placeholder="Search" type="text" className="w-full" onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => {if (e.keyCode === 13){ setFilter("name:"+search)}}}/>
       ),
     },
     { //Profile, swap out for avatar picture at const end, end = {end}
