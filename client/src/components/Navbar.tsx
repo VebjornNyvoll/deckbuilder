@@ -32,6 +32,8 @@ export default function Navbar() {
         },
     ];
     console.log(user);
+    // Due to overflow issues in CardView!
+    document.body.style.overflow = "visible";
     return (
         <div className="card relative z-2">
             <Menubar
