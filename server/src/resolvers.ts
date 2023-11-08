@@ -7,8 +7,16 @@ import { error } from "console";
 import { GraphQLError } from 'graphql';
 const resolvers = {
   Query: {
-    user: async (parent, args) => await User.findById(args.id),
-    users: async (parent, args) => await User.find({}),
+    user: async (parent, args, contextValue) => {
+      if(contextValue.error){
+        throw new GraphQLError("Not authenticated")
+      }
+      const user = await User.findById(contextValue.result);
+      if(!user){
+        throw new GraphQLError("User could not be found");
+      }
+      return user;
+    },
     cards:  async (parent, args) => await Cards.find({}),
     getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
@@ -308,3 +316,4 @@ const resolvers = {
 };
 
 export { resolvers };
+

@@ -1,6 +1,6 @@
 const typeDefs = `
   type Query {
-    user(id: ID): User
+    user: User
     users: [User]
     cards: [Card]
     getPaginatedCards(limit: Int, skip: Int): PaginatedCards
