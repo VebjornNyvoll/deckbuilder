@@ -142,6 +142,7 @@ export default function Navbar({
       },
     },
     { //Searchbar
+      visible: page,
       template: (
         <InputText placeholder="Search" type="text" className="w-full" />
       ),
