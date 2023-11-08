@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import CardView from "./components/CardView";
+import { useRef } from "react";
+import CardView from "../components/CardView";
 import { Menu } from "primereact/menu";
 import { MenuItem } from "primereact/menuitem";
 import { classNames } from "primereact/utils";
 import { OverlayPanel } from "primereact/overlaypanel";
-import Navbar from "./components/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
-export default function Deck() {
+export default function Deck({ layout }: { layout: "grid" | "list" }) {
+  const { user } = useContext(AuthContext);
   const overlayPanel = useRef(null);
   const items: MenuItem = [
     {
@@ -51,11 +53,10 @@ export default function Deck() {
   ];
   return (
     <>
-      <Navbar />
       <div className="flex">
         <Menu model={items} />
         <div className="w-12">
-          <CardView />
+          <CardView layout={layout} />
         </div>
       </div>
     </>

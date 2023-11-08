@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CardService } from "../service/CardService";
-import { DataView, DataViewLayoutOptions } from "primereact/dataview";
+import { DataView } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
@@ -10,13 +10,10 @@ interface SortOption {
   value: string;
 }
 
-export default function CardView() {
+export default function CardView({ layout }: { layout: "grid" | "list" }) {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, pressedCard] = useState<Card>();
-  const [layout, setLayout] = useState<
-    "grid" | "list" | (string & Record<string, unknown>)
-  >("grid");
   const [sortKey, setSortKey] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<0 | 1 | -1>(0);
   const [sortField, setSortField] = useState<string>("");
@@ -80,10 +77,6 @@ export default function CardView() {
           onChange={onSortChange}
           className="w-full sm:w-14rem"
         />
-        <DataViewLayoutOptions
-          layout={layout}
-          onChange={(e) => setLayout(e.value)}
-        />
       </div>
     );
   };
@@ -96,7 +89,7 @@ export default function CardView() {
         sortField={sortField}
         sortOrder={sortOrder}
         layout={layout}
-        header={header()}
+        //header={header()}
       />
       {popCard && (
         <CardPopUp

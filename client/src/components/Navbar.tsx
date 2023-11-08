@@ -1,35 +1,54 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Menubar } from "primereact/menubar";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
+import { AuthContext } from "../context/authContext";
 
-
-var sortorder:boolean = true
-var datasaver:boolean = false
-var darkmode:boolean = false;
-
-
-import { PrimeReactContext } from 'primereact/api';
-
-//Use in a component
-const { changeTheme } = useContext(PrimeReactContext);
+//const { changeTheme } = useContext(PrimeReactContext);
 
 //changeTheme(currentTheme: "string", newTheme: "string", linkElementId: "string", callback: Function)
-        
 
-export default function Navbar() {
+export default function Navbar({
+  layout,
+  setLayout,
+}: {
+  layout: "grid" | "list";
+  setLayout: (newLayout: "grid" | "list") => void;
+}) {
   const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
 
-  function LogOut() {
-    //Code to log out and route to loginpage
+  var page: boolean = false;
+  switch (window.location.pathname) {
+    case "/":
+      page = true;
+      break;
+    case "/decks":
+      page = true;
+      break;
+    default:
+      page = false;
+      break;
   }
+
+  const onLogout = () => {
+    logout();
+    navigate("/");
+  };
+  var sortorder: boolean = true;
+  var datasaver: boolean = false;
+  const [darkmode, setTheme] = useState<true | false>(false);
+
+  const switchLayout = () => {
+    setLayout(layout === "grid" ? "list" : "grid");
+  };
+
   function DataSaver() {
-    datasaver = !datasaver
+    datasaver = !datasaver;
     //Code to log out and route to loginpage
   }
   function DarkMode() {
-    darkmode = !darkmode
-    navigate("/") //Needed to refresh the icon
+    setTheme(!darkmode);
   }
 
   const items = [
@@ -48,6 +67,7 @@ export default function Navbar() {
       },
     },
     {
+      visible: page,
       label: "Filter",
       icon: "pi pi-fw pi-filter",
       items: [
@@ -57,73 +77,75 @@ export default function Navbar() {
           items: [
             {
               label: "High to low",
-              icon: ""
+              icon: "",
             },
             {
               label: "Low to high",
-              icon: ""
+              icon: "",
             },
-          ]
+          ],
         },
         {
           label: "Faction",
           icon: "",
-          items: [
-            
-          ]
+          items: [],
         },
-      ]
+      ],
     },
     {
-      label: "",
-      icon: "pi pi-fw pi-sort-alt",
+      visible: page,
+      label: layout == "grid" ? "List" : "Grid",
+      icon: layout == "grid" ? "pi pi-fw pi-list" : "pi pi-fw pi-th-large",
       command: () => {
-        sortorder = !sortorder;
+        switchLayout();
       },
     },
     {
-      label: "Profil",
+      separator: true,
+    },
+    {
+      template: (
+        <InputText placeholder="Search" type="text" className="w-full" />
+      ),
+    },
+    {
+      label: "Profile",
       icon: "pi pi-fw pi-user",
       items: [
         {
-          label: "Log out",
-          icon: "pi pi-fw pi-user-minus",
+          label: user ? "Log out" : "Login",
+          icon: user ? "pi pi-fw pi-user-minus" : "pi pi-fw pi-user-plus",
           command: () => {
-            LogOut();
+            user ? onLogout() : navigate("/login");
           },
         },
         {
-          separator: true
+          separator: true,
         },
         {
           label: "Datasaver",
           icon: "pi pi-fw pi-bolt",
+
           command: () => {
             DataSaver();
           },
         },
         {
           label: "Darkmode",
-          icon: darkmode? "pi pi-fw pi-sun": "pi pi-fw pi-moon",
+          icon: darkmode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
           command: () => {
             DarkMode();
           },
-        }
-      ]
-    }
+        },
+      ],
+    },
   ];
-
-  const end = (
-  <div>
-    <InputText placeholder="Search" type="text" className="w-full" />
-  </div>
-  );
 
   return (
     <div className="card relative z-2">
       <Menubar
-        model={items}
-        end={end}
+        model={items.filter((item) => item !== null)}
+        //end={end}
         pt={{
           action: ({ props, state, context }) => ({
             className: context.active
