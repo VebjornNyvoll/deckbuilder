@@ -1,29 +1,112 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { SelectButton } from 'primereact/selectbutton';
+import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
 import "../Filters.css";
-import filters from "../data/filters.json"
+import filters from "../data/filters.json";
+
 export default function FilterComponent() {
     const [selectedFilter, setSelectedFilter] = useState(null);
+    const [filterValue, setFilterValue] = useState('');
+    const [filterInput, setFilterInput] = useState(null);
+    const [comparison, setComparison] = useState(null);
+    const [sorting, setSorting] = useState(null);
+    const sortOptions = [
+        { label: 'Ascending', value: 'asc' },
+        { label: 'Descending', value: 'desc' }
+    ];
 
-    // Your JSON data for filters
-    
+    const comparisonOptions = [
+        { label: 'Greater than', value: 'gt' },
+        { label: 'Less than', value: 'lt' }
+    ];
 
-    // Map your filter data to items that SelectButton can understand
     const filterItems = filters.map(filter => ({
-        name: filter.keyName, // The label shown on the button
-        value: filter.internalName, // The value that will be set on selection
-        type: filter.type // The data type, not used in SelectButton directly, but useful if needed
+        label: filter.keyName,
+        value: filter,
     }));
 
-    // Handler for selection
     const onFilterChange = (e) => {
-        setSelectedFilter(e.value);
-        // Here you would normally filter your data based on the selected filter.
+        const filterData = e.value;
+        setSelectedFilter(filterData); // Save the entire filter object
+
+        // Reset filter input and value
+        setFilterInput(null);
+        setFilterValue('');
+        setComparison(null);
+        setSorting(null);
+
+        switch (filterData.type) {
+            case 'string':
+                setFilterInput('string');
+                break;
+            case 'integer':
+                setFilterInput('integer');
+                break;
+            default:
+                setFilterInput(null);
+                break;
+        }
+    };
+
+    const renderFilterInput = () => {
+        switch (filterInput) {
+            case 'string':
+                return (
+                    <>
+                    <InputText
+                        value={filterValue}
+                        onChange={(e) => setFilterValue(e.target.value)}
+                        placeholder="Search"
+                    />
+                     <Dropdown
+                            value={sorting}
+                            options={sortOptions}
+                            onChange={(e) => setSorting(e.value)}
+                            placeholder="Select Sorting"
+                        />
+                    </>
+                    
+
+                    
+                );
+            case 'integer':
+                return (
+                    <>
+                        <InputText
+                            keyfilter="int"
+                            value={filterValue}
+                            onChange={(e) => setFilterValue(e.target.value)}
+                            placeholder="Enter number"
+                        />
+                        <Dropdown
+                            value={comparison}
+                            options={comparisonOptions}
+                            onChange={(e) => setComparison(e.value)}
+                            placeholder="Select Comparison"
+                        />
+                        <Dropdown
+                            value={sorting}
+                            options={sortOptions}
+                            onChange={(e) => setSorting(e.value)}
+                            placeholder="Select Sorting"
+                        />
+                    </>
+                );
+            default:
+                return null;
+        }
     };
 
     return (
         <div className="card flex justify-content-center attributes">
-            <SelectButton value={selectedFilter} onChange={onFilterChange} optionLabel="name" options={filterItems} />
+            <SelectButton
+                value={selectedFilter}
+                onChange={onFilterChange}
+                optionLabel="label"
+                options={filterItems}
+            />
+            {renderFilterInput()}
         </div>
     );
 }
