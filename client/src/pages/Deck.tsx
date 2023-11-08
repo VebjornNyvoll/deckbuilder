@@ -10,13 +10,55 @@ import { Dialog } from 'primereact/dialog';
 import { Form } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
+import { gql } from 'graphql-tag';
+import { useMutation, useQuery } from '@apollo/client';
+import { Toast } from 'primereact/toast';
 
 
 
 export default function Deck() {
-    const {user} = useContext(AuthContext);
-    const [visible, setVisible] = useState<boolean>(false);
-    const [deckName, setDeckName] = useState('');
+  const {user} = useContext(AuthContext);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [deckName, setDeckName] = useState('');
+  const [errors, setErrors] = useState([]);
+
+  const CREATE_DECK = gql`
+  mutation createDeck($deckName: String!) {
+    createDeck(deckName: $deckName) {
+      username
+    }
+  }`;
+
+  const GET_DECKS = gql`
+    query getDecks {
+    user {
+      decks {
+        id
+        deckName
+      }
+    }
+}`;
+
+const [ createDeck, { loading }] = useMutation(CREATE_DECK,{
+  onError({graphQLErrors}) {
+      setErrors(graphQLErrors)
+  },
+  variables: {deckName: deckName}
+});
+  function Decks(){
+    const [loading, error, decks] = useQuery(GET_DECKS);
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error</p>;
+    return decks.map(({ id, deckName }) => (
+      <div key={id}>
+        <p>
+          {deckName}: {id}
+        </p>
+      </div>
+    ));
+  }
+  
+    
 
     const clearCreateDeck = () => {
       setVisible(false);
@@ -24,7 +66,7 @@ export default function Deck() {
     }
 
     const handleCreateDeck = () => {  
-      console.log('Create deck:', deckName);
+      createDeck();
       clearCreateDeck();
     }
 
@@ -38,13 +80,7 @@ export default function Deck() {
     const items: MenuItem = [
       {
         label:'My decks',
-        items: [
-          { label: "My Collection", icon: "pi pi-fw pi-home" },
-          { label: "High Priest Deck", icon: "pi pi-fw pi-book" },
-          { label: "Shaman Deck", icon: "pi pi-fw pi-book" },
-          { label: "Summon Deck", icon: "pi pi-fw pi-book" },
-          { label: "Paladin Deck", icon: "pi pi-fw pi-book" },
-        ]
+        items: [{label: "hello", icon: "pi pi-book"}]
       },
         {
           label:'Options',
@@ -56,9 +92,8 @@ export default function Deck() {
                   return (
                     <div className='card flex justify-content-center'>
                       <Button icon="pi pi-plus-circle" onClick={(e) => options.onClick(e)} className={classNames(options.className, 'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround')}>
-                          New deck
+                          <p className="p-2">New deck</p>
                       </Button>
-                      
                     </div>
                   )
           }}
@@ -66,10 +101,13 @@ export default function Deck() {
         }
      
     ];
+    const toast = useRef<Toast>(null);
+    
     return (
       <>
       <div className="flex">
-        
+        {Decks()}
+        <Toast ref={toast} />
         <Menu model={items}/>
         <Dialog header="Create new deck" footer={footerContent} modal={false} visible={visible} onHide={() => setVisible(false)} draggable={false} resizable={false} position='left'>
           <InputText
@@ -84,6 +122,15 @@ export default function Deck() {
           <CardView/>
         </div>
       </div>
+      {errors.map(function(error){
+                            return (
+                                <>  
+                                    {setErrors([...new Set(errors)])};
+                                    {toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
+                                    {setErrors([])};
+                                </>
+                            )
+                        })}
       </>
     )
 }

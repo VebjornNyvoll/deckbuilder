@@ -16,6 +16,7 @@ const CREATE_USER = gql`
     mutation CreateUser($username: String!, $password: String!){
         createUser(username: $username, password: $password){
             user{username}
+            token
         }
     }
 `;
@@ -28,31 +29,24 @@ function CreateAccount(props) {
     const validateForm = (event) => {
         event.preventDefault();
     
-        const errors = [];
-    
         if (!values.username || values.username.length < 3) {
-            errors.push('Username needs to be minimum 3 characters');
+            setErrors(['Username needs to be minimum 3 characters']);
         }
     
         if (!values.password || values.password.length < 3) {
-            errors.push('Password needs to be minimum 3 characters');
+            setErrors(['Password needs to be minimum 3 characters']);
         }
     
         if (!checked) {
-
-            errors.push('You must accept the Terms of Service');
+            setErrors(['You need to accept the terms of service']);
         }
     
-        console.log('Validation Errors:', errors);
-    
-        if (errors.length === 0) {
+        if (errors.length == 0) {
             createUser();
         } else {
             console.log('Validation failed');
             // Display validation errors using the toast
-            errors.forEach(error => {
-                toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error });
-            });
+            toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: "Validation failed" });
         }
     };
     
@@ -81,7 +75,7 @@ function CreateAccount(props) {
     const toast = useRef<Toast>(null);
 
     const show = () => {
-        toast.current?.show({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });
+        toast.current?.replace({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });
     };
     
     return (
@@ -117,8 +111,10 @@ function CreateAccount(props) {
                         </div>
                         {errors.map(function(error){
                             return (
-                                <>
-                                    {toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
+                                <>  
+                                    {setErrors([...new Set(errors)])};
+                                    {toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
+                                    {setErrors([])};
                                 </>
                             )
                         })}
