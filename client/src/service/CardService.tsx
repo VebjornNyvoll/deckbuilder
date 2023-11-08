@@ -6,55 +6,57 @@ const client = new ApolloClient({
 });
 
 export const CardService = {
-  getCards(limit: number, skip: number) {
+  getCards(limit: number, skip: number, field: string, value: string, gt: number, lt: number, sortBy: string) {
     return client
       .query({
         query: gql`
-          query GetCards($limit: Int, $skip: Int) {
-            getPaginatedCards(limit: $limit, skip: $skip) {
-              cards {
-                id
-                cardId
-                dbfId
-                name
-                cardSet
-                type
-                text
-                playerClass
-                locale
-                faction
-                mechanics {
-                  name
+            query GetFilteredCards($limit: Int, $skip: Int, $field: String!, $value: String, $gt: Int, $lt: Int, $sortBy: String) {
+                filteredCards(limit: limit, skip: skip, field: $field, value: $value, gt: $gt, lt: $lt, sortBy: $sortBy) {
+                    id
+                    cardId
+                    dbfId
+                    name
+                    cardSet
+                    type
+                    text
+                    playerClass
+                    locale
+                    faction
+                    mechanics {
+                      name
+                    }
+                    cost
+                    attack
+                    health
+                    flavour
+                    artist
+                    elite
+                    rarity
+                    spellSchool
+                    race
+                    img
+                    durability
+                    collectible
+                    imgGold
+                    otherRaces
+                    howToGetSignature
+                    armor
+                    howToGet
+                    howToGetGold
+                    howToGetDiamond
+                    multiClassGroup
+                    classes
+                  }
                 }
-                cost
-                attack
-                health
-                flavour
-                artist
-                elite
-                rarity
-                spellSchool
-                race
-                img
-                durability
-                collectible
-                imgGold
-                otherRaces
-                howToGetSignature
-                armor
-                howToGet
-                howToGetGold
-                howToGetDiamond
-                multiClassGroup
-                classes
-              }
-              hasNextPage
-            }
-          }
-        `,
+            `,
         variables: {
           limit,
           skip,
+            field,
+            value,
+            gt,
+            lt,
+            sortBy,
         },
       })
       .then((result) => result.data.getPaginatedCards)
@@ -63,7 +65,4 @@ export const CardService = {
         return [];
       });
   },
-    getFilteredCards(limit: number, skip: number, filter: string) {
-
-    }
 };
