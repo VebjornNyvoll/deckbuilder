@@ -1,14 +1,15 @@
-import {User} from "./models/User.js";
-import {Authenticate} from "./helpers/authentication.js";
-import {Cards} from "./models/Card.js";
-import {Review} from "./models/Review.js";
+import { User } from "./models/User.js";
+import { Authenticate } from "./helpers/authentication.js";
+import { Cards } from "./models/Card.js"; 
+import { Review } from "./models/Review.js";
 import mongoose from "mongoose";
-
+import { error } from "console";
+import { GraphQLError } from 'graphql';
 const resolvers = {
   Query: {
     user: async (parent, args) => await User.findById(args.id),
-    users: async () => await User.find({}),
-    cards:  async () => await Cards.find({}),
+    users: async (parent, args) => await User.find({}),
+    cards:  async (parent, args) => await Cards.find({}),
     getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
       const cards = await Cards.find().skip(skip).limit(limit);
@@ -24,7 +25,8 @@ const resolvers = {
   getReviewsByCardId: async (parent, args) => {
     try{
       const cardId = args.cardId;
-        return await Review.find({cardId: cardId});
+      const reviews = await Review.find({ cardId: cardId });
+      return reviews;
     }catch(error){
       return error;
     }
@@ -54,10 +56,11 @@ const resolvers = {
       }
 
       // Execute the query
-        return await itemsQuery.exec();
+      const items = await itemsQuery.exec();
+      return items;
     } catch (error) {
       console.error(error);
-      throw new Error('Failed to fetch items');
+      throw new GraphQLError("Could not fetch items");
     }
   },
   
@@ -70,17 +73,16 @@ const resolvers = {
          throw "Authenticate user"
         }
         const user = await User.findById(contextValue.result); // Make sure to await this
-
+    
         if (!user) {
-          throw "User not found";
+          throw new GraphQLError("User not found");
         }
-
+        
         await Review.create({ cardId: args.cardId, text: args.text, rating: args.rating, user: user.toObject() });
-
+        
         return await Review.find({ cardId: args.cardId });
       }catch(error){
-        console.log(error);
-        return []
+        throw new GraphQLError(error);
       }
     },
     
@@ -99,18 +101,12 @@ const resolvers = {
       };
       const user = await User.findOne({ username: args.username });
       if (user) {
-        payload.error.message = "User already exists";
-        payload.error.error = true;
-        outerPayload.user = payload;
-        return outerPayload;
+        throw new GraphQLError("User already exists");
       }
 
       const password = await Authenticate.hash(args.password);
       if (password.error) {
-        payload.error.message = "An error has occured occured";
-        payload.error.error = true;
-        outerPayload.user = payload;
-        return outerPayload;
+        throw new GraphQLError("An error has occured");
       } else {
         const newUser = new User({
           username: args.username,
@@ -145,24 +141,18 @@ const resolvers = {
       const user = await User.findOne({ username: args.username });
 
       if (!user) {
-        payload.error.error = true;
-        payload.error.message = "User does not exist";
-        return payload;
+        throw new GraphQLError("User does not exist");
       }
 
       const valid = await Authenticate.verify(args.password, user.password);
 
       if (valid.error) {
-        payload.error.message = "Invalid password";
-        payload.error.error = true;
-        return payload;
+        throw new GraphQLError("Invalid password");
       }
 
       const token = Authenticate.createToken(user.id);
       if (token.error) {
-        payload.error.error = true;
-        payload.error.message = "Could not create token";
-        return payload;
+        throw new GraphQLError("Could not create token");
       } else {
         payload.token = token.result;
         payload.user = user;
@@ -180,9 +170,7 @@ const resolvers = {
   
       try {
           if (contextValue.error) {
-              payload.error.message = "Could not authorize user!";
-              payload.error.error = true;
-              return payload;
+            throw new GraphQLError("Could not authorize user");
           }
 
           // Fetching the card documents that you want to add
@@ -192,7 +180,7 @@ const resolvers = {
   
           // Validate if cards were found
           if (!cardsToAdd.length) {
-              throw new Error('No cards found with the provided IDs.');
+            throw new GraphQLError("No cards with the provided ids");
           }
 
           // Update user's deck to include the new card documents
@@ -203,20 +191,18 @@ const resolvers = {
           );
 
           if (!updatedUser) {
-              throw new Error('User or deck not found.');
+            throw new GraphQLError("User or deck not found");
           }
 
           payload.id = updatedUser._id;
           payload.username = updatedUser.username;
           payload.decks = updatedUser.decks;
           return payload;
-
+  
       } catch (error) {
           console.log(error);
   
-          payload.error.message = "An error has occurred";
-          payload.error.error = true;
-          return payload;
+          throw new GraphQLError("An error has occured");
       }
   },  
 
@@ -230,9 +216,7 @@ const resolvers = {
   
       try {
           if (contextValue.error) {
-              payload.error.message = "Could not authenticate user";
-              payload.error.error = true;
-              return payload;
+            throw new GraphQLError("Could not authenticate user");
           }
   
           
@@ -242,9 +226,8 @@ const resolvers = {
           );
   
           if (result.modifiedCount === 0) {
-              payload.error.message = "No cards removed (deck or cards not found)";
-              payload.error.error = true;
-              return payload;
+              throw new GraphQLError("No cards removed (deck orcards not found)");
+             
           }
   
           
@@ -257,9 +240,7 @@ const resolvers = {
   
       } catch (error) {
           console.log(error);
-          payload.error.message = "An error has occurred";
-          payload.error.error = true;
-          return payload;
+          throw new GraphQLError("An error has occured");
       }
   },
   
@@ -273,9 +254,7 @@ const resolvers = {
       }
 
       if(contextValue.error){
-        payload.error.message = "Could not authorize user";
-        payload.error.error = true;
-        return payload;
+        throw new GraphQLError("Could not authorize user");
       }
 
       const user = await User.findById(contextValue.result);
@@ -299,9 +278,7 @@ const resolvers = {
       };
       try{
         if(contextValue.error){
-          payload.error.message = "Could not authenticate user"
-          payload.error.error = true;
-          return payload
+          throw new GraphQLError("Could not authorize user");
         }
         const deckId = new mongoose.Types.ObjectId(args.deckId);
   
@@ -312,11 +289,8 @@ const resolvers = {
         )
 
         if(result.modifiedCount === 0){
-          payload.error.message = "Could not delete deck"
-          payload.error.error = true;
-          return payload
+          throw new GraphQLError("Could not delete deck");
         }
-
         return payload;
       }catch(error){
         payload.error.error = true;

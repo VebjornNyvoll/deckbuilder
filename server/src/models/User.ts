@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, connect } from 'mongoose';
 import { IUser } from '../interfaces/user';
 import { deckSchema } from "./Deck.js"
 
@@ -8,6 +8,6 @@ const userSchema = new Schema<IUser>({
     decks: {type: [deckSchema], required: false},
 })
 
-const User = model<IUser>('User', userSchema);
+const User = model<IUser>("User", userSchema);
 
 export { User, userSchema };
