@@ -116,12 +116,16 @@ const itemTemplate = (card: Card, layout: string) => {
 
 const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
   function Decks(){
-    if (data)
+    if (data){
+      if (data.user){
+        if (data.user.decks){
       return (
         data.user.decks.map(deck => ({
           label: deck.deckName,
           icon: "pi pi-book"
-        })));
+        })));}}
+      else return [{label: 'No decks found', icon: "pi pi-times"}];
+    }
     else return [{label: 'No decks found', icon: "pi pi-times"}];
     } 
 
