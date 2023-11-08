@@ -3,7 +3,8 @@ import { CardService } from '../service/CardService';
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
-import { ListItem, GridItem, Card, CardPopUp } from './CardItem';
+import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
+import FilterComponent from "./FilterComponent";
 
 interface SortOption {
   label: string;
@@ -128,21 +129,7 @@ export default function CardView() {
     }
   };
 
-  const header = () => {
-    return (
-        <div className="flex justify-content-end">
-          <Dropdown
-              options={sortOptions}
-              value={sortKey}
-              optionLabel="label"
-              placeholder="Sort By Cost"
-              onChange={onSortChange}
-              className="w-full sm:w-14rem"
-          />
-          <DataViewLayoutOptions layout={layout} onChange={(e) => setLayout(e.value)} />
-        </div>
-    );
-  };
+  
 
   const onSortChange = (event: DropdownChangeEvent) => {
     const value = event.value;
@@ -154,9 +141,22 @@ export default function CardView() {
   };
 
   return (
-      <div className="card" ref={scrollContainerRef} style={{ overflow: 'auto', height: '783px' }}>
-        <DataView value={cards} itemTemplate={itemTemplate} layout={layout} header={header()} />
-        {popCard && <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />}
-      </div>
+    <div className="card">
+      <DataView
+        value={cards}
+        itemTemplate={itemTemplate}
+        sortField={sortField}
+        sortOrder={sortOrder}
+        layout={layout}
+        header={FilterComponent()}
+      />
+      {popCard && (
+        <CardPopUp
+          card={popCard}
+          open={isDialogOpen}
+          onClose={closeDialog}
+        ></CardPopUp>
+      )}
+    </div>
   );
 }
