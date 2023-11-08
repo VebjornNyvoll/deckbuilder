@@ -4,14 +4,24 @@ import { DataView  } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
 
 
-export default function CardView({ layout, field, value, gt, lt, sortBy }: { layout: "grid" | "list"; field: string; value: string; gt: number; lt: number; sortBy: string }) {
+export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, setPopCard] = useState<Card | undefined>();
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
+  var field  = filter.split(":")[0];
+  var sortBy = "";
+  var value = "";
+  var gt = 0;
+  var lt = 100;
+  if (Number(filter.split(":")[1])){
+    sortBy = filter.split(":")[1];
+  }
+  else{
+    value = filter.split(":")[1];
+  }
   useEffect(() => {
     loadInitialCards(50, 0, field, value, gt, lt, sortBy);
   }, [field, value, gt, lt, sortBy]);
@@ -45,7 +55,7 @@ export default function CardView({ layout, field, value, gt, lt, sortBy }: { lay
     setLoading(true);
     const startIndex = cards.length;
 
-    CardService.getCards(25, startIndex)
+    CardService.getCards(25, startIndex, field, value, gt, lt, sortBy)
       .then((data) => {
         console.log("Fetched more cards data:", data);
         if (data.cards && data.hasNextPage) {
