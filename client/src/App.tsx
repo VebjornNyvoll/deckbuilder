@@ -10,7 +10,7 @@ import { useState } from "react";
 
 function App() {
   const [layout, setLayout] = useState<"grid" | "list">("grid");
-  const [filter, setFilter] = useState<string>("");
+  const [filter, setFilter] = useState<string>("cost:0");
 
   return (
     <>

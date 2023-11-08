@@ -11,42 +11,52 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  var field  = filter.split(":")[0];
+
+  type Params = {limit?: number, skip: number, value?: string , sortBy?: number}
+  var params: Params = {limit: 10, skip: 0}
+
+  if (isNaN(parseInt(filter.split(":")[1]))){
+    params.value = filter.split(":")[1];
+  } else {
+    params.sortBy = parseInt(filter.split(":")[1]);
+  }
 
   useEffect(() => {
-    // Initialize with limit and skip
-    loadInitialCards(50, 0);
-  }, []);
+    loadInitialCards()
+  },[filter]);
 
-  const loadInitialCards = (limit: number, skip: number) => {
+  const loadInitialCards = () => {
     if (loading) return;
     setLoading(true);
 
-    CardService.getCards(limit, skip)
-      .then((data) => {
-        console.log("Fetched cards data:", data);
-        if (data.cards && data.hasNextPage) {
-          setCards(data.cards);
-          setHasMore(true);
-        } else {
+    CardService.getFilteredCards(field, params)
+        .then((data) => {
+          console.log("Fetched cards data:", data);     
+          if (data.cards && data.hasNextPage) {
+            setCards(data.cards);
+            setHasMore(true);
+          } else {
+            setCards([]);
+            setHasMore(false);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching cards:", error);
           setCards([]);
           setHasMore(false);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching cards:", error);
-        setCards([]);
-        setHasMore(false);
-        setLoading(false);
-      });
+          setLoading(false);
+        });
   };
 
   const loadMoreCards = () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    const startIndex = cards.length;
+    params.skip = cards.length;
+    console.log(params)
 
-    CardService.getCards(25, startIndex)
+    CardService.getFilteredCards(field, params)
       .then((data) => {
         console.log("Fetched more cards data:", data);
         if (data.cards && data.hasNextPage) {
@@ -111,8 +121,6 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
       return <GridItem card={card} onClick={handleClick} />;
     }
   };
-
-  // Remember to fix this issue in navbar.tsx!
 
   return (
     <div
