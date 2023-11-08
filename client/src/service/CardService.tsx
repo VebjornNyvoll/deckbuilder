@@ -1,8 +1,14 @@
 import allCards from "../data/allcards.json";
 export const CardService = {
   getCardsData() {
-    //Replace this with apollo code
-    return null
+    const mergedCards = Object.values(allCards as any).reduce(
+      (acc: any[], currentArray: any[]) => {
+        const filteredCards = currentArray.filter((card: any) => "img" in card);
+        return acc.concat(filteredCards);
+      },
+      [],
+    );
+    return mergedCards;
   },
 
   getCardsMini() {
