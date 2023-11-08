@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { CardService } from "../service/CardService";
-import { DataView } from "primereact/dataview";
+import { DataView  } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
 
-export default function CardView() {
+
+export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, setPopCard] = useState<Card | undefined>();
-  const [layout] = useState<
-    "grid" | "list" | (string & Record<string, unknown>)
-  >("grid");
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -115,7 +113,6 @@ export default function CardView() {
   };
 
   // Remember to fix this issue in navbar.tsx!
-  document.body.style.overflow = "hidden";
 
   return (
     <div
