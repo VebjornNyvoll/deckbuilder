@@ -62,7 +62,7 @@ export const CardService = {
       .then((result) => result.data.getPaginatedCards)
       .catch((error) => {
         console.error("Error fetching cards:", error);
-        return [];
+        return {cards: [], hasNextPage: false};
       });
   },
 };

@@ -4,7 +4,7 @@ import { DataView  } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
 
 
-export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
+export default function CardView({ layout, field, value, gt, lt, sortBy }: { layout: "grid" | "list"; field: string; value: string; gt: number; lt: number; sortBy: string }) {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, setPopCard] = useState<Card | undefined>();
@@ -13,32 +13,31 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Initialize with limit and skip
-    loadInitialCards(50, 0);
-  }, []);
+    loadInitialCards(50, 0, field, value, gt, lt, sortBy);
+  }, [field, value, gt, lt, sortBy]);
 
-  const loadInitialCards = (limit: number, skip: number) => {
+  const loadInitialCards = (limit: number, skip: number, field: string, value: string, gt: number, lt: number, sortBy: string) => {
     if (loading) return;
     setLoading(true);
 
-    CardService.getCards(limit, skip)
-      .then((data) => {
-        console.log("Fetched cards data:", data);
-        if (data.cards && data.hasNextPage) {
-          setCards(data.cards);
-          setHasMore(true);
-        } else {
+    CardService.getCards(limit, skip, field, value, gt, lt, sortBy)
+        .then((data) => {
+          console.log("Fetched cards data:", data);
+          if (data.cards && data.hasNextPage) {
+            setCards(data.cards);
+            setHasMore(true);
+          } else {
+            setCards([]);
+            setHasMore(false);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching cards:", error);
           setCards([]);
           setHasMore(false);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching cards:", error);
-        setCards([]);
-        setHasMore(false);
-        setLoading(false);
-      });
+          setLoading(false);
+        });
   };
 
   const loadMoreCards = () => {
@@ -111,8 +110,6 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
       return <GridItem card={card} onClick={handleClick} />;
     }
   };
-
-  // Remember to fix this issue in navbar.tsx!
 
   return (
     <div
