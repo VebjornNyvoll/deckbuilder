@@ -12,7 +12,7 @@ const typeDefs = `
     cards: [Card]
     hasNextPage: Boolean
   }
-
+  
   type Review{
     cardId: ID!
     text: String!
