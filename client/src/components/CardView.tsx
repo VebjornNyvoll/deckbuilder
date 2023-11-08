@@ -1,48 +1,96 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CardService } from "../service/CardService";
-import { DataView } from "primereact/dataview";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-
+import { DataView  } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
 
-interface SortOption {
-  label: string;
-  value: string;
-}
 
 export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [popCard, pressedCard] = useState<Card>();
-  const [sortKey, setSortKey] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<0 | 1 | -1>(0);
-  const [sortField, setSortField] = useState<string>("");
-  const sortOptions: SortOption[] = [
-    { label: "Cost: High to Low", value: "!cost" },
-    { label: "Cost: Low to High", value: "cost" },
-  ];
+  const [popCard, setPopCard] = useState<Card | undefined>();
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    CardService.getCards().then((data) => setCards(data.slice(0, 25)));
+    // Initialize with limit and skip
+    loadInitialCards(50, 0);
   }, []);
 
-  const onSortChange = (event: DropdownChangeEvent) => {
-    const value = event.value;
+  const loadInitialCards = (limit: number, skip: number) => {
+    if (loading) return;
+    setLoading(true);
 
-    if (value.indexOf("!") === 0) {
-      setSortOrder(-1);
-      setSortField(value.substring(1, value.length));
-      setSortKey(value);
-    } else {
-      setSortOrder(1);
-      setSortField(value);
-      setSortKey(value);
+    CardService.getCards(limit, skip)
+      .then((data) => {
+        console.log("Fetched cards data:", data);
+        if (data.cards && data.hasNextPage) {
+          setCards(data.cards);
+          setHasMore(true);
+        } else {
+          setCards([]);
+          setHasMore(false);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching cards:", error);
+        setCards([]);
+        setHasMore(false);
+        setLoading(false);
+      });
+  };
+
+  const loadMoreCards = () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    const startIndex = cards.length;
+
+    CardService.getCards(25, startIndex)
+      .then((data) => {
+        console.log("Fetched more cards data:", data);
+        if (data.cards && data.hasNextPage) {
+          setCards([...cards, ...data.cards]);
+          setHasMore(true);
+        } else {
+          setHasMore(false);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching more cards:", error);
+        setHasMore(false);
+        setLoading(false);
+      });
+  };
+
+  const handleScroll = () => {
+    if (loading || !hasMore) return;
+
+    const scrollY = scrollContainerRef.current.scrollTop;
+    const windowHeight = scrollContainerRef.current.clientHeight;
+    const contentHeight = scrollContainerRef.current.scrollHeight;
+
+    if (contentHeight - (scrollY + windowHeight) < 500) {
+      loadMoreCards();
     }
   };
 
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [handleScroll, scrollContainerRef]);
+
   const openDialog = (card: Card) => {
-    pressedCard(card); //Save what card is pressed
-    setIsDialogOpen(true); //Set to true so it will show dialog
+    setPopCard(card);
+    setIsDialogOpen(true);
   };
 
   const closeDialog = () => {
@@ -50,53 +98,32 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   };
 
   const itemTemplate = (card: Card, layout: string) => {
-    const handleClick = (card: Card) => {
-      //To send parameter card with the onClick, we have handleClick const that takes in card and send to open dialog. Can not do directly!
+    const handleClick = () => {
       openDialog(card);
     };
 
     if (!card) {
-      return;
+      return null;
     }
     if (layout === "list") {
       return <ListItem card={card} onClick={handleClick} />;
-    } //onClick is defined in CardItemProps to take in card param and return void, (to match handleClick)
-    else if (layout === "grid") {
+    } else if (layout === "grid") {
       return <GridItem card={card} onClick={handleClick} />;
     }
   };
 
-  const header = () => {
-    return (
-      <div className="flex justify-content-end">
-        <Dropdown
-          options={sortOptions}
-          value={sortKey}
-          optionLabel="label"
-          placeholder="Sort By Cost"
-          onChange={onSortChange}
-          className="w-full sm:w-14rem"
-        />
-      </div>
-    );
-  };
+  // Remember to fix this issue in navbar.tsx!
+  document.body.style.overflow = "hidden";
 
   return (
-    <div className="card">
-      <DataView
-        value={cards}
-        itemTemplate={itemTemplate}
-        //sortField={sortField}
-        //sortOrder={sortOrder}
-        layout={layout}
-        //header={header()}
-      />
+    <div
+      className="card"
+      ref={scrollContainerRef}
+      style={{ overflow: "auto", height: "783px" }}
+    >
+      <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
       {popCard && (
-        <CardPopUp
-          card={popCard}
-          open={isDialogOpen}
-          onClose={closeDialog}
-        ></CardPopUp>
+        <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />
       )}
     </div>
   );

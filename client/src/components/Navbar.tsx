@@ -17,9 +17,9 @@ export default function Navbar({
   setLayout: (newLayout: "grid" | "list") => void;
   setFilter: (newFilter: string) => void;
 }) {
+
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
-
   var page: boolean = false;
   switch (window.location.pathname) {
     case "/":
@@ -80,14 +80,14 @@ export default function Navbar({
               label: "High to low",
               icon: "",
               command: () => {
-                setFilter("1")
+                setFilter("cost:1")
               }
             },
             {
               label: "Low to high",
               icon: "",
               command: () => {
-                setFilter("0")
+                setFilter("cost:0")
               }
             },
           ],
@@ -99,17 +99,35 @@ export default function Navbar({
             {
               label: "Neutral",
               command: () => {
-                setFilter("Neutral")
+                setFilter("type:Neutral")
               }
             },
             {
               label: "Alliance",
               command: () => {
-                setFilter("Alliance")
+                setFilter("type:Alliance")
               }
             }
           ],
         },
+        {
+          label: "Rarity",
+          icon: "pi pi-fw pi-box",
+          items: [
+            {
+              label: "Basic",
+              command: () => {
+                setFilter("rarity:Basic")
+              }
+            },
+            {
+              label: "Common",
+              command: () => {
+                setFilter("rarity:Common")
+              }
+            }
+          ]
+        }
       ],
     },
     {
@@ -157,18 +175,11 @@ export default function Navbar({
     },
   ];
 
+  document.body.style.overflow = "visible";
   return (
     <div className="card relative z-2">
       <Menubar
         model={items.filter((item) => item !== null)}
-        //end={end}
-        pt={{
-          action: ({ props, state, context }) => ({
-            className: context.active
-              ? "bg-primary-200 border-round-sm"
-              : undefined,
-          }),
-        }}
       />
     </div>
   );
