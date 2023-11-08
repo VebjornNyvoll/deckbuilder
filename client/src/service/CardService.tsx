@@ -1,14 +1,15 @@
 import allCards from "../data/allcards.json";
 export const CardService = {
   getCardsData() {
-    const mergedCards = Object.values(allCards as any).reduce(
-      (acc: any[], currentArray: any[]) => {
-        const filteredCards = currentArray.filter((card: any) => "img" in card);
-        return acc.concat(filteredCards);
-      },
-      [],
-    );
-    return mergedCards;
+    // const mergedCards = Object.values(allCards as any).reduce(
+    //   (acc: any[], currentArray: any[]) => {
+    //     const filteredCards = currentArray.filter((card: any) => "img" in card);
+    //     console.log(filteredCards);
+    //     return acc.concat(filteredCards);
+    //   },
+    //   [],
+    // );
+    return null;
   },
 
   getCardsMini() {
