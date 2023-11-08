@@ -8,6 +8,6 @@ const userSchema = new Schema<IUser>({
     decks: {type: [deckSchema], required: false},
 })
 
-const User = model<IUser>('User', userSchema);
+const User = model<IUser>("User", userSchema);
 
 export { User, userSchema };

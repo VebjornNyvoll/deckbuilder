@@ -6,22 +6,21 @@ import 'primeflex/primeflex.css';                                   // css utili
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.css';                       // core css
 import App from './App';
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
+import client from './service/apolloClient';
+import { BrowserRouter } from 'react-router-dom';
+import {AuthProvider} from './context/authContext';
 
-
-const client = new ApolloClient({
-  uri: 'http://localhost:1001/Hearthstone',
-  cache: new InMemoryCache(),
-});
-
-//<HearthStoneCardComponent  card={HearthStoneInfo.getCardsData()[0]}/>
 ReactDOM.createRoot(document.getElementById('root')!).render(
+    <AuthProvider>
   <ApolloProvider client={client}>
-<React.StrictMode>
-    <PrimeReactProvider> 
-    <App/>
-    </PrimeReactProvider>
-    
-  </React.StrictMode>
-  </ApolloProvider>,
+    <BrowserRouter>
+      <React.StrictMode>
+        <PrimeReactProvider> 
+        <App/>
+        </PrimeReactProvider>
+      </React.StrictMode>
+    </BrowserRouter>
+  </ApolloProvider>
+</AuthProvider>,
 )

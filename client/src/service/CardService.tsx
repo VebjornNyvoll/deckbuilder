@@ -1,31 +1,27 @@
-import allCards from "../data/allcards.json"
+import allCards from "../data/allcards.json";
 export const CardService = {
-    getCardsData() {
-        const mergedCards = Object.values(allCards as any).reduce((acc: any[], currentArray: any[]) => {
-            const filteredCards = currentArray.filter((card: any) => 'img' in card);
-            return acc.concat(filteredCards);
-        }, []);
-        return mergedCards;
-    },
-    
-    getCardsMini() {
-        return Promise.resolve(this.getCardsData().slice(0, 5));
-    },
+  getCardsData() {
+    //Replace this with apollo code
+    return null
+  },
 
-    getCardsSmall() {
-        return Promise.resolve(this.getCardsData().slice(0, 10));
-    },
+  getCardsMini() {
+    return Promise.resolve(this.getCardsData().slice(0, 5));
+  },
 
-    getCards() {
-        return Promise.resolve(this.getCardsData());
-    },
+  getCardsSmall() {
+    return Promise.resolve(this.getCardsData().slice(0, 10));
+  },
 
-    getCardsWithOrdersSmall() {
-        return Promise.resolve(this.getCardsWithOrders().slice(0, 10));
-    },
+  getCards() {
+    return Promise.resolve(this.getCardsData());
+  },
 
-    getCardsWithOrders() {
-        return Promise.resolve(this.getCardsWithOrders());
-    }
+  getCardsWithOrdersSmall() {
+    return Promise.resolve(this.getCardsWithOrders().slice(0, 10));
+  },
+
+  getCardsWithOrders() {
+    return Promise.resolve(this.getCardsWithOrders());
+  },
 };
-

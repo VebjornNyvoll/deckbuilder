@@ -1,10 +1,8 @@
-import CardView from "./components/CardView";
-import Navbar from "./components/Navbar";
+import CardView from "../components/CardView";
 
 export default function Index(){
     return(
     <div>
-        <Navbar/>
         <CardView/>   
     </div>
     )
