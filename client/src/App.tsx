@@ -9,21 +9,22 @@ import RequireAuth from "./service/RequireAuth";
 import { useState } from "react";
 
 function App() {
-  const [layout, setLayout] = useState<"grid" | "list">("list");
+  const [layout, setLayout] = useState<"grid" | "list">("grid");
+  const [filter, setFilter] = useState<string>("");
 
   return (
     <>
-      <Navbar layout={layout} setLayout={setLayout} />
+      <Navbar layout={layout} setLayout={setLayout} setFilter={setFilter} />
       <Routes>
         <Route path="/detail/:cardId" element={<DetailedView />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
-        <Route index element={<Index layout={layout} />} />
+        <Route index element={<Index layout={layout} filter={filter} />} />
         <Route
           path="/decks"
           element={
             <RequireAuth>
-              <Deck layout={layout} />
+              <Deck layout={layout} filter={filter}/>
             </RequireAuth>
           }
         />

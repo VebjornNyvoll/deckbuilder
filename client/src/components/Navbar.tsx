@@ -11,9 +11,11 @@ import { AuthContext } from "../context/authContext";
 export default function Navbar({
   layout,
   setLayout,
+  setFilter,
 }: {
   layout: "grid" | "list";
   setLayout: (newLayout: "grid" | "list") => void;
+  setFilter: (newFilter: string) => void;
 }) {
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
@@ -35,7 +37,6 @@ export default function Navbar({
     logout();
     navigate("/");
   };
-  var sortorder: boolean = true;
   var datasaver: boolean = false;
   const [darkmode, setTheme] = useState<true | false>(false);
 
@@ -45,7 +46,7 @@ export default function Navbar({
 
   function DataSaver() {
     datasaver = !datasaver;
-    //Code to log out and route to loginpage
+    //Code to turn on datasaverMode
   }
   function DarkMode() {
     setTheme(!darkmode);
@@ -73,22 +74,41 @@ export default function Navbar({
       items: [
         {
           label: "Cost",
-          icon: "",
+          icon: "pi pi-fw pi-money-bill",
           items: [
             {
               label: "High to low",
               icon: "",
+              command: () => {
+                setFilter("1")
+              }
             },
             {
               label: "Low to high",
               icon: "",
+              command: () => {
+                setFilter("0")
+              }
             },
           ],
         },
         {
           label: "Faction",
-          icon: "",
-          items: [],
+          icon: "pi pi-fw pi-prime",
+          items: [
+            {
+              label: "Neutral",
+              command: () => {
+                setFilter("Neutral")
+              }
+            },
+            {
+              label: "Alliance",
+              command: () => {
+                setFilter("Alliance")
+              }
+            }
+          ],
         },
       ],
     },
@@ -100,15 +120,12 @@ export default function Navbar({
         switchLayout();
       },
     },
-    {
-      separator: true,
-    },
-    {
+    { //Searchbar
       template: (
         <InputText placeholder="Search" type="text" className="w-full" />
       ),
     },
-    {
+    { //Profile, swap out for avatar picture at const end, end = {end}
       label: "Profile",
       icon: "pi pi-fw pi-user",
       items: [
@@ -125,7 +142,6 @@ export default function Navbar({
         {
           label: "Datasaver",
           icon: "pi pi-fw pi-bolt",
-
           command: () => {
             DataSaver();
           },

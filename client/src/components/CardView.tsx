@@ -10,7 +10,7 @@ interface SortOption {
   value: string;
 }
 
-export default function CardView({ layout }: { layout: "grid" | "list" }) {
+export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, pressedCard] = useState<Card>();
@@ -86,8 +86,8 @@ export default function CardView({ layout }: { layout: "grid" | "list" }) {
       <DataView
         value={cards}
         itemTemplate={itemTemplate}
-        sortField={sortField}
-        sortOrder={sortOrder}
+        //sortField={sortField}
+        //sortOrder={sortOrder}
         layout={layout}
         //header={header()}
       />

@@ -7,7 +7,7 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 
-export default function Deck({ layout }: { layout: "grid" | "list" }) {
+export default function Deck({ layout, filter }: { layout: "grid" | "list"; filter: string}) {
   const { user } = useContext(AuthContext);
   const overlayPanel = useRef(null);
   const items: MenuItem = [
@@ -56,7 +56,7 @@ export default function Deck({ layout }: { layout: "grid" | "list" }) {
       <div className="flex">
         <Menu model={items} />
         <div className="w-12">
-          <CardView layout={layout} />
+          <CardView layout={layout} filter={filter} />
         </div>
       </div>
     </>
