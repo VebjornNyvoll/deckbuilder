@@ -7,9 +7,9 @@ interface Props {
 }
 
 export default function RequireAuth({ children }: Props): ReactElement {
-    const user = useContext(AuthContext);
+    const {user} = useContext(AuthContext);
 
-    if (!user || user.user === null) {
+    if (!user || user === null) {
         return <Navigate to="/login" />;
     }
 
