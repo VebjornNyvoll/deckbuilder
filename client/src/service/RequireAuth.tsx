@@ -3,16 +3,15 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 
 interface Props {
-    children: ReactElement;
+  children: ReactElement;
 }
 
 export default function RequireAuth({ children }: Props): ReactElement {
-    const user = useContext(AuthContext);
+    const {user} = useContext(AuthContext);
 
-    if (!user || user.user === null) {
+    if (!user || user === null) {
         return <Navigate to="/login" />;
     }
 
-    return children;
+  return children;
 }
-

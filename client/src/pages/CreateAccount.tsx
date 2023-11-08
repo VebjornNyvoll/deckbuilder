@@ -3,59 +3,50 @@ import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
 import { useContext, useRef, useState } from "react";
 import { Avatar } from "primereact/avatar";
-import placeholder_avatar from '../img/placeholder_avatar.png'
+import placeholder_avatar from "../img/placeholder_avatar.png";
 import { Toast } from "primereact/toast";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { useForm } from "../service/hooks";
-import { useMutation } from '@apollo/client';
-import {gql} from 'graphql-tag';
+import { useMutation } from "@apollo/client";
+import { gql } from "graphql-tag";
 import { useNavigate } from "react-router-dom";
 
 const CREATE_USER = gql`
     mutation CreateUser($username: String!, $password: String!){
         createUser(username: $username, password: $password){
-            user{
-                username
-            }
-            
+            user{username}
+            token   
         }
     }
 `;
 
 function CreateAccount(props) {
-    const context = useContext(AuthContext);
-    const navigate = useNavigate();
-    const [errors, setErrors] = useState([]);
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
 
     const validateForm = (event) => {
         event.preventDefault();
     
-        const errors = [];
-    
         if (!values.username || values.username.length < 3) {
-            errors.push('Username needs to be minimum 3 characters');
+            setErrors(['Username needs to be minimum 3 characters']);
         }
     
         if (!values.password || values.password.length < 3) {
-            errors.push('Password needs to be minimum 3 characters');
+            setErrors(['Password needs to be minimum 3 characters']);
         }
     
         if (!checked) {
-
-            errors.push('You must accept the Terms of Service');
+            setErrors(['You need to accept the terms of service']);
         }
     
-        console.log('Validation Errors:', errors);
-    
-        if (errors.length === 0) {
+        if (errors.length == 0) {
             createUser();
         } else {
             console.log('Validation failed');
             // Display validation errors using the toast
-            errors.forEach(error => {
-                toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error });
-            });
+            toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: "Validation failed" });
         }
     };
     
@@ -78,13 +69,13 @@ function CreateAccount(props) {
         },
         variables: {username: values.username, password: values.password}
     });
-    
-    const [checked, setChecked] = useState(false);
 
-    const toast = useRef<Toast>(null);
+  const [checked, setChecked] = useState(false);
+
+  const toast = useRef<Toast>(null);
 
     const show = () => {
-        toast.current?.show({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });
+        toast.current?.replace({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });
     };
 
     return (
@@ -120,8 +111,10 @@ function CreateAccount(props) {
                         </div>
                         {errors.map(function(error){
                             return (
-                                <>
-                                    {toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
+                                <>  
+                                    {setErrors([...new Set(errors)])};
+                                    {toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
+                                    {setErrors([])};
                                 </>
                             )
                         })}

@@ -55,7 +55,7 @@ function Login(props) {
         } else {
             // Display validation errors using the toast
             errors.forEach(error => {
-                toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error });
+                toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error });
             });
         }
     };
@@ -72,7 +72,7 @@ function Login(props) {
     });
     const toast = useRef<Toast>(null);
     const showForgotPassword = () => {
-        toast.current?.show({severity: 'info', summary: 'Forgot password', detail: '✨No worries, you can just make a new account!✨'});
+        toast.current?.replace({severity: 'info', summary: 'Forgot password', detail: '✨No worries, you can just make a new account!✨'});
     }
     return (
             <>
@@ -103,8 +103,10 @@ function Login(props) {
                             </div>
                             {errors.map(function(error){
                             return (
-                                <>
-                                    {toast.current?.show({ severity: 'error', summary: 'Error Message', detail: error.message })};
+                                <>  
+                                    {setErrors([...new Set(errors)])};
+                                    {toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error.message })};
+                                    {setErrors([])};
                                 </>
                             )
                             })}

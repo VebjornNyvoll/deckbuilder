@@ -83,10 +83,18 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
       onHide={onClose}
       footer={footerContent}
     >
-      <div style={{justifyContent: "center", alignContent: "center", marginTop: "0px" }}>
-      <p>Rarity: {card.rarity? card.rarity : "no rarity"}</p>
-      <p>Text: {parse(card.text ? card.text.replace("[x]", "") : "no text")}</p>
-      <p>Flavor: {card.flavor? card.flavor: "no flavor"}</p>
+      <div
+        style={{
+          justifyContent: "center",
+          alignContent: "center",
+          marginTop: "0px",
+        }}
+      >
+        <p>Rarity: {card.rarity ? card.rarity : "no rarity"}</p>
+        <p>
+          Text: {parse(card.text ? card.text.replace("[x]", "") : "no text")}
+        </p>
+        <p>Flavor: {card.flavor ? card.flavor : "no flavor"}</p>
       </div>
     </Dialog>
   );

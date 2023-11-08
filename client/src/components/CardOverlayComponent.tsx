@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
@@ -18,6 +18,24 @@ export const CardOverlayComponent = ({ op, cardId }) => {
       }
     }
   `;
+
+  const GET_DECKS = gql`
+  query Decks {
+  user {
+  decks {
+    deckName
+    id
+  } 
+  }
+  }`;
+  const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
+  const products = data.user.decks.map((deck) => {
+    return {
+      deckId: deck.id,
+      name: deck.deckName
+    }
+  });
+
   const toast = useRef<Toast>(null);
   
   const show = (error, content) => {
@@ -29,21 +47,9 @@ export const CardOverlayComponent = ({ op, cardId }) => {
   }
   const handleClick = (e) => {
     e.stopPropagation();
+
   };
-  const products = [{ name: "654ba1c6da3d8ce2c2447cee" , deckId: "654ba1c6da3d8ce2c2447cee"},
-                    { name: "654ba1c6da3d8ce2c2447cee" , deckId: "654ba1c6da3d8ce2c2447cee"},
-                    { name: "654ba1c6da3d8ce2c2447cee" , deckId: "654ba1c6da3d8ce2c2447cee"},
-                    { name: "654ba1c6da3d8ce2c2447cee" , deckId: "654ba1c6da3d8ce2c2447cee"}, 
-                    { name: "654ba1c6da3d8ce2c2447cee" , deckId: "654ba1c6da3d8ce2c2447cee"}, 
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"}, 
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"},
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"},
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"},
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"},
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"}, 
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"}, 
-                    { name: "a" , deckId: "654ba1c6da3d8ce2c2447cee"}, 
-                    { name: "a", deckId: "654ba1c6da3d8ce2c2447cee"}];
+
 
   const context = useContext(AuthContext);
 
