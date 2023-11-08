@@ -24,12 +24,15 @@ export default function Navbar({
   switch (window.location.pathname) {
     case "/":
       page = true;
+      document.body.style.overflow = "hidden";
       break;
     case "/decks":
       page = true;
+      document.body.style.overflow = "hidden";
       break;
     default:
       page = false;
+      document.body.style.overflow = "visible";
       break;
   }
 
@@ -175,7 +178,6 @@ export default function Navbar({
     },
   ];
 
-  document.body.style.overflow = "visible";
   return (
     <div className="card relative z-2">
       <Menubar

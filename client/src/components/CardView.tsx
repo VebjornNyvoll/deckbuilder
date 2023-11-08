@@ -113,7 +113,6 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   };
 
   // Remember to fix this issue in navbar.tsx!
-  document.body.style.overflow = "hidden";
 
   return (
     <div
