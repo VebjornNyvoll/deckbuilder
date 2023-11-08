@@ -145,8 +145,6 @@ export default function CardView() {
       <DataView
         value={cards}
         itemTemplate={itemTemplate}
-        sortField={sortField}
-        sortOrder={sortOrder}
         layout={layout}
         header={FilterComponent()}
       />
