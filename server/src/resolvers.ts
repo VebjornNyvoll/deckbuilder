@@ -33,7 +33,7 @@ const resolvers = {
   },
 
   filteredCards: async (parent, args) => {
-    const { field, value, gt, lt, sortBy } = args;
+    const {skip = 0, limit = 10, field, value, gt, lt, sortBy } = args;
     let query = {};
 
     // If value is provided, perform a string match
@@ -50,14 +50,20 @@ const resolvers = {
 
     try {
       // Base query with possibility of sorting
-      let itemsQuery = Cards.find(query);
+      let itemsQuery = Cards.find(query).skip(skip).limit(limit);
       if (sortBy) {
-        itemsQuery = itemsQuery.sort({ [sortBy]: 1 }); // 1 for ascending order
+        itemsQuery = itemsQuery.sort({ [field]: sortBy }); // 1 for ascending order
       }
 
       // Execute the query
       const items = await itemsQuery.exec();
-      return items;
+      const totalCards = await Cards.find(query).countDocuments();
+
+      const hasNextPage = skip + limit < totalCards;
+      console.log(items, hasNextPage);
+      
+      
+      return {cards: items, hasNextPage:hasNextPage};
     } catch (error) {
       console.error(error);
       throw new GraphQLError("Could not fetch items");

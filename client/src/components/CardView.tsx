@@ -12,27 +12,30 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   var field  = filter.split(":")[0];
-  var sortBy = "";
-  var value = "";
-  var gt = 0;
-  var lt = 100;
-  if (Number(filter.split(":")[1])){
-    sortBy = filter.split(":")[1];
-  }
-  else{
-    value = filter.split(":")[1];
-  }
-  useEffect(() => {
-    loadInitialCards(50, 0, field, value, gt, lt, sortBy);
-  }, [field, value, gt, lt, sortBy]);
+  console.log(field)
 
-  const loadInitialCards = (limit: number, skip: number, field: string, value: string, gt: number, lt: number, sortBy: string) => {
+  type Params = {limit?: number, skip?: number, value?: string , sortBy?: number}
+  var params: Params = {limit: 10, skip: 0}
+
+  if (isNaN(parseInt(filter.split(":")[1]))){
+    params.value = filter.split(":")[1];
+  } else {
+    params.sortBy = parseInt(filter.split(":")[1]);
+  }
+
+  useEffect(() => {
+    loadInitialCards()
+  },[field, params]);
+
+  const loadInitialCards = () => {
     if (loading) return;
     setLoading(true);
+    params.skip = 0;
+    console.log(params)
 
-    CardService.getCards(limit, skip, field, value, gt, lt, sortBy)
+    CardService.getFilteredCards(field, params)
         .then((data) => {
-          console.log("Fetched cards data:", data);
+          console.log("Fetched cards data:", data);     
           if (data.cards && data.hasNextPage) {
             setCards(data.cards);
             setHasMore(true);
@@ -53,9 +56,10 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   const loadMoreCards = () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    const startIndex = cards.length;
+    params.skip = cards.length;
+    console.log(params.skip)
 
-    CardService.getCards(25, startIndex, field, value, gt, lt, sortBy)
+    CardService.getFilteredCards(field, params)
       .then((data) => {
         console.log("Fetched more cards data:", data);
         if (data.cards && data.hasNextPage) {

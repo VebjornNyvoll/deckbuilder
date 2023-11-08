@@ -103,13 +103,13 @@ export default function Navbar({
             {
               label: "Neutral",
               command: () => {
-                setFilter("type:Neutral")
+                setFilter("faction:Neutral")
               }
             },
             {
               label: "Alliance",
               command: () => {
-                setFilter("type:Alliance")
+                setFilter("faction:Alliance")
               }
             }
           ],
@@ -119,17 +119,17 @@ export default function Navbar({
           icon: "pi pi-fw pi-box",
           items: [
             {
-              label: "Basic",
-              command: () => {
-                setFilter("rarity:Basic")
-              }
-            },
-            {
               label: "Common",
               command: () => {
                 setFilter("rarity:Common")
               }
-            }
+            },
+            {
+              label: "Rare",
+              command: () => {
+                setFilter("rarity:Rare")
+              }
+            },
           ]
         }
       ],
