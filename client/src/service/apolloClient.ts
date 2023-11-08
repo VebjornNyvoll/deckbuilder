@@ -2,7 +2,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:1001/Hearthstone",
+    uri: "http://localhost:4000/Hearthstone"
 });
 
 const authLink = setContext((_, { headers }) => {

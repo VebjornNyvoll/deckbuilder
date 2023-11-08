@@ -77,7 +77,7 @@ function CreateAccount(props) {
     const show = () => {
         toast.current?.replace({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });
     };
-    
+
     return (
         <>
          <Toast ref={toast} />

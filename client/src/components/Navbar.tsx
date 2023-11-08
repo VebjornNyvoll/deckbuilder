@@ -26,10 +26,10 @@ export default function Navbar({
       page = true;
       document.body.style.overflow = "hidden";
       break;
-    case "/decks":
-      page = true;
-      document.body.style.overflow = "hidden";
-      break;
+    // case "/decks":
+    //   page = true;
+    //   document.body.style.overflow = "hidden";
+    //   break;
     default:
       page = false;
       document.body.style.overflow = "visible";
