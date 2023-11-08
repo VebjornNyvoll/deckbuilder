@@ -107,6 +107,16 @@ function addCardToDeck() {
 }
 
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
+
+  
+  const op = useRef(null); 
+  const showOverlayPanel = (event) => {
+    // Prevent event from bubbling up to parent elements
+    event.stopPropagation();
+    if (op.current && op.current.toggle) {
+      op.current.toggle(event);
+    }
+  };
   //The onClick as defined in Props must take in a argument card
   const handleItemClick = () => {
     if (onClick) {
@@ -153,11 +163,14 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
             <span className="text-2xl font-semibold">
               {card.cost ? "Cost: " + card.cost.toString() : "No cost"}
             </span>
-            <Button
-              icon="pi pi-plus"
-              className="p-button-rounded"
-              onClick={addCardToDeck}
-            ></Button>
+            <OverlayPanel ref={op} dismissable>
+          <CardOverlayComponent op={op} cardId={card.id} />
+        </OverlayPanel>
+        <Button
+        icon="pi pi-plus"
+        className="p-button-rounded"
+        onClick={showOverlayPanel}
+      />
           </div>
         </div>
       </div>
@@ -169,7 +182,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
 
   
-  const op = useRef(null); // Assuming you've already declared this.
+  const op = useRef(null); 
   const showOverlayPanel = (event) => {
     // Prevent event from bubbling up to parent elements
     event.stopPropagation();
