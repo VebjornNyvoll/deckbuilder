@@ -39,9 +39,11 @@ const resolvers = {
       return error;
     }
   },
+
   filteredCards: async (parent, args) => {
-    const { skip=10, limit=0, field, value, gt, lt, sortBy } = args;
+    const { field, value, gt, lt, sortBy } = args;
     let query = {};
+
     // If value is provided, perform a string match
     if (value) {
       query[field] = new RegExp(value, 'i'); // Case-insensitive matching
@@ -56,9 +58,9 @@ const resolvers = {
 
     try {
       // Base query with possibility of sorting
-      let itemsQuery = Cards.find(query).skip(skip).limit(limit);
+      let itemsQuery = Cards.find(query);
       if (sortBy) {
-        itemsQuery = itemsQuery.sort({ [field]: sortBy }); // 1 for ascending order
+        itemsQuery = itemsQuery.sort({ [sortBy]: 1 }); // 1 for ascending order
       }
 
       // Execute the query
@@ -308,3 +310,4 @@ const resolvers = {
 };
 
 export { resolvers };
+

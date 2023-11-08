@@ -63,42 +63,7 @@ export const CardService = {
         return [];
       });
   },
-  getFilteredCards(field, options = {}) {
+    getFilteredCards(limit: number, skip: number, filter: string) {
 
-    const { limit, skip, value, sortBy } = options;
-
-    let variables = { field }; 
-  
-    if (limit !== undefined) {
-      variables.limit = limit;
     }
-    if (skip !== undefined) {
-      variables.skip = skip;
-    }
-    if (value !== undefined) {
-      variables.value = value;
-    }
-    if (sortBy !== undefined) {
-      variables.sortBy = sortBy;
-    }
-    return client
-      .query({
-        query: gql`
-        query FilteredCards($field: String!, $limit: Int, $skip: Int, $value: String, $sortBy: Int) {
-          filteredCards(field: $field, limit: $limit, skip: $skip, value: $value, sortBy: $sortBy) {
-            name
-          }
-        }
-        `,
-        variables: variables,
-      })
-      .then((result) => result.data.filteredCards)
-      .catch((error) => {
-        console.error("Error fetching cards:", error);
-        return [];
-      });
-  }
 };
-
-
-
