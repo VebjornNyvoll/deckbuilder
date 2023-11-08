@@ -8,6 +8,7 @@ import { AuthContext } from '../context/authContext';
 
 
 export const CardOverlayComponent = ({ op, cardId }) => {
+  const context = useContext(AuthContext);
   const CARD_TO_DECK =  gql`
   mutation AddCards($cardIds: [ID!]!, $deckId: ID!) {
       addCards(cardIds: $cardIds, deckId: $deckId) {
@@ -29,7 +30,11 @@ export const CardOverlayComponent = ({ op, cardId }) => {
   }
   }`;
   const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
-  const products = data.user.decks.map((deck) => {
+  if (loadingDecks) return [{deckId: null, name: null}];
+  if (errorDecks) return [{deckId: null, name: null}];
+  // DO NOT REMOVE! The console log is needed to ensure data is loaded before the component is rendered
+  console.log(context.user);
+  const products = data?.user?.decks?.map((deck) => {
     return {
       deckId: deck.id,
       name: deck.deckName
@@ -51,8 +56,7 @@ export const CardOverlayComponent = ({ op, cardId }) => {
   };
 
 
-  const context = useContext(AuthContext);
-
+  
   // Hook to call the mutation
   const [addCardsToDeck] = useMutation(CARD_TO_DECK);
 
