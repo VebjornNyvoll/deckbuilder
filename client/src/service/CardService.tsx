@@ -1,17 +1,18 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const client = new ApolloClient({
-    uri: "http://localhost:1001/Hearthstone",
-    cache: new InMemoryCache(),
+  uri: "http://localhost:1001/Hearthstone",
+  cache: new InMemoryCache(),
 });
 
 export const CardService = {
-    getCards(limit: number, skip: number) {
-        return client.query({
-            query: gql`
-        query GetCards($limit: Int, $skip: Int) {
-          getPaginatedCards(limit: $limit, skip: $skip) {
-            cards {
+  getCards(limit: number, skip: number) {
+    return client
+      .query({
+        query: gql`
+          query GetCards($limit: Int, $skip: Int) {
+            getPaginatedCards(limit: $limit, skip: $skip) {
+              cards {
                 id
                 cardId
                 dbfId
@@ -48,18 +49,21 @@ export const CardService = {
                 classes
               }
               hasNextPage
+            }
           }
-        }
-      `,
-            variables: {
-                limit,
-                skip,
-            },
-        })
-            .then((result) => result.data.getPaginatedCards)
-            .catch((error) => {
-                console.error("Error fetching cards:", error);
-                return [];
-            });
-    },
+        `,
+        variables: {
+          limit,
+          skip,
+        },
+      })
+      .then((result) => result.data.getPaginatedCards)
+      .catch((error) => {
+        console.error("Error fetching cards:", error);
+        return [];
+      });
+  },
+    getFilteredCards(limit: number, skip: number, filter: string) {
+
+    }
 };
