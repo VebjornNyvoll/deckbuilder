@@ -58,7 +58,7 @@ const resolvers = {
       // Base query with possibility of sorting
       let itemsQuery = Cards.find(query).skip(skip).limit(limit);
       if (sortBy) {
-        itemsQuery = itemsQuery.sort({ [sortBy]: 1 }); // 1 for ascending order
+        itemsQuery = itemsQuery.sort({ [field]: sortBy }); // 1 for ascending order
       }
 
       // Execute the query
