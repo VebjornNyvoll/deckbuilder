@@ -86,7 +86,6 @@ const { data: cardData } = useQuery(GET_CARDS_IN_DECK);
 
 const handleDeckSelect = (index) => {
   setCards(cardData.user.decks[index].cards);
-  console.log(cardData.user.decks[index].cards);
 };
 
 const [cards, setCards] = useState([]);
@@ -123,7 +122,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
           label: deck.deckName,
           icon: "pi pi-book"
         })));
-    else return [{label: 'No decks', icon: "pi pi-book"}];
+    else return [{label: 'No decks found', icon: "pi pi-times"}];
     } 
 
     const clearCreateDeck = () => {
@@ -134,6 +133,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
     const handleCreateDeck = () => {  
       createDeck();
       clearCreateDeck();
+      // Should convert to useState instead of reloading page, but this works for now
       window.location.reload();
     }
 
@@ -164,8 +164,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
           label:'Options',
           items:[
             { 
-              command: (e) => { setVisible(true);
-              console.log(e) },
+              command: (e) => { setVisible(true);},
               template: (item, options) => {
                   return (
                     <div className='card flex justify-content-center'>

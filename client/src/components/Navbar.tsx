@@ -31,7 +31,6 @@ export default function Navbar() {
             command: () => { user ? onLogout() : navigate('/login'); },
         },
     ];
-    console.log(user);
     return (
         <div className="card relative z-2">
             <Menubar

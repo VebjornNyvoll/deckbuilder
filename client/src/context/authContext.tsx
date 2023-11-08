@@ -6,7 +6,6 @@ const initialState = {
 }
 
 if(localStorage.getItem("token") && localStorage.getItem("token") != "undefined" && localStorage.getItem("token") != "null") {
-    console.log("AUTHCONTEXT: " + localStorage.getItem("token"));
     const token = localStorage.getItem("token");
     const decodedToken = jwtDecode<JwtPayload>(token);
 
