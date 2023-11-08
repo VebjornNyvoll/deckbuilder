@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import CardTooltip from "./CardTooltip";
 import { Dialog } from "primereact/dialog";
 import parse from "html-react-parser";
-
+import {CardOverlayComponent} from "./CardOverlayComponent";
+import { OverlayPanel } from "primereact/overlaypanel";
 interface CardItemProps {
   card: Card;
   onClick?: (card: Card) => void;
@@ -13,6 +14,7 @@ interface Mechanic {
   name: string;
 }
 export interface Card {
+  id: string;
   cardId: string;
   dbfId: number;
   name: string;
@@ -90,8 +92,10 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
   );
 }
 
-function addCardToDeck(event: { stopPropagation: () => void }) {
-  event.stopPropagation();
+
+function addCardToDeck() {
+  
+  
 }
 
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
@@ -153,7 +157,20 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   );
 };
 
+
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
+
+  
+  const op = useRef(null); // Assuming you've already declared this.
+  const showOverlayPanel = (event) => {
+    // Prevent event from bubbling up to parent elements
+    event.stopPropagation();
+    if (op.current && op.current.toggle) {
+      op.current.toggle(event);
+    }
+  };
+  
+  
   const handleItemClick = () => {
     if (onClick) {
       onClick(card);
@@ -161,10 +178,9 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   };
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
-      <div
-        className="p-4 border-1 surface-border surface-card border-round"
-        onClick={handleItemClick}
-      >
+      <div className="p-4 border-1 surface-border surface-card border-round">
+
+      <div onClick={handleItemClick}>
         <div className="flex flex-wrap align-items-center justify-content-between gap-2">
           <div className="flex align-items-center gap-2">
             <i className="pi pi-book"></i>{" "}
@@ -197,12 +213,16 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           <span className="text-2xl font-semibold">
             {card.cost ? "Cost: " + card.cost.toString() : "No cost"}
           </span>
-          <Button
-            icon="pi pi-plus"
-            className="p-button-rounded"
-            onClick={addCardToDeck}
-          ></Button>
         </div>
+        <OverlayPanel ref={op} dismissable>
+        <CardOverlayComponent op={op} cardId={card.id} />
+      </OverlayPanel>
+      </div>
+      <Button
+        icon="pi pi-plus"
+        className="p-button-rounded"
+        onClick={showOverlayPanel}
+      />
       </div>
     </div>
   );

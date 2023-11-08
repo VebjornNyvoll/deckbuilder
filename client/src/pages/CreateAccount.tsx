@@ -15,7 +15,10 @@ import { useNavigate } from "react-router-dom";
 const CREATE_USER = gql`
     mutation CreateUser($username: String!, $password: String!){
         createUser(username: $username, password: $password){
-            username
+            user{
+                username
+            }
+            
         }
     }
 `;
@@ -75,7 +78,7 @@ function CreateAccount(props) {
         },
         variables: {username: values.username, password: values.password}
     });
-
+    
     const [checked, setChecked] = useState(false);
 
     const toast = useRef<Toast>(null);
@@ -83,7 +86,7 @@ function CreateAccount(props) {
     const show = () => {
         toast.current?.show({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });
     };
-    
+
     return (
         <>
          <Toast ref={toast} />

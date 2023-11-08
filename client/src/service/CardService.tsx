@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "http://localhost:1001/Hearthstone",
+  uri: "http://localhost:4000/Hearthstone",
   cache: new InMemoryCache(),
 });
 
