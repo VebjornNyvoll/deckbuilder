@@ -1,4 +1,4 @@
-import { Schema, model, connect } from "mongoose";
+import { Schema, model } from "mongoose";
 import { ICard } from "../interfaces/card.js";
 import { IMechanics } from "../interfaces/mechanics.js";
 
