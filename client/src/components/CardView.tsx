@@ -12,9 +12,8 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   var field  = filter.split(":")[0];
-  console.log(field)
 
-  type Params = {limit?: number, skip?: number, value?: string , sortBy?: number}
+  type Params = {limit?: number, skip: number, value?: string , sortBy?: number}
   var params: Params = {limit: 10, skip: 0}
 
   if (isNaN(parseInt(filter.split(":")[1]))){
@@ -25,13 +24,11 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
 
   useEffect(() => {
     loadInitialCards()
-  },[field, params]);
+  },[filter]);
 
   const loadInitialCards = () => {
     if (loading) return;
     setLoading(true);
-    params.skip = 0;
-    console.log(params)
 
     CardService.getFilteredCards(field, params)
         .then((data) => {
@@ -57,7 +54,7 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
     if (loading || !hasMore) return;
     setLoading(true);
     params.skip = cards.length;
-    console.log(params.skip)
+    console.log(params)
 
     CardService.getFilteredCards(field, params)
       .then((data) => {
