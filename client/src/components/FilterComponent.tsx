@@ -43,6 +43,9 @@ export default function FilterComponent() {
             case 'integer':
                 setFilterInput('integer');
                 break;
+            case 'boolean':
+                setFilterInput('boolean');
+                break;
             default:
                 setFilterInput(null);
                 break;
@@ -53,6 +56,9 @@ export default function FilterComponent() {
         switch (filterInput) {
             case 'string':
                 return (
+                    <div>
+
+                   
                     <>
                     <InputText
                         value={filterValue}
@@ -66,12 +72,15 @@ export default function FilterComponent() {
                             placeholder="Select Sorting"
                         />
                     </>
+                    </div>
                     
 
                     
                 );
             case 'integer':
                 return (
+                    <div>
+                        
                     <>
                         <InputText
                             keyfilter="int"
@@ -92,7 +101,35 @@ export default function FilterComponent() {
                             placeholder="Select Sorting"
                         />
                     </>
+                    
+                    </div>
                 );
+                case 'boolean':
+                    return (
+                        <div>
+                        <>
+                            <InputText
+                                keyfilter="int"
+                                value={filterValue}
+                                onChange={(e) => setFilterValue(e.target.value)}
+                                placeholder="Enter number"
+                            />
+                            <Dropdown
+                                value={comparison}
+                                options={comparisonOptions}
+                                onChange={(e) => setComparison(e.value)}
+                                placeholder="Select Comparison"
+                            />
+                            <Dropdown
+                                value={sorting}
+                                options={sortOptions}
+                                onChange={(e) => setSorting(e.value)}
+                                placeholder="Select Sorting"
+                            />
+                        </>
+                        </div>
+                    );
+            
             default:
                 return null;
         }
