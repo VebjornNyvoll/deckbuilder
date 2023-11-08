@@ -29,7 +29,7 @@ const resolvers = {
           hasNextPage,
       };
   },
-
+  
   getReviewsByCardId: async (parent, args) => {
     try{
       const cardId = args.cardId;
@@ -39,11 +39,9 @@ const resolvers = {
       return error;
     }
   },
-
   filteredCards: async (parent, args) => {
     const { field, value, gt, lt, sortBy } = args;
     let query = {};
-
     // If value is provided, perform a string match
     if (value) {
       query[field] = new RegExp(value, 'i'); // Case-insensitive matching
