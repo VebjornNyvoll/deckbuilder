@@ -3,13 +3,13 @@ import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
 import { useContext, useRef, useState } from "react";
 import { Avatar } from "primereact/avatar";
-import placeholder_avatar from '../img/placeholder_avatar.png'
+import placeholder_avatar from "../img/placeholder_avatar.png";
 import { Toast } from "primereact/toast";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { useForm } from "../service/hooks";
-import { useMutation } from '@apollo/client';
-import {gql} from 'graphql-tag';
+import { useMutation } from "@apollo/client";
+import { gql } from "graphql-tag";
 import { useNavigate } from "react-router-dom";
 
 const CREATE_USER = gql`
@@ -22,9 +22,9 @@ const CREATE_USER = gql`
 `;
 
 function CreateAccount(props) {
-    const context = useContext(AuthContext);
-    const navigate = useNavigate();
-    const [errors, setErrors] = useState([]);
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
 
     const validateForm = (event) => {
         event.preventDefault();
@@ -70,9 +70,9 @@ function CreateAccount(props) {
         variables: {username: values.username, password: values.password}
     });
 
-    const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(false);
 
-    const toast = useRef<Toast>(null);
+  const toast = useRef<Toast>(null);
 
     const show = () => {
         toast.current?.replace({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });

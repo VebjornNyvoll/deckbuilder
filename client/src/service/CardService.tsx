@@ -1,34 +1,69 @@
-import allCards from "../data/allcards.json";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+
+const client = new ApolloClient({
+  uri: "http://localhost:1001/Hearthstone",
+  cache: new InMemoryCache(),
+});
+
 export const CardService = {
-  getCardsData() {
-    // const mergedCards = Object.values(allCards as any).reduce(
-    //   (acc: any[], currentArray: any[]) => {
-    //     const filteredCards = currentArray.filter((card: any) => "img" in card);
-    //     console.log(filteredCards);
-    //     return acc.concat(filteredCards);
-    //   },
-    //   [],
-    // );
-    return null;
+  getCards(limit: number, skip: number) {
+    return client
+      .query({
+        query: gql`
+          query GetCards($limit: Int, $skip: Int) {
+            getPaginatedCards(limit: $limit, skip: $skip) {
+              cards {
+                id
+                cardId
+                dbfId
+                name
+                cardSet
+                type
+                text
+                playerClass
+                locale
+                faction
+                mechanics {
+                  name
+                }
+                cost
+                attack
+                health
+                flavour
+                artist
+                elite
+                rarity
+                spellSchool
+                race
+                img
+                durability
+                collectible
+                imgGold
+                otherRaces
+                howToGetSignature
+                armor
+                howToGet
+                howToGetGold
+                howToGetDiamond
+                multiClassGroup
+                classes
+              }
+              hasNextPage
+            }
+          }
+        `,
+        variables: {
+          limit,
+          skip,
+        },
+      })
+      .then((result) => result.data.getPaginatedCards)
+      .catch((error) => {
+        console.error("Error fetching cards:", error);
+        return [];
+      });
   },
+    getFilteredCards(limit: number, skip: number, filter: string) {
 
-  getCardsMini() {
-    return Promise.resolve(this.getCardsData().slice(0, 5));
-  },
-
-  getCardsSmall() {
-    return Promise.resolve(this.getCardsData().slice(0, 10));
-  },
-
-  getCards() {
-    return Promise.resolve(this.getCardsData());
-  },
-
-  getCardsWithOrdersSmall() {
-    return Promise.resolve(this.getCardsWithOrders().slice(0, 10));
-  },
-
-  getCardsWithOrders() {
-    return Promise.resolve(this.getCardsWithOrders());
-  },
+    }
 };

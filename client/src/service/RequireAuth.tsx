@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 
 interface Props {
-    children: ReactElement;
+  children: ReactElement;
 }
 
 export default function RequireAuth({ children }: Props): ReactElement {
@@ -13,6 +13,5 @@ export default function RequireAuth({ children }: Props): ReactElement {
         return <Navigate to="/login" />;
     }
 
-    return children;
+  return children;
 }
-
