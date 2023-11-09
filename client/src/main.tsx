@@ -8,19 +8,19 @@ import "primereact/resources/primereact.css"; // core css
 import App from "./App";
 import { ApolloProvider } from "@apollo/client";
 import client from "./service/apolloClient";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { AuthProvider } from "./context/authContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <AuthProvider>
     <ApolloProvider client={client}>
-      <BrowserRouter>
+      <HashRouter>
         <React.StrictMode>
           <PrimeReactProvider>
             <App />
           </PrimeReactProvider>
         </React.StrictMode>
-      </BrowserRouter>
+      </HashRouter>
     </ApolloProvider>
   </AuthProvider>,
 );
