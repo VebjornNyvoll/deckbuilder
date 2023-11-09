@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Menubar } from "primereact/menubar";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 
@@ -21,21 +21,9 @@ export default function Navbar({
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
-  var page: boolean = false;
-  switch (window.location.pathname) {
-    case "/":
-      page = true;
-      document.body.style.overflow = "hidden";
-      break;
-    // case "/decks":
-    //   page = true;
-    //   document.body.style.overflow = "hidden";
-    //   break;
-    default:
-      page = false;
-      document.body.style.overflow = "visible";
-      break;
-  }
+  const page: boolean = true;
+  
+  
 
   const onLogout = () => {
     logout();
