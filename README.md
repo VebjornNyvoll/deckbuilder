@@ -8,6 +8,9 @@ In the /decks page, users can look at their decks and see which cards are in eac
 
 The project's styling mostly comes from the component library PrimeReact and we use PrimeFlex as our utility library. PrimeFlex is very similar to Tailwind which is why the syntax will probably be familiar to a lot of people. 
 
+## Supported browsers
+The project does not support Mozilla FireFox. It is currently only confirmed working on Google Chrome. We also recommend disabling adblock as it may interfere with certain calls. Some adblocks, for instance, may result in CORS errors.
+
 
 ## How to run the project
 The project assumes the user has Node v.20.6.0 or higher. The project is also reliant on a MongoDB database which the user has to initialize with card data. We no longer store the card data in Gitlab as a huge json file is not ideal for storing and merging in Git. Looking at the Hearthstone API documentation can give users a good idea of how cards should be filled into the database, although we highly recommend testing out the project in our VM instead of running it locally. 
