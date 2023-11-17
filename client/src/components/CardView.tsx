@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { CardService } from "../service/CardService";
 import { DataView  } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
+import { RemoveScroll } from "react-remove-scroll";
+import { ScrollTop} from "primereact/scrolltop";
 
 
 export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
@@ -33,7 +35,7 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
     CardService.getFilteredCards(field, params)
         .then((data) => {
           console.log("Fetched cards data:", data);     
-          if (data.cards && data.hasNextPage) {
+          if (data.cards) {
             setCards(data.cards);
             setHasMore(true);
           } else {
@@ -123,15 +125,18 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   };
 
   return (
+      <RemoveScroll>
     <div
       className="card"
       ref={scrollContainerRef}
-      style={{ overflow: "auto", height: "783px" }}
+        style={{ height: "calc(100vh - 62px)", overflow: "auto" }}
     >
       <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
       {popCard && (
         <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />
       )}
+      <ScrollTop target="parent" threshold={1000} className="w-3rem h-3rem border-round bg-primary" icon="pi pi-arrow-up text-base" />
     </div>
+      </RemoveScroll>
   );
 }
