@@ -6,8 +6,16 @@ import mongoose from "mongoose";
 import { GraphQLError } from 'graphql';
 const resolvers = {
   Query: {
-    user: async (parent, args) => await User.findById(args.id),
-    users: async (parent, args) => await User.find({}),
+    user: async (parent, args, contextValue) => {
+      if(contextValue.error){
+        throw new GraphQLError("Not authenticated")
+      }
+      const user = await User.findById(contextValue.result);
+      if(!user){
+        throw new GraphQLError("User could not be found");
+      }
+      return user;
+    },
     cards:  async (parent, args) => await Cards.find({}),
     getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
@@ -23,23 +31,28 @@ const resolvers = {
 
   getCardsInDeck: async (parent, args, contextValue) => {
     try {
+      console.log(contextValue);
+      console.log("Received id: " + args.id);
       if (contextValue.error) {
         throw new GraphQLError("Could not authenticate user");
       }
-
+  
       const user = await User.findById(contextValue.result);
-      const deck = user.decks.find((d) => d._id.toString() === parent.id);
-
+      const deck = user.decks.find((d) => d._id.toString() === args.id);
+  
       if (!deck) {
         throw new GraphQLError("Deck not found");
       }
-
+  
       return deck.cards;
     } catch (error) {
       console.error(error);
       throw new GraphQLError("An error occurred while fetching cards");
     }
   },
+  
+  
+  
 
 
   getReviewsByCardId: async (parent, args) => {
