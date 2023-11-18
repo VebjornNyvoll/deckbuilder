@@ -32,22 +32,21 @@ export default function Navbar({
     logout();
     navigate("/");
   };
-  var datasaver: boolean = false;
+  var dataSaver: boolean = false;
   
   const switchLayout = () => {
     setLayout(layout === "grid" ? "list" : "grid");
   };
 
   function DataSaver() {
-    datasaver = !datasaver;
-    //Code to turn on datasaverMode
+    dataSaver = !dataSaver;
+    //Code to turn on datasaverMode 
   }
   function toggleTheme() {      
     console.log(darkMode)
     if (darkMode) changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
     else changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
     setDarkMode(!darkMode);
-    
 }
 
   const items = [
@@ -157,14 +156,14 @@ export default function Navbar({
           separator: true,
         },
         {
-          label: "Datasaver",
+          label: dataSaver? "Disable data saver" : "Enable data saver",
           icon: "pi pi-fw pi-bolt",
           command: () => {
             DataSaver();
           },
         },
         {
-          label: "Darkmode",
+          label: darkMode ? "Light mode" : "Dark mode",
           icon: darkMode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
           command: () => {
             toggleTheme();
