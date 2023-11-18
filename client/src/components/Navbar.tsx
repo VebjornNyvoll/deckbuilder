@@ -3,6 +3,9 @@ import { Menubar } from "primereact/menubar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
+import { useAppSelector, useAppDispatch } from "../service/hooks";
+import { Button } from "primereact/button";
+import { Tag } from "primereact/tag";
 
 //const { changeTheme } = useContext(PrimeReactContext);
 
@@ -18,6 +21,8 @@ export default function Navbar({
   setFilter: (newFilter: string) => void;
 }) {
 
+  const filters = useAppSelector((state) => state.filters);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
@@ -173,6 +178,14 @@ export default function Navbar({
       <Menubar
         model={items.filter((item) => item !== null)}
       />
+      <p>Active filters: 
+        <Tag className="p-2 m-1 text-base" value="Name: Castle" icon="pi pi-times"></Tag>
+        <Tag className="p-2 m-1 text-base" value="Type: Opera" icon="pi pi-times"></Tag>
+        <Tag className="p-2 m-1 text-base" value="Cost: 0" icon="pi pi-times"></Tag>
+
+      </p>
+      
+     
     </div>
   );
 }
