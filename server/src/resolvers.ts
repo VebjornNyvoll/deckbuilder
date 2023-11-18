@@ -80,23 +80,36 @@ const resolvers = {
   
   },
   Mutation: {
-    addReview: async(parent, args, contextValue) => {
+    deleteCurrentUser: async(parent, args, contextValue) => {
+        const payload = {
+            id: null,
+            username: null,
+            decks: null,
+            error: { message: "User deleted", error: false },
+        };
 
-      try{
-        if(contextValue.error){
-         throw "Authenticate user"
+      try {
+        if (contextValue.error) {
+          throw new GraphQLError("Could not authenticate user");
         }
-        const user = await User.findById(contextValue.result); // Make sure to await this
-    
-        if (!user) {
+
+        // Remove the user by their ID
+        const result = await User.findByIdAndDelete(contextValue.result);
+
+        if (!result) {
           throw new GraphQLError("User not found");
         }
-        
-        await Review.create({ cardId: args.cardId, text: args.text, rating: args.rating, user: user.toObject() });
-        
-        return await Review.find({ cardId: args.cardId });
-      }catch(error){
-        throw new GraphQLError(error);
+
+        payload.id = result.id;
+        payload.username = result.username;
+        payload.decks = result.decks;
+
+        return payload;
+      } catch (error) {
+        console.log(error);
+        payload.error.error = true;
+        payload.error.message = "An error occurred while deleting the user";
+        return payload;
       }
     },
     

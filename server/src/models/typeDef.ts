@@ -41,7 +41,7 @@ const typeDefs = `
     removeDeck(deckId: String!): User!
     addCards(cardIds: [ID!]!, deckId: ID!): User!
     removeCards(cardIds: [ID!]!, deckId: ID!): User!
-    addReview(cardId: ID!, text: String!, rating: Int!): [Review]
+    deleteCurrentUser: User!
   }
 
   type AuthPayload {
