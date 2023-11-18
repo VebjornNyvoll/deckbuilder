@@ -17,7 +17,6 @@ const resolvers = {
       }
       return user;
     },
-    users: async (parent, args) => await User.find({}),
     cards:  async (parent, args) => await Cards.find({}),
     getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
