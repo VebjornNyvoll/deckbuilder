@@ -20,8 +20,9 @@ export default function Navbar({
   setLayout: (newLayout: "grid" | "list") => void;
   setFilter: (newFilter: string) => void;
 }) {
-
+  // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
+  // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>("")
@@ -178,14 +179,6 @@ export default function Navbar({
       <Menubar
         model={items.filter((item) => item !== null)}
       />
-      <p>Active filters: 
-        <Tag className="p-2 m-1 text-base" value="Name: Castle" icon="pi pi-times"></Tag>
-        <Tag className="p-2 m-1 text-base" value="Type: Opera" icon="pi pi-times"></Tag>
-        <Tag className="p-2 m-1 text-base" value="Cost: 0" icon="pi pi-times"></Tag>
-
-      </p>
-      
-     
     </div>
   );
 }
