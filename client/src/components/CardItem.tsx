@@ -36,24 +36,24 @@ export interface Card {
   locale: string;
   mechanics: Mechanic[];
 }
-const getSeverity = (card: Card) => {
+const getColor = (card: Card) => {
   switch (card.faction) {
     case "Alliance":
-      return "success";
+      return "var(--green-500)";
     case "Scourge":
-      return "success";
+      return "var(--green-500)";
     case "Explorer":
-      return "warning";
+      return "var(--yellow-500)";
     case "Legion":
-      return "warning";
+      return "var(--orange-500)";
     case "Horde":
-      return "danger";
+      return "var(--red-500)";
     case "Empire":
-      return "danger";
+      return "var(--red-500)";
     case "Pirate":
-      return "danger";
+      return "var(--gray-500)";
     case "Neutral":
-      return "info";
+      return "var(--blue-500)";
     default:
       return null;
   }
@@ -143,7 +143,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
               </span>
               <Tag
                 value={card.faction ? card.faction.toString() : "None"}
-                severity={getSeverity(card)}
+                style={{background: 'linear-gradient(-225deg,#AC32E4 0%,#7918F2 48%,#4801FF 100%)'}}
               ></Tag>
             </div>
             <div>
@@ -209,7 +209,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           </div>
           <Tag
             value={card.faction ? card.faction.toString() : "None"}
-            severity={getSeverity(card)}
+            style={{backgroundColor: getColor(card)}}
           ></Tag>
         </div>
         <div className="flex flex-column align-items-center gap-3 py-5">

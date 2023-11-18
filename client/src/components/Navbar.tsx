@@ -4,12 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
-import { Button } from "primereact/button";
-import { Tag } from "primereact/tag";
+import { PrimeReactContext } from "primereact/api";
 
-//const { changeTheme } = useContext(PrimeReactContext);
-
-//changeTheme(currentTheme: "string", newTheme: "string", linkElementId: "string", callback: Function)
 
 export default function Navbar({
   layout,
@@ -22,13 +18,14 @@ export default function Navbar({
 }) {
   // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
-  // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
+  // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const page: boolean = true;
-  
+  const { changeTheme } = useContext(PrimeReactContext);
+  const [darkMode, setDarkMode] = useState<boolean>(false);
   
 
   const onLogout = () => {
@@ -36,8 +33,7 @@ export default function Navbar({
     navigate("/");
   };
   var datasaver: boolean = false;
-  const [darkmode, setTheme] = useState<true | false>(false);
-
+  
   const switchLayout = () => {
     setLayout(layout === "grid" ? "list" : "grid");
   };
@@ -46,9 +42,13 @@ export default function Navbar({
     datasaver = !datasaver;
     //Code to turn on datasaverMode
   }
-  function DarkMode() {
-    setTheme(!darkmode);
-  }
+  function toggleTheme() {      
+    console.log(darkMode)
+    if (darkMode) changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
+    else changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
+    setDarkMode(!darkMode);
+    
+}
 
   const items = [
     {
@@ -165,9 +165,9 @@ export default function Navbar({
         },
         {
           label: "Darkmode",
-          icon: darkmode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
+          icon: darkMode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
           command: () => {
-            DarkMode();
+            toggleTheme();
           },
         },
       ],
