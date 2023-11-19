@@ -6,6 +6,7 @@ import { Dialog } from "primereact/dialog";
 import parse from "html-react-parser";
 import {CardOverlayComponent} from "./CardOverlayComponent";
 import { OverlayPanel } from "primereact/overlaypanel";
+
 interface CardItemProps {
   card: Card;
   onClick?: (card: Card) => void;
@@ -60,20 +61,9 @@ const getSeverity = (card: Card) => {
 };
 
 export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
+  
   const { open, onClose, card } = props;
-  const footerContent = (
-    <div>
-      <Button
-        icon="pi pi-plus"
-        style={{ padding: "15px" }}
-        className="p-button-rounded"
-        onClick={addCardToDeck}
-        autoFocus
-      ></Button>
-    </div>
-  );
   const headerContent = <div style={{ textAlign: "center" }}>{card.name}</div>;
-
   return (
     <Dialog
       headerStyle={{ height: "70px" }}
@@ -81,42 +71,33 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
       visible={open}
       style={{ width: "60vw", maxWidth: "400px" }}
       onHide={onClose}
-      footer={footerContent}
-    >
-      <div
-        style={{
-          justifyContent: "center",
-          alignContent: "center",
-          marginTop: "0px",
-        }}
       >
-        <p>Rarity: {card.rarity ? card.rarity : "no rarity"}</p>
-        <p>
-          Text: {parse(card.text ? card.text.replace("[x]", "") : "no text")}
-        </p>
-        <p>Flavor: {card.flavor ? card.flavor : "no flavor"}</p>
-      </div>
+      <div style={{ textAlign: "left" }}>
+      {card.rarity && <p>Rarity: {card.rarity}</p>}
+      {card.text && <p style={{whiteSpace: "pre-wrap"}}>Text:  {parse(card.text.replace("[x]","").replace("#","").replace("$","").replace("\\n"," ").replace("\\n"," ").replace("\\n"," "))}</p>}
+      {card.flavor && <p>Flavor: {card.flavor}</p>}
+      {card.faction && <p>Faction: {card.faction}</p>}
+      {card.cardSet && <p>Cardset: {card.cardSet}</p>}  
+      {card.playerClass && <p>Player class: {card.playerClass}</p>}
+      <br/>
+      {card.artist && <p>Artist: {card.artist}</p>}
+
+
+    </div>
     </Dialog>
   );
 }
 
 
-function addCardToDeck() {
-  
-  
-}
-
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
-
-  
   const op = useRef(null); 
-  const showOverlayPanel = (event) => {
-    // Prevent event from bubbling up to parent elements
-    event.stopPropagation();
-    if (op.current && op.current.toggle) {
-      op.current.toggle(event);
-    }
-  };
+const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
+  // Prevent event from bubbling up to parent elements
+  event.stopPropagation();
+  if (op.current && op.current.toggle) {
+    op.current.toggle(event);
+  }
+};
   //The onClick as defined in Props must take in a argument card
   const handleItemClick = () => {
     if (onClick) {
@@ -180,16 +161,16 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
 
 
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
-
-  
   const op = useRef(null); 
-  const showOverlayPanel = (event) => {
+  const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
     // Prevent event from bubbling up to parent elements
     event.stopPropagation();
     if (op.current && op.current.toggle) {
       op.current.toggle(event);
     }
   };
+  
+  
   
   
   const handleItemClick = () => {
