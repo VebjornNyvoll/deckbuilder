@@ -10,7 +10,7 @@ interface FilterActionPayload {
     [key: string]: Array<string>;
   }
   
-  const initialState: FilterState = { name: ['Rock'] };
+  const initialState: FilterState = {};
   
   export const filterSlice = createSlice({
     name: 'filters',
