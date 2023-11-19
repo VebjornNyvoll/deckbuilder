@@ -1,9 +1,9 @@
 import CardView from "../components/CardView";
 
-export default function Index({ layout, filter }: { layout: "grid"|"list" ; filter: string }) {
+export default function Index() {
   return (
     <div>
-      <CardView layout={layout} filter={filter} />
+      <CardView/>
     </div>
   );
 }

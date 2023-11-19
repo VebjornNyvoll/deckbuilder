@@ -6,23 +6,14 @@ import { RemoveScroll } from "react-remove-scroll";
 import { ScrollTop} from "primereact/scrolltop";
 
 
-export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
+export default function CardView() {
   const [cards, setCards] = useState<Card[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, setPopCard] = useState<Card | undefined>();
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  var field  = filter.split(":")[0];
-
-  type Params = {limit?: number, skip: number, value?: string , sortBy?: number}
-  var params: Params = {limit: 10, skip: 0}
-
-  if (isNaN(parseInt(filter.split(":")[1]))){
-    params.value = filter.split(":")[1];
-  } else {
-    params.sortBy = parseInt(filter.split(":")[1]);
-  }
+  
 
   useEffect(() => {
     loadInitialCards()

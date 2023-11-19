@@ -4,21 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
-import { Button } from "primereact/button";
-import { Tag } from "primereact/tag";
 import debounce from 'lodash.debounce';
 
 //const { changeTheme } = useContext(PrimeReactContext);
 
 //changeTheme(currentTheme: "string", newTheme: "string", linkElementId: "string", callback: Function)
 
-export default function Navbar({
-  layout,
-  setLayout,
-}: {
-  layout: "grid" | "list";
-  setLayout: (newLayout: "grid" | "list") => void;
-}) {
+export default function Navbar() {
   // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
