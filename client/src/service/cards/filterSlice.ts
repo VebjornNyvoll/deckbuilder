@@ -18,6 +18,10 @@ interface FilterActionPayload {
     reducers: {
         addFilter: (state, action: PayloadAction<FilterActionPayload>) => {
             const { field, values } = action.payload;
+            // Check if field is "name", if so, clear all other filters in name field
+            if (field === "name") {
+                delete state[field];
+            }
             // Filter out duplicates before updating the state
             state[field] = Array.from(new Set([...(state[field] || []), ...values]));
             },
