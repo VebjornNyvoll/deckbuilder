@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Menubar } from "primereact/menubar";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
@@ -29,11 +29,11 @@ export default function Navbar({
   //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const page: boolean = true;
-  const [filters, saveFilters] = useState<string[]>([":"]);
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
-    setFilter("name:"+e.target.value)
+    addFilter({field: "name", values: [e.target.value]});
   };
+
   const debouncedResults = useMemo(() => {
     return debounce(handleSearchChange, 300);
   }, []);
@@ -43,33 +43,8 @@ export default function Navbar({
     };
   });
 
-  
-  function handleFilter(filter: string) {
-    console.log(filters)
-
-    if (!filters.includes(filter)) {
-      const [category, value] = filter.split(':');
-      // Check if a filter with the same category already exists
-      const existingFilterIndex = filters.findIndex((f) => f.startsWith(`${category}:`));
-
-      if (existingFilterIndex !== -1) {
-        console.log("cat exist: " + category)
-        // If exists, replace the existing filter with the new one
-        saveFilters((prevFilters) => {
-          const updatedFilters = [...prevFilters];
-          updatedFilters.splice(existingFilterIndex, 1, filter);
-          return updatedFilters;
-        });
-      } else {
-        console.log("adding: " + filter)
-        saveFilters((prevFilters) => [...prevFilters, filter]);
-      }
-    } else {
-      console.log("Filter out "+filter)
-      saveFilters((prevFilters) => prevFilters.filter((f) => f !== filter));
-    }
-    console.log(filters)
-    setFilter(filter)    //Can only handle 1 filter, takes the last filter
+  function addFilter(filter: {field: string, values: string[]}) {
+    dispatch({ type: "filters/addFilter", payload: filter });
   }
   
   const onLogout = () => {
@@ -89,6 +64,15 @@ export default function Navbar({
   }
   function DarkMode() {
     setTheme(!darkmode);
+  }
+
+  enum sortOrder {
+    ASC = 1,
+    DESC = -1
+  }
+
+  function sort(field: String, sortOrder: sortOrder) {
+    dispatch({ type: "sort/sort", payload: {field: field, sortOrder: sortOrder} });
   }
 
   const items = [
@@ -118,52 +102,21 @@ export default function Navbar({
             {
               label: "Neutral",
               command: () => {
-                handleFilter("faction:Neutral")
+                addFilter({field: "faction", values: ["Neutral"]})
               }
             },
             {
               label: "Alliance",
               command: () => {
-                handleFilter("faction:Alliance")
+                addFilter({field: "faction", values: ["Alliance"]})
               }
             },
             {
               label: "Horde",
               command: () => {
-                handleFilter("faction:Horde");
+                addFilter({field: "faction", values: ["Horde"]});
               }
-            },
-            /*
-            {
-              label: "Empire",
-              command: () => {
-                handleFilter("faction:Empire");
-              }
-            },
-            {
-              label: "Explorer",
-              command: () => {
-                handleFilter("faction:Explorer");
-              }
-            },
-            {
-              label: "Legion",
-              command: () => {
-                handleFilter("faction:Legion");
-              }
-            },
-            {
-              label: "Pirate",
-              command: () => {
-                handleFilter("faction:Pirate");
-              }
-            },
-            {
-              label: "Scourge",
-              command: () => {
-                handleFilter("faction:Scourge");
-              }
-            }  Does not exist any cards off*/          
+            },          
           ],
         },
         {
@@ -173,31 +126,31 @@ export default function Navbar({
             {
               label: "Free",
               command: () => {
-                handleFilter("rarity:Free");
+                addFilter({field: "rarity", values: ["Free"]});
               }
             },
             {
               label: "Common",
               command: () => {
-                handleFilter("rarity:Common")
+                addFilter({field: "rarity", values: ["Common"]});
               }
             },
             {
               label: "Rare",
               command: () => {
-                handleFilter("rarity:Rare")
+                addFilter({field: "rarity", values: ["Rare"]});
               }
             },
             {
               label: "Epic",
               command: () => {
-                handleFilter("rarity:Epic");
+                addFilter({field: "rarity", values: ["Epic"]});
               }
             },
             {
               label: "Legendary",
               command: () => {
-                handleFilter("rarity:Legendary");
+                addFilter({field: "rarity", values: ["Legendary"]});
               }
             }
             
@@ -210,37 +163,37 @@ export default function Navbar({
             {
               label: "Spell",
               command: () => {
-                handleFilter("type:Spell");
+                addFilter({field: "type", values: ["Spell"]});
               }
             },
             {
               label: "Minion",
               command: () => {
-                handleFilter("type:Minion")
+                addFilter({field: "type", values: ["Minion"]});
               }
             },
             {
               label: "Hero",
               command: () => {
-                handleFilter("type:Hero")
+                addFilter({field: "type", values: ["Hero"]});
               }
             },
             {
               label: "Hero power",
               command: () => {
-                handleFilter("type:Hero Power");
+                addFilter({field: "type", values: ["Hero Power"]});
               }
             },
             {
               label: "Weapons",
               command: () => {
-                handleFilter("type:Weapon");
+                addFilter({field: "type", values: ["Weapon"]});
               }
             },
             {
               label: "Location",
               command: () => {
-                handleFilter("type:Location");
+                addFilter({field: "type", values: ["Location"]});
               }
             }
             
@@ -260,14 +213,14 @@ export default function Navbar({
             label: "High to low",
             icon: "pi pi-fw pi-sort-numeric-down-alt",
             command: () => {
-              handleFilter("cost:-1")
+              sort("cost", sortOrder.DESC)
             }
           },
           {
             label: "Low to high",
             icon: "pi pi-fw pi-sort-numeric-up",
             command: () => {
-              handleFilter("cost:1")
+              sort("cost", sortOrder.ASC)
             }
           },
         ],
@@ -280,14 +233,14 @@ export default function Navbar({
             label: "A-Z",
             icon: "pi pi-fw pi-sort-alpha-down",
             command: () => {
-              handleFilter("name:1")
+              sort("name", sortOrder.ASC)
             }
           },
           {
             label: "Z-A",
             icon: "pi pi-fw pi-sort-alpha-up-alt",
             command: () => {
-              handleFilter("name:-1")
+              sort("name", sortOrder.DESC)
             }
           },
         ],
@@ -300,14 +253,14 @@ export default function Navbar({
             label: "High to low",
             icon: "pi pi-fw pi-sort-numeric-down-alt",
             command: () => {
-              handleFilter("attack:-1")
+              sort("attack", sortOrder.DESC)
             }
           },
           {
             label: "Low to high",
             icon: "pi pi-fw pi-sort-numeric-up",
             command: () => {
-              handleFilter("attack:1")
+              sort("attack", sortOrder.ASC)
             }
           },
         ],
@@ -320,14 +273,14 @@ export default function Navbar({
             label: "High to low",
             icon: "pi pi-fw pi-sort-numeric-down-alt",
             command: () => {
-              handleFilter("health:-1")
+              sort("health", sortOrder.DESC)
             }
           },
           {
             label: "Low to high",
             icon: "pi pi-fw pi-sort-numeric-up",
             command: () => {
-              handleFilter("health:1")
+              sort("health", sortOrder.ASC)
             }
           },
         ],
