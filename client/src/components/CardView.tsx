@@ -4,6 +4,7 @@ import { DataView  } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
 import { RemoveScroll } from "react-remove-scroll";
 import { ScrollTop} from "primereact/scrolltop";
+import { useAppDispatch, useAppSelector } from "../service/hooks";
 
 
 export default function CardView() {
@@ -13,19 +14,29 @@ export default function CardView() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  
+  const dispatch = useAppDispatch();
+  const filters = useAppSelector(state => state.filters);
+  const sort = useAppSelector(state => state.sort);
+
+  const options = {
+    limit: 20,
+    skip: 0,
+    sortBy: sort,
+  };
+
+  const layout = "grid";
 
   useEffect(() => {
     loadInitialCards()
-  },[filter]);
+  },);
 
   const loadInitialCards = () => {
     if (loading) return;
     setLoading(true);
 
-    CardService.getFilteredCards(field, params)
+    CardService.getFilteredCards(filters, options)
         .then((data) => {
-          console.log("Fetched cards data:", data);     
+          // console.log("Fetched cards data:", data);     
           if (data.cards) {
             setCards(data.cards);
             setHasMore(true);
@@ -46,14 +57,15 @@ export default function CardView() {
   const loadMoreCards = () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    params.skip = cards.length;
-    console.log(params)
+    options.skip = cards.length;
+    console.log(options)
 
-    CardService.getFilteredCards(field, params)
+    CardService.getFilteredCards(filters, options)
       .then((data) => {
-        console.log("Fetched more cards data:", data);
+        // console.log("Fetched more cards data:", data);
         if (data.cards && data.hasNextPage) {
           setCards([...cards, ...data.cards]);
+          console.log(cards)
           setHasMore(true);
         } else {
           setHasMore(false);

@@ -20,6 +20,8 @@ export default function Navbar() {
   //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const page: boolean = true;
+
+  const [layout, setLayout] = useState<string>("grid");
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});

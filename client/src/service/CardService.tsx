@@ -5,8 +5,19 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+interface Filter {
+  field?: string;
+  values?: string[];
+}
+
+interface Options {
+  limit?: number;
+  skip?: number;
+  sortBy?: { field: string; order: number };
+}
+
 export const CardService = {
-    getFilteredCards(filters, options = {}) {
+    getFilteredCards(filters: Filter, options: Options = {}) {
       const { limit, skip, sortBy } = options;
 
       const filterVariables = Object.entries(filters).map(([field, values]) => ({
