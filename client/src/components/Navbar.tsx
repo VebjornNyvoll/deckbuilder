@@ -25,7 +25,7 @@ export default function Navbar({
   const { user, logout } = useContext(AuthContext);
   const page: boolean = true;
   const { changeTheme } = useContext(PrimeReactContext);
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const darkMode = useAppSelector((state) => state.darkMode);
   
 
   const onLogout = () => {
@@ -44,10 +44,16 @@ export default function Navbar({
   }
   function toggleTheme() {      
     console.log(darkMode)
-    if (darkMode) changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
-    else changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
-    setDarkMode(!darkMode);
-}
+    if (darkMode) {
+      changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
+      dispatch({type: 'darkMode/toggle'})
+      console.log(darkMode)
+    }
+    else {
+      changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
+      dispatch({type: 'darkMode/toggle'})
+      console.log(darkMode)
+}}
 
   const items = [
     {
