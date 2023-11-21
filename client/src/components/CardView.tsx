@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DataView } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
 import { RemoveScroll } from "react-remove-scroll";
@@ -17,14 +17,13 @@ export default function CardView() {
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
   const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
+  const layout = useAppSelector((state) => state.layout.layout);
 
   const options = {
     limit: 20,
     skip: 0,
     sortBy: sort,
   };
-
-  const layout = "grid";
 
   useEffect(() => {
     options.limit = 20; // Reset limit when filters change
