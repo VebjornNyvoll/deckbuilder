@@ -12,6 +12,7 @@ import { gql } from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import { Toast } from 'primereact/toast';
 import { GridItem, ListItem } from '../components/CardItem';
+import { DeckService } from '../service/DeckService';
 
 export default function Deck() {
   const {user} = useContext(AuthContext);
@@ -84,8 +85,10 @@ export default function Deck() {
 // All cards
 const { data: cardData } = useQuery(GET_CARDS_IN_DECK);
 
-const handleDeckSelect = (index) => {
-  setCards(cardData.user.decks[index].cards);
+const handleDeckSelect = (id) => {
+  DeckService.getCardsInDeck(id).then((cards) => {
+    setCards(cards);
+  })
 };
 
 const [cards, setCards] = useState([]);
@@ -108,7 +111,7 @@ const [createDeck, { loading }] = useMutation(CREATE_DECK, {
       },
     });
   },
-});
+}); 
 
 const itemTemplate = (card: Card, layout: string) => {
   const handleClick = (card: Card) => {
@@ -135,7 +138,8 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
       return (
         data.user.decks.map(deck => ({
           label: deck.deckName,
-          icon: "pi pi-book"
+          icon: "pi pi-book",
+          id: deck.id
         })));}}
       else return [{label: 'No decks found', icon: "pi pi-times"}];
     }
@@ -164,17 +168,17 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
     const items: MenuItem = [
       {
         label:'My decks',
-        items: Decks().map((deck, index) => ({
+        items: Decks().map((deck) => ({
           label: (
             
             <Button
               className="w-full p-link text-color hover:surface-200 border-noround" name={deck.label} 
-              onClick={(e) => handleDeckSelect(index)}
             >
               {deck.label}
             </Button>
           ),
-          icon: 'pi pi-book'
+          icon: 'pi pi-book',
+          command: () => handleDeckSelect(deck.id)
         }))
       },
         {

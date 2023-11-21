@@ -1,9 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-
-const client = new ApolloClient({
-  uri: "http://localhost:4000/Hearthstone",
-  cache: new InMemoryCache(),
-});
+import client from "./apolloClient"
 
 // DeckService will have three functions, getCardsInDeck, createDeck and deleteDeck
 // getCardsInDeck will take in a deckId and return a list of cards
