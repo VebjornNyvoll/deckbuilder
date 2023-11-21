@@ -2,12 +2,17 @@ import { configureStore } from "@reduxjs/toolkit";
 import filterSliceReducer from "./cards/filterSlice";
 import sortSliceReducer from "./cards/sortSlice";
 import cardsSliceReducer from "./cards/cardsSlice";
+import dataSaverReducer from "./cards/dataSaverSlice";
+
 
 export const store = configureStore({
     reducer: {
         filters: filterSliceReducer,
         sort: sortSliceReducer,
-        cards: cardsSliceReducer,}
+        cards: cardsSliceReducer,
+        datasaver: dataSaverReducer,
+    }
+
     },
 );
 

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
+import { setDataSaver } from "../service/cards/dataSaverSlice";
+
 import debounce from 'lodash.debounce';
 
 //const { changeTheme } = useContext(PrimeReactContext);
@@ -14,6 +16,7 @@ export default function Navbar() {
   // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
+  const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
   // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -63,8 +66,10 @@ export default function Navbar() {
   };
 
   function DataSaver() {
-    datasaver = !datasaver;
-    //Code to turn on datasaverMode
+   
+    dispatch(setDataSaver(!dataSaver));
+    console.log(dataSaver); 
+    
   }
   function DarkMode() {
     setTheme(!darkmode);
