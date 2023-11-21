@@ -355,8 +355,8 @@ export default function Navbar() {
           separator: true,
         },
         {
-          label: "Datasaver",
-          icon: "pi pi-fw pi-bolt",
+          label: dataSaver ? "Disable Data Saver" : "Enable Data Saver",
+          icon: dataSaver ? "pi pi-fw pi-times" : "pi pi-fw pi-bolt",
           command: () => {
             DataSaver();
           },
