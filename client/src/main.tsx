@@ -10,9 +10,12 @@ import { ApolloProvider } from "@apollo/client";
 import client from "./service/apolloClient";
 import { HashRouter } from "react-router-dom";
 import { AuthProvider } from "./context/authContext";
+import { store } from "./service/store";
+import { Provider } from "react-redux";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <AuthProvider>
+    <Provider store={store}>
     <ApolloProvider client={client}>
       <HashRouter>
         <React.StrictMode>
@@ -22,5 +25,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </React.StrictMode>
       </HashRouter>
     </ApolloProvider>
+    </Provider>
   </AuthProvider>,
 );

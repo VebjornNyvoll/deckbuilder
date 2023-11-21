@@ -1,68 +1,75 @@
-import { useState, useEffect, useRef } from "react";
-import { CardService } from "../service/CardService";
-import { DataView  } from "primereact/dataview";
+import React, { useState, useEffect, useRef } from "react";
+import { DataView } from "primereact/dataview";
 import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
 import { RemoveScroll } from "react-remove-scroll";
-import { ScrollTop} from "primereact/scrolltop";
+import { ScrollTop } from "primereact/scrolltop";
+import { useAppDispatch, useAppSelector } from "../service/hooks";
+import { setCards, addCards } from "../service/cards/cardsSlice";
+import { CardService } from "../service/CardService";
 
-
-export default function CardView({ layout, filter }: { layout: "grid" | "list"; filter: string }) {
-  const [cards, setCards] = useState<Card[]>([]);
+export default function CardView() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [popCard, setPopCard] = useState<Card | undefined>();
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  var field  = filter.split(":")[0];
+  const dispatch = useAppDispatch();
+  const filters = useAppSelector((state) => state.filters);
+  const sort = useAppSelector((state) => state.sort);
+  const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
+  const layout = useAppSelector((state) => state.layout.layout);
 
-  type Params = {limit?: number, skip: number, value?: string , sortBy?: number}
-  var params: Params = {limit: 10, skip: 0}
+  const options = {
+    limit: 20,
+    skip: 0,
+    sortBy: sort,
+  };
 
-  if (isNaN(parseInt(filter.split(":")[1]))){
-    params.value = filter.split(":")[1];
-  } else {
-    params.sortBy = parseInt(filter.split(":")[1]);
-  }
+  
 
   useEffect(() => {
-    loadInitialCards()
-  },[filter]);
+    options.limit = 20; // Reset limit when filters change
+    options.skip = 0; // Reset skip when filters change
+    options.sortBy = sort; // Keep the sort options when filters change
+    loadInitialCards();
+  }, [filters, sort]);
+
+  useEffect(() => {
+    loadInitialCards();
+  }, []);
 
   const loadInitialCards = () => {
     if (loading) return;
     setLoading(true);
 
-    CardService.getFilteredCards(field, params)
-        .then((data) => {
-          console.log("Fetched cards data:", data);     
-          if (data.cards) {
-            setCards(data.cards);
-            setHasMore(true);
-          } else {
-            setCards([]);
-            setHasMore(false);
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching cards:", error);
-          setCards([]);
+    CardService.getFilteredCards(filters, options)
+      .then((data) => {
+        if (data.cards) {
+          dispatch(setCards(data.cards)); // Dispatch the action to set initial cards
+          setHasMore(true);
+        } else {
+          dispatch(setCards([])); // Dispatch the action to set an empty array
           setHasMore(false);
-          setLoading(false);
-        });
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching cards:", error);
+        dispatch(setCards([])); // Dispatch the action to set an empty array on error
+        setHasMore(false);
+        setLoading(false);
+      });
   };
 
   const loadMoreCards = () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    params.skip = cards.length;
-    console.log(params)
+    options.skip = cards.length;
 
-    CardService.getFilteredCards(field, params)
+    CardService.getFilteredCards(filters, options)
       .then((data) => {
-        console.log("Fetched more cards data:", data);
         if (data.cards && data.hasNextPage) {
-          setCards([...cards, ...data.cards]);
+          dispatch(addCards(data.cards)); // Dispatch the action to add more cards
           setHasMore(true);
         } else {
           setHasMore(false);
@@ -125,18 +132,23 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
   };
 
   return (
-      <RemoveScroll>
-    <div
-      className="card"
-      ref={scrollContainerRef}
+    <RemoveScroll>
+      <div
+        className="card"
+        ref={scrollContainerRef}
         style={{ height: "calc(100vh - 62px)", overflow: "auto" }}
-    >
-      <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
-      {popCard && (
-        <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />
-      )}
-      <ScrollTop target="parent" threshold={1000} className="w-3rem h-3rem border-round bg-primary" icon="pi pi-arrow-up text-base" />
-    </div>
-      </RemoveScroll>
+      >
+        <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
+        {popCard && (
+          <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />
+        )}
+        <ScrollTop
+          target="parent"
+          threshold={1000}
+          className="w-3rem h-3rem border-round bg-primary"
+          icon="pi pi-arrow-up text-base"
+        />
+      </div>
+    </RemoveScroll>
   );
 }

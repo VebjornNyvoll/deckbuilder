@@ -5,7 +5,21 @@ const typeDefs = `
     cards: [Card]
     getPaginatedCards(limit: Int, skip: Int): PaginatedCards
     getReviewsByCardId(cardId: ID!): [Review]!
-    filteredCards(limit: Int, skip: Int, field: String!, value: String, gt: Int, lt: Int, sortBy: Int): PaginatedCards
+    filteredCards(filters: [FilterInput!], limit: Int, skip: Int, sortBy: SortInput): PaginatedCards
+    getCardsInDeck(id: ID!): [Card]
+  }
+
+  input FilterInput {
+    field: String!
+    value: String
+    values: [String]
+    gt: Int
+    lt: Int
+  }
+
+  input SortInput {
+    field: String!
+    order: Int!
   }
 
   type PaginatedCards {
@@ -13,14 +27,14 @@ const typeDefs = `
     hasNextPage: Boolean
   }
 
-  type Review{
+  type Review {
     cardId: ID!
     text: String!
     rating: Int!
     user: User!
   }
 
-  type User{
+  type User {
     id: ID
     username: String
     decks: [Deck]
@@ -55,8 +69,6 @@ const typeDefs = `
     error: Boolean!
   }
 
-  
-
   type Card {
     id: ID
     cardId: String
@@ -90,13 +102,11 @@ const typeDefs = `
     howToGetDiamond: String
     multiClassGroup: String
     classes: [String]
-
   }
 
   type Mechanics {
     name: String
   }
-
 `;
 
 export { typeDefs };

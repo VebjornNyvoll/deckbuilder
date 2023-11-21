@@ -1,39 +1,64 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Menubar } from "primereact/menubar";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
+import { useAppSelector, useAppDispatch } from "../service/hooks";
+import debounce from 'lodash.debounce';
 
 //const { changeTheme } = useContext(PrimeReactContext);
 
 //changeTheme(currentTheme: "string", newTheme: "string", linkElementId: "string", callback: Function)
 
-export default function Navbar({
-  layout,
-  setLayout,
-  setFilter,
-}: {
-  layout: "grid" | "list";
-  setLayout: (newLayout: "grid" | "list") => void;
-  setFilter: (newFilter: string) => void;
-}) {
-
+export default function Navbar() {
+  // Gets filters from redux store
+  const filters = useAppSelector((state) => state.filters);
+  const sort = useAppSelector((state) => state.sort);
+  const layout = useAppSelector((state) => state.layout.layout);
+  // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [search, setSearch] = useState<string>("")
+  //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const page: boolean = true;
   
+  const handleSearchChange = (e: { target: { value: string; }; }) => {
+    addFilter({field: "name", values: [e.target.value]});
+    console.log(e.target.value)
+    console.log(filters)
+  };
+
+  const debouncedResults = useMemo(() => {
+    return debounce(handleSearchChange, 300);
+  }, []);
+  useEffect(() => {
+    return () => {
+      debouncedResults.cancel();
+    };
+  });
+
+  function addFilter(filter: {field: string, values: string[]}) {
+    // Check if filter already exists
+    if (filters[filter.field]?.includes(filter.values[0])) {
+      // Remove filter if it does
+      dispatch({ type: "filters/removeFilter", payload: filter });
+      return;
+    }
+    // Otherwise add filter
+    dispatch({ type: "filters/addFilter", payload: filter });
+  }
   
+  const activeFilterColor = "bg-teal-100";
 
   const onLogout = () => {
     logout();
     navigate("/");
   };
   var datasaver: boolean = false;
-  const [darkmode, setTheme] = useState<true | false>(false);
+  var darkmode: boolean = false;
 
   const switchLayout = () => {
-    setLayout(layout === "grid" ? "list" : "grid");
+    dispatch({ type: "layout/switchLayout" });
   };
 
   function DataSaver() {
@@ -42,6 +67,15 @@ export default function Navbar({
   }
   function DarkMode() {
     setTheme(!darkmode);
+  }
+
+  enum sortOrder {
+    ASC = 1,
+    DESC = -1
+  }
+
+  function setSort(field: string, order: sortOrder) {
+    dispatch({ type: "sort/sort", payload: {field: field, order: order} });
   }
 
   const items = [
@@ -63,63 +97,227 @@ export default function Navbar({
       visible: page,
       label: "Filter",
       icon: "pi pi-fw pi-filter",
+      className: Object.keys(filters).length > 0 ? activeFilterColor : "",
       items: [
-        {
-          label: "Cost",
-          icon: "pi pi-fw pi-money-bill",
-          items: [
-            {
-              label: "High to low",
-              icon: "",
-              command: () => {
-                setFilter("cost:1")
-              }
-            },
-            {
-              label: "Low to high",
-              icon: "",
-              command: () => {
-                setFilter("cost:0")
-              }
-            },
-          ],
-        },
         {
           label: "Faction",
           icon: "pi pi-fw pi-prime",
+          className: filters?.faction?.length>0 ? activeFilterColor : "",
           items: [
             {
               label: "Neutral",
+              className: filters?.faction?.includes("Neutral") ? activeFilterColor : "",
               command: () => {
-                setFilter("faction:Neutral")
+                addFilter({field: "faction", values: ["Neutral"]})
               }
             },
             {
               label: "Alliance",
+              className: filters?.faction?.includes("Alliance") ? activeFilterColor : "",
               command: () => {
-                setFilter("faction:Alliance")
+                addFilter({field: "faction", values: ["Alliance"]})
               }
-            }
+            },
+            {
+              label: "Horde",
+              className: filters?.faction?.includes("Horde") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "faction", values: ["Horde"]});
+              }
+            },          
           ],
         },
         {
           label: "Rarity",
           icon: "pi pi-fw pi-box",
+          className: filters?.rarity?.length>0 ? activeFilterColor : "",
           items: [
             {
-              label: "Common",
+              label: "Free",
+              className: filters?.rarity?.includes("Free") ? activeFilterColor : "",
               command: () => {
-                setFilter("rarity:Common")
+                addFilter({field: "rarity", values: ["Free"]});
+              }
+            },
+            {
+              label: "Common",
+              className: filters?.rarity?.includes("Common") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "rarity", values: ["Common"]});
               }
             },
             {
               label: "Rare",
+              className: filters?.rarity?.includes("Rare") ? activeFilterColor : "",
               command: () => {
-                setFilter("rarity:Rare")
+                addFilter({field: "rarity", values: ["Rare"]});
               }
             },
+            {
+              label: "Epic",
+              className: filters?.rarity?.includes("Epic") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "rarity", values: ["Epic"]});
+              }
+            },
+            {
+              label: "Legendary",
+              className: filters?.rarity?.includes("Legendary") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "rarity", values: ["Legendary"]});
+              }
+            }
+            
+          ]
+        },
+        {
+          label: "Type",
+          icon: "pi pi-fw pi-book",
+          className: filters?.type?.length>0 ? activeFilterColor : "",
+          items: [
+            {
+              label: "Spell",
+              className: filters?.type?.includes("Spell") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "type", values: ["Spell"]});
+              }
+            },
+            {
+              label: "Minion",
+              className: filters?.type?.includes("Minion") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "type", values: ["Minion"]});
+              }
+            },
+            {
+              label: "Hero",
+              className: filters?.type?.includes("Hero") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "type", values: ["Hero"]});
+              }
+            },
+            {
+              label: "Hero power",
+              'className': filters?.type?.includes("Hero Power") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "type", values: ["Hero Power"]});
+              }
+            },
+            {
+              label: "Weapons",
+              className: filters?.type?.includes("Weapon") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "type", values: ["Weapon"]});
+              }
+            },
+            {
+              label: "Location",
+              className: filters?.type?.includes("Location") ? activeFilterColor : "",
+              command: () => {
+                addFilter({field: "type", values: ["Location"]});
+              }
+            }
+            
           ]
         }
+      ],
+    },
+    {
+      label: "Sort",
+      icon: "pi pi-fw pi-sort-alt",
+      items: [
+      {
+        label: "Cost",
+        icon: "pi pi-fw pi-money-bill",
+        className: sort?.field == "cost" ? activeFilterColor : "",
+        items: [
+          {
+            label: "High to low",
+            icon: "pi pi-fw pi-sort-numeric-down-alt",
+            className: sort?.field == "cost" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
+            command: () => {
+              setSort("cost", sortOrder.DESC)
+            }
+          },
+          {
+            label: "Low to high",
+            icon: "pi pi-fw pi-sort-numeric-up",
+            className: sort?.field == "cost" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
+            command: () => {
+              setSort("cost", sortOrder.ASC)
+            }
+          },
+        ],
+      },
+      {
+        label: "Name",
+        icon: "pi pi-fw pi-id-card",
+        className: sort?.field == "name" ? activeFilterColor : "",
+        items: [
+          {
+            label: "A-Z",
+            icon: "pi pi-fw pi-sort-alpha-down",
+            className: sort?.field == "name" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
+            command: () => {
+              setSort("name", sortOrder.ASC)
+            }
+          },
+          {
+            label: "Z-A",
+            icon: "pi pi-fw pi-sort-alpha-up-alt",
+            className: sort?.field == "name" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
+            command: () => {
+              setSort("name", sortOrder.DESC)
+            }
+          },
+        ],
+      },
+      {
+        label: "Attack",
+        icon: "pi pi-fw pi-wrench",
+        className: sort?.field == "attack" ? activeFilterColor : "",
+        items: [
+          {
+            label: "High to low",
+            icon: "pi pi-fw pi-sort-numeric-down-alt",
+            className: sort?.field == "attack" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
+            command: () => {
+              setSort("attack", sortOrder.DESC)
+            }
+          },
+          {
+            label: "Low to high",
+            icon: "pi pi-fw pi-sort-numeric-up",
+            className: sort?.field == "attack" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
+            command: () => {
+              setSort("attack", sortOrder.ASC)
+            }
+          },
+        ],
+      },
+      {
+        label: "Health",
+        icon: "pi pi-fw pi-heart",
+        className: sort?.field == "health" ? activeFilterColor : "",
+        items: [
+          {
+            label: "High to low",
+            icon: "pi pi-fw pi-sort-numeric-down-alt",
+            className: sort?.field == "health" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
+            command: () => {
+              setSort("health", sortOrder.DESC)
+            }
+          },
+          {
+            label: "Low to high",
+            icon: "pi pi-fw pi-sort-numeric-up",
+            className: sort?.field == "health" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
+            command: () => {
+              setSort("health", sortOrder.ASC)
+            }
+          },
+        ],
+      },
       ],
     },
     {
@@ -133,7 +331,7 @@ export default function Navbar({
     { //Searchbar
       visible: page,
       template: (
-        <InputText placeholder="Search" type="text" className="w-full" onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => {if (e.keyCode === 13){ setFilter("name:"+search)}}}/>
+        <InputText placeholder="Search" type="text"  onChange={debouncedResults}/>
       ),
     },
     { //Profile, swap out for avatar picture at const end, end = {end}
