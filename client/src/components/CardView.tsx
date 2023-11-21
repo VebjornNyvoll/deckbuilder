@@ -8,7 +8,6 @@ import { setCards, addCards } from "../service/cards/cardsSlice";
 import { CardService } from "../service/CardService";
 
 export default function CardView() {
-  const [popCard, setPopCard] = useState<Card | undefined>();
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -110,7 +109,7 @@ export default function CardView() {
   
   const openDialog = (card) => {
     
-    
+
     setDialogState({ isOpen: true, id: card.id });
   };
 
