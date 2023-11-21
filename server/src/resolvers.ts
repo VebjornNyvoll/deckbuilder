@@ -29,7 +29,7 @@ const resolvers = {
           hasNextPage,
       };
   },
-
+  
   getCardsInDeck: async (parent, args, contextValue) => {
     try {
       console.log(contextValue);
@@ -297,29 +297,28 @@ const resolvers = {
   },
   
     
-    // createDeck: async (parent, args, contextValue) =>{
-    //   const payload = {
-    //     id: null,
-    //     username: null,
-    //     decks: null,
-    //     error: {message: "No error occured", error: false}
-    //   }
+    createDeck: async (parent, args, contextValue) =>{
+      const payload = {
+        id: null,
+        username: null,
+        decks: null,
+        error: {message: "No error occured", error: false}
+      }
 
-    //   if(contextValue.error){
-    //     throw new GraphQLError("Could not authorize user");
-    //   }
+      if(contextValue.error){
+        throw new GraphQLError("Could not authorize user");
+      }
 
-    //   const user = await User.findById(contextValue.result);
-    //   const newDeck = {deckName: args.deckName, cards: []}
-    //   user.decks.push(newDeck);
-    //   await user.save();
+      const user = await User.findById(contextValue.result);
+      const newDeck = {deckName: args.deckName, cards: []}
+      user.decks.push(newDeck);
+      await user.save();
       
-    //   payload.id = user.id;
-    //   payload.username = user.username;
-    //   payload.decks = user.decks;
-    //   return payload;
-
-    // },
+      payload.id = user.id;
+      payload.username = user.username;
+      payload.decks = user.decks;
+      return payload;
+    },
 
     removeDeck: async (parent, args, contextValue) =>{
       const payload = {
