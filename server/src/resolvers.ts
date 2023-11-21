@@ -29,7 +29,27 @@ const resolvers = {
           hasNextPage,
       };
   },
+
+  getCardById: async (parent, args) => {
+
+    try{
+      if (!mongoose.Types.ObjectId.isValid(args.id)) {
+        throw new GraphQLError("Invalid ID format");
+      }
   
+      const card = await Cards.findById(args.id);
+      if (!card) {
+        throw new GraphQLError("Card not found");
+      }
+  
+      return card;
+
+    }catch(error){
+      throw new GraphQLError(error)
+    }
+    
+  },
+
   getCardsInDeck: async (parent, args, contextValue) => {
     try {
       console.log(contextValue);
