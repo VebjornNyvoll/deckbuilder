@@ -92,13 +92,15 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
 
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const op = useRef(null); 
-const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
-  // Prevent event from bubbling up to parent elements
-  event.stopPropagation();
-  if (op.current && op.current.toggle) {
-    op.current.toggle(event);
-  }
-};
+  const idString = card.id.toString()
+
+  const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
+    // Prevent event from bubbling up to parent elements
+    event.stopPropagation();
+    if (op.current && op.current.toggle) {
+      op.current.toggle(event);
+    }
+  };
   //The onClick as defined in Props must take in a argument card
   const handleItemClick = () => {
     if (onClick) {
@@ -107,7 +109,7 @@ const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
   };
   return (
     //Needs to send to const to do the onClick that has been sent.
-    <div className="col-12" onClick={handleItemClick}>
+    <button onClick={handleItemClick}  aria-haspopup aria-labelledby={idString+"set "+idString+"faction "+idString+"name"} className="col-12 border-1 surface-border surface-card border-round " >
       <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
         <img
           className="w-10rem shadow-2 block xl:block mx-auto border-round align-items-center"
@@ -116,14 +118,14 @@ const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
         />
         <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
           <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-            <div className="text-2xl font-bold text-900">{card.name}</div>
+            <div id={idString+"name"} className="text-2xl font-bold text-900">{card.name}</div>
             {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
             <div className="flex align-items-center gap-3">
               <span className="flex align-items-center gap-2">
                 <i className="pi pi-book"></i>
-                <span className="font-semibold">{card.cardSet}</span>
+                <span id={idString+"set"} className="font-semibold">{card.cardSet}</span>
               </span>
-              <Tag
+              <Tag id={idString+"faction"}
                 value={card.faction ? card.faction.toString() : "None"}
                 severity={getSeverity(card)}
               ></Tag>
@@ -146,6 +148,9 @@ const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
               {card.type ? card.type.toString() : "No Type"}
             </span> } 
             <Button
+              id = {idString+"btn"}
+              title={"Add Card: "+ card.name.toString()}
+              aria-labelledby={idString+"btn"}
               icon="pi pi-plus"
               className="p-button-rounded"
               onClick={showOverlayPanel}
@@ -153,14 +158,10 @@ const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
             <OverlayPanel ref={op} dismissable>
             <CardOverlayComponent op={op} cardId={card.id} />
             </OverlayPanel>   
-          </div>
-          
-        </div>
-        
-      </div>
-      
-    </div>
-    
+          </div>         
+        </div>       
+      </div>     
+    </button>   
   );
 };
 
