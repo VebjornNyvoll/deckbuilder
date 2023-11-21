@@ -66,19 +66,7 @@ export const DeckService = {
         });
         return data.getCardsInDeck;
     },
-    createDeck: async (deckName: string) => {
-        const { data } = await client.mutate({
-        mutation: gql`
-            mutation CreateDeck($deckName: String!) {
-                createDeck(deckName: $deckName) {
-                    id
-        }
-        }
-        `,
-        variables: { deckName },
-        });
-        return data.createDeck.id;
-    },
+    
     deleteDeck: async (deckId: string) => {
         const { data } = await client.mutate({
         mutation: gql`
@@ -90,4 +78,47 @@ export const DeckService = {
         });
         return data.deleteDeck;
     },
+
+
+    createDeck: async (deckName: String) => {
+
+        const GET_DECKS = gql`
+        query Decks {
+      user {
+        decks {
+          deckName
+          id
+        } 
+      }
+    }`;
+        
+        try {
+          const { data } = await client.mutate({
+            mutation: gql`mutation createDeck($deckName: String!) {
+                createDeck(deckName: $deckName) {
+                  username
+                }
+              }`,
+            variables: { deckName },
+            update: (cache, { data: { createDeck } }) => {
+              const existingDecks = cache.readQuery({ query: GET_DECKS });
+              if (existingDecks) {
+                cache.writeQuery({
+                  query: GET_DECKS,
+                  data: {
+                    user: {
+                      ...existingDecks.user,
+                      decks: [...existingDecks.user.decks, createDeck],
+                    },
+                  },
+                });
+              }
+            },
+          });
+          return data.createDeck;
+        } catch (error) {
+          console.error("Error creating deck:", error);
+          throw error; // or handle it as you see fit
+        }
+      },
     };

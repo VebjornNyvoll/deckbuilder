@@ -1,213 +1,151 @@
-import { useRef, useState } from 'react';
-import { DataView } from 'primereact/dataview';
-import { Menu } from 'primereact/menu';
-import { MenuItem } from 'primereact/menuitem';
-import { classNames } from 'primereact/utils';
-import {useContext} from 'react';
-import { AuthContext } from '../context/authContext';
-import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
-import { gql } from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
-import { Toast } from 'primereact/toast';
-import { GridItem, ListItem } from '../components/CardItem';
-import { DeckService } from '../service/DeckService';
+import { useRef, useState, useEffect } from "react";
+import { DataView } from "primereact/dataview";
+import { Menu } from "primereact/menu";
+import { MenuItem } from "primereact/menuitem";
+import { classNames } from "primereact/utils";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
+import { Dialog } from "primereact/dialog";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import { gql } from "graphql-tag";
+import { useMutation, useQuery } from "@apollo/client";
+import { Toast } from "primereact/toast";
+import { GridItem, ListItem } from "../components/CardItem";
+import { DeckService } from "../service/DeckService";
 
 export default function Deck() {
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [visible, setVisible] = useState<boolean>(false);
-  const [deckName, setDeckName] = useState('');
+  const [deckName, setDeckName] = useState("");
   const [errors, setErrors] = useState([]);
-
-  const CREATE_DECK = gql`
-  mutation createDeck($deckName: String!) {
-    createDeck(deckName: $deckName) {
-      username
-    }
-  }`;
-
-  const GET_CARDS_IN_DECK = gql`
-  query Cards {
-  user {
-    decks {
-      cards {
-        id
-        cardId
-        dbfId
-        name
-        cardSet
-        type
-        text
-        playerClass
-        locale
-        faction
-        mechanics {
-          name
-        }
-        cost
-        attack
-        health
-        flavour
-        artist
-        elite
-        rarity
-        spellSchool
-        race
-        img
-        durability
-        collectible
-        imgGold
-        otherRaces
-        howToGetSignature
-        armor
-        howToGet
-        howToGetGold
-        howToGetDiamond
-        multiClassGroup
-        classes
-      }
-    }
-  }
-}`;
-
-
-  const GET_DECKS = gql`
-    query Decks {
-  user {
-    decks {
-      deckName
-      id
-    } 
-  }
-}`;
-
-// All cards
-const { data: cardData } = useQuery(GET_CARDS_IN_DECK);
-
-const handleDeckSelect = (id) => {
-  DeckService.getCardsInDeck(id).then((cards) => {
-    setCards(cards);
-  })
-};
-
-const [cards, setCards] = useState([]);
-
-const [createDeck, { loading }] = useMutation(CREATE_DECK, {
-  onError({ graphQLErrors }) {
-    setErrors(graphQLErrors);
-  },
-  variables: { deckName: deckName },
-  update: (cache, { data: { createDeck } }) => {
-    const existingDecks = cache.readQuery({ query: GET_DECKS });
-
-    cache.writeQuery({
-      query: GET_DECKS,
-      data: {
-        user: {
-          ...existingDecks.user,
-          decks: [...existingDecks.user.decks, createDeck]
-        },
-      },
+  const [deckData, setData] = useState([]);
+  useEffect(() => {
+    DeckService.getDecks().then((decks) => {
+      setData(decks);
     });
-  },
-}); 
+  });
 
-const itemTemplate = (card: Card, layout: string) => {
-  const handleClick = (card: Card) => {
-    //To send parameter card with the onClick, we have handleClick const that takes in card and send to open dialog. Can not do directly!
-    openDialog(card);
+  // All cards
+
+  const handleDeckSelect = (id) => {
+    DeckService.getCardsInDeck(id).then((result) => {
+      setCards(result);
+    });
   };
 
-  if (!card) {
-    return;
+  const [cards, setCards] = useState([]);
+
+  const itemTemplate = (card: Card, layout: string) => {
+    const handleClick = (card: Card) => {
+      openDialog(card);
+    };
+
+    if (!card) {
+      return;
+    }
+    if (layout === "list") {
+      return <ListItem card={card} onClick={handleClick} />;
+    } else if (layout === "grid") {
+      return <GridItem card={card} onClick={handleClick} />;
+    }
+  };
+
+  function Decks() {
+    if (deckData.length > 0) {
+      return deckData.map((deck) => ({
+        label: deck.deckName,
+        icon: "pi pi-book",
+        id: deck.id,
+      }));
+    } else {
+      return [{ label: "No decks found", icon: "pi pi-times" }];
+    }
   }
-  if (layout === "list") {
-    return <ListItem card={card} onClick={handleClick} />;
-  } //onClick is defined in CardItemProps to take in card param and return void, (to match handleClick)
-  else if (layout === "grid") {
-    return <GridItem card={card} onClick={handleClick} />;
-  }
-};
 
-const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
-  function Decks(){
-    if (data){
-      if (data.user){
-        if (data.user.decks){
-      return (
-        data.user.decks.map(deck => ({
-          label: deck.deckName,
-          icon: "pi pi-book",
-          id: deck.id
-        })));}}
-      else return [{label: 'No decks found', icon: "pi pi-times"}];
-    }
-    else return [{label: 'No decks found', icon: "pi pi-times"}];
-    } 
+  const clearCreateDeck = () => {
+    setVisible(false);
+    setDeckName("");
+  };
 
-    const clearCreateDeck = () => {
-      setVisible(false);
-      setDeckName('');
-    }
+  const handleCreateDeck = async () => {
+    await DeckService.createDeck(deckName);
+    clearCreateDeck();
+  };
 
-    const handleCreateDeck = async () => {  
-      await createDeck();
-      clearCreateDeck();
-      loadingDecks();
-
-    }
-
-    const footerContent = (
-      <div>
-          <Button label="Cancel" icon="pi pi-times" severity="danger" onClick={() => clearCreateDeck()} className="p-button-text" />
-          <Button label="Create deck" severity="success" icon="pi pi-check" onClick={() => handleCreateDeck()} autoFocus />
-      </div>
+  const footerContent = (
+    <div>
+      <Button
+        label="Cancel"
+        icon="pi pi-times"
+        severity="danger"
+        onClick={() => clearCreateDeck()}
+        className="p-button-text"
+      />
+      <Button
+        label="Create deck"
+        severity="success"
+        icon="pi pi-check"
+        onClick={() => handleCreateDeck()}
+        autoFocus
+      />
+    </div>
   );
 
-    const items: MenuItem = [
-      {
-        label:'My decks',
-        items: Decks().map((deck) => ({
-          label: (
-            
-            <Button
-              className="w-full p-link text-color hover:surface-200 border-noround" name={deck.label} 
-            >
-              {deck.label}
-            </Button>
-          ),
-          icon: 'pi pi-book',
-          command: () => handleDeckSelect(deck.id)
-        }))
-      },
+  const items: MenuItem = [
+    {
+      label: "My decks",
+      items: Decks().map((deck) => ({
+        label: deck.label,
+        icon: "pi pi-book",
+        command: () => handleDeckSelect(deck.id),
+      })),
+    },
+    {
+      label: "Options",
+      items: [
         {
-          label:'Options',
-          items:[
-            { 
-              command: (e) => { setVisible(true);},
-              template: (item, options) => {
-                  return (
-                    <div className='card flex justify-content-center'>
-                      <Button icon="pi pi-plus-circle" onClick={(e) => options.onClick(e)} className={classNames(options.className, 'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround')}>
-                          <p className="p-2">New deck</p>
-                      </Button>
-                    </div>
-                  )
-          }}
-          ]
-        }
-     
-    ];
-    const toast = useRef<Toast>(null);
-    
-    return (
-      <>
+          command: (e) => {
+            setVisible(true);
+          },
+          template: (item, options) => {
+            return (
+              <div className="card flex justify-content-center">
+                <Button
+                  icon="pi pi-plus-circle"
+                  onClick={(e) => options.onClick(e)}
+                  className={classNames(
+                    options.className,
+                    "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+                  )}
+                >
+                  <p className="p-2">New deck</p>
+                </Button>
+              </div>
+            );
+          },
+        },
+      ],
+    },
+  ];
+  const toast = useRef<Toast>(null);
+
+  return (
+    <>
       {/* <p>{cards}</p> */}
       <div className="flex">
         <Toast ref={toast} />
-        <Menu id="deckMenu" model={items}/>
-        <Dialog header="Create new deck" footer={footerContent} modal={false} visible={visible} onHide={() => setVisible(false)} draggable={false} resizable={false} position='left'>
+        <Menu id="deckMenu" model={items} />
+        <Dialog
+          header="Create new deck"
+          footer={footerContent}
+          modal={false}
+          visible={visible}
+          onHide={() => setVisible(false)}
+          draggable={false}
+          resizable={false}
+          position="left"
+        >
           <InputText
             placeholder="Deck name"
             className="w-full mb-3"
@@ -216,18 +154,23 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
           />
         </Dialog>
 
-        <div className='w-12'>
-          <DataView value={cards} itemTemplate={itemTemplate}  />
+        <div className="w-12">
+          <DataView value={cards} itemTemplate={itemTemplate} />
         </div>
       </div>
-      {errors.map(function(error){
-                            return (
-                                <>  
-                                    {setErrors([...new Set(errors)])};
-                                    {toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
-                                    {setErrors([])};
-                                </>
-                            )
-                        })}
-      </>
-);}
+      {errors.map(function (error) {
+        return (
+          <>
+            {setErrors([...new Set(errors)])};
+            {toast.current?.replace({
+              severity: "error",
+              summary: "Error Message",
+              detail: error.message ? error.message : error,
+            })}
+            ;{setErrors([])};
+          </>
+        );
+      })}
+    </>
+  );
+}
