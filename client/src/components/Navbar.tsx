@@ -65,10 +65,7 @@ export default function Navbar() {
   };
 
   function DataSaver() {
-   
     dispatch(setDataSaver(!dataSaver));
-    console.log(dataSaver); 
-    
   }
   function DarkMode() {
     setTheme(!darkmode);
