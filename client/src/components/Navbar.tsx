@@ -5,6 +5,7 @@ import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
 import { PrimeReactContext } from "primereact/api";
+import { useEffect } from "react";
 
 
 export default function Navbar({
@@ -25,8 +26,25 @@ export default function Navbar({
   const { user, logout } = useContext(AuthContext);
   const page: boolean = true;
   const { changeTheme } = useContext(PrimeReactContext);
-  const darkMode = useAppSelector((state) => state.darkMode);
   
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    // Load dark mode preference from localStorage on component mount
+    const storedDarkMode = localStorage.getItem("darkMode");
+    return storedDarkMode !== null ? JSON.parse(storedDarkMode) : false;
+  });
+
+  useEffect(() => {
+    // Save dark mode preference to localStorage when it changes
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  useEffect(() => {
+    // Check darkMode on component mount and call changeTheme if true
+    if (darkMode) {
+      console.log("USEEFFECT: " + darkMode)
+      changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
+    }
+  }, []);
 
   const onLogout = () => {
     logout();
@@ -43,16 +61,20 @@ export default function Navbar({
     //Code to turn on datasaverMode 
   }
   function toggleTheme() {      
-    console.log(darkMode)
+    console.log("TOGGLETHEME: " + darkMode)
     if (darkMode) {
+      setDarkMode(false);
+      console.log("setDarkMode(false)");
       changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
-      dispatch({type: 'darkMode/toggle'})
-      console.log(darkMode)
+      // dispatch({type: 'darkMode/toggle'});
+      // console.log("Dark mode is: " + darkMode)
     }
     else {
+      setDarkMode(true);
+      console.log("setDarkMode(true)");
       changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
-      dispatch({type: 'darkMode/toggle'})
-      console.log(darkMode)
+      // dispatch({type: 'darkMode/toggle'});
+      // console.log("Dark mode is: " + darkMode)
 }}
 
   const items = [
