@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
+import { setDataSaver } from "../service/cards/dataSaverSlice";
+import { useLocation } from "react-router-dom";
+
 import debounce from 'lodash.debounce';
 
 //const { changeTheme } = useContext(PrimeReactContext);
@@ -14,13 +17,18 @@ export default function Navbar() {
   // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
-  const layout = useAppSelector((state) => state.layout.layout);
+  const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
   // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
-  const page: boolean = true;
+  const location = useLocation();
+
+  const page = location.pathname == "/" ? true : false;
+
+  
+  const [layout, setLayout] = useState<string>("grid");
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});
@@ -58,12 +66,14 @@ export default function Navbar() {
   var darkmode: boolean = false;
 
   const switchLayout = () => {
-    dispatch({ type: "layout/switchLayout" });
+    setLayout(layout === "grid" ? "list" : "grid");
   };
 
   function DataSaver() {
-    datasaver = !datasaver;
-    //Code to turn on datasaverMode
+   
+    dispatch(setDataSaver(!dataSaver));
+    console.log(dataSaver); 
+    
   }
   function DarkMode() {
     setTheme(!darkmode);
@@ -223,6 +233,7 @@ export default function Navbar() {
       ],
     },
     {
+      visible: page,
       label: "Sort",
       icon: "pi pi-fw pi-sort-alt",
       items: [
