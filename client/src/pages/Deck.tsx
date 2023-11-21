@@ -90,11 +90,24 @@ const handleDeckSelect = (index) => {
 
 const [cards, setCards] = useState([]);
 
-const [ createDeck, { loading }] = useMutation(CREATE_DECK,{
-  onError({graphQLErrors}) {
-      setErrors(graphQLErrors)
+const [createDeck, { loading }] = useMutation(CREATE_DECK, {
+  onError({ graphQLErrors }) {
+    setErrors(graphQLErrors);
   },
-  variables: {deckName: deckName}
+  variables: { deckName: deckName },
+  update: (cache, { data: { createDeck } }) => {
+    const existingDecks = cache.readQuery({ query: GET_DECKS });
+
+    cache.writeQuery({
+      query: GET_DECKS,
+      data: {
+        user: {
+          ...existingDecks.user,
+          decks: [...existingDecks.user.decks, createDeck]
+        },
+      },
+    });
+  },
 });
 
 const itemTemplate = (card: Card, layout: string) => {
@@ -134,11 +147,11 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
       setDeckName('');
     }
 
-    const handleCreateDeck = () => {  
-      createDeck();
+    const handleCreateDeck = async () => {  
+      await createDeck();
       clearCreateDeck();
-      // Should convert to useState instead of reloading page, but this works for now
-      window.location.reload();
+      loadingDecks();
+
     }
 
     const footerContent = (
