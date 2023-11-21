@@ -1,11 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
-import CardTooltip from "./CardTooltip";
 import { Dialog } from "primereact/dialog";
-import parse from "html-react-parser";
 import {CardOverlayComponent} from "./CardOverlayComponent";
 import { OverlayPanel } from "primereact/overlaypanel";
+import { CardService } from "../service/CardService";
 interface CardItemProps {
   card: Card;
   onClick?: (card: Card) => void;
@@ -59,20 +58,33 @@ const getSeverity = (card: Card) => {
   }
 };
 
-export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
-  const { open, onClose, card } = props;
+export function CardPopUp(props: { cardId: String; open: any; onClose: any }) {
+  const { open, onClose, cardId } = props;
+  const [cardDetails, setCardDetails] = useState(null);
+
+  useEffect(() => {
+    if (cardId) {
+      CardService.getCardById(cardId)
+        .then(setCardDetails)
+        .catch((error) => {
+          console.error("Error fetching card details:", error);
+          // Handle error appropriately
+        });
+    }
+  }, [cardId]);
+
   const footerContent = (
     <div>
+      <h4>Hallo</h4>
       <Button
         icon="pi pi-plus"
         style={{ padding: "15px" }}
         className="p-button-rounded"
-        onClick={addCardToDeck}
         autoFocus
       ></Button>
     </div>
   );
-  const headerContent = <div style={{ textAlign: "center" }}>{card.name}</div>;
+  const headerContent = <div style={{ textAlign: "center" }}>Card Details</div>;
 
   return (
     <Dialog
@@ -90,21 +102,33 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
           marginTop: "0px",
         }}
       >
-        <p>Rarity: {card.rarity ? card.rarity : "no rarity"}</p>
-        <p>
-          Text: {parse(card.text ? card.text.replace("[x]", "") : "no text")}
-        </p>
-        <p>Flavor: {card.flavor ? card.flavor : "no flavor"}</p>
+        {cardDetails ? (
+          <div>
+            {Object.keys(cardDetails).map((key) => {
+              // Check if the value is an object (like 'mechanics') and handle it appropriately
+              if (typeof cardDetails[key] === 'object' && cardDetails[key] !== null) {
+                return (
+                  <div key={key}>
+                    <strong>{key}:</strong> {JSON.stringify(cardDetails[key])}
+                  </div>
+                );
+              }
+              return (
+                <div key={key}>
+                  <strong>{key}:</strong> {cardDetails[key]}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p>Loading card details...</p>
+        )}
       </div>
     </Dialog>
   );
 }
 
 
-function addCardToDeck() {
-  
-  
-}
 
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
 
@@ -120,7 +144,9 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   //The onClick as defined in Props must take in a argument card
   const handleItemClick = () => {
     if (onClick) {
-      onClick(card);
+      
+      
+      onClick(card.id);
     }
   };
   return (
@@ -184,7 +210,6 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   
   const op = useRef(null); 
   const showOverlayPanel = (event) => {
-    // Prevent event from bubbling up to parent elements
     event.stopPropagation();
     if (op.current && op.current.toggle) {
       op.current.toggle(event);
@@ -194,9 +219,10 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   
   const handleItemClick = () => {
     if (onClick) {
-      onClick(card);
+      console.log(card.id);
+      onClick(card.id);
     }
-  };
+  };  
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
       <div className="p-4 border-1 surface-border surface-card border-round">
@@ -221,7 +247,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           <div className="text-xl font-bold">{card.name}</div>
           {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
           <div>
-            <CardTooltip card={card}></CardTooltip>
+            
             <p className="p-0 m-0 align-items-center">
               {card.attack ? "Attack: " + card.attack.toString() : "No attack"}
             </p>

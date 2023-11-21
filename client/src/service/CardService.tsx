@@ -38,27 +38,15 @@ export const CardService = {
             query FilteredCards($filters: [FilterInput!], $limit: Int, $skip: Int, $sortBy: SortInput) {
               filteredCards(filters: $filters, limit: $limit, skip: $skip, sortBy: $sortBy) {
                 cards {
-                  id
-                  cardId
-                  dbfId
-                  name
-                  cardSet
-                  type
-                  text
-                  img
-                  playerClass
-                  locale
-                  faction
-                  mechanics {
-                    name
-                  }
-                  cost
                   attack
                   health
-                  flavour
-                  artist
-                  elite
-                  rarity
+                  cost
+                  faction
+                  name
+                  img
+                  cardSet
+                  id
+                  type
                 }
                 hasNextPage
               }
@@ -75,6 +63,58 @@ export const CardService = {
         .catch((error) => {
           console.error("Error fetching filtered cards:", error);
           return [];
+        });
+    },
+
+    getCardById(cardId: String) {
+      return client
+        .query({
+          query: gql`
+            query GetCardById($id: ID!) {
+              getCardById(id: $id) {
+                id
+                cardId
+                dbfId
+                name
+                cardSet
+                type
+                text
+                playerClass
+                locale
+                faction
+                mechanics {
+                  name
+                }
+                cost
+                attack
+                health
+                flavour
+                artist
+                elite
+                rarity
+                spellSchool
+                race
+                img
+                durability
+                collectible
+                imgGold
+                otherRaces
+                howToGetSignature
+                armor
+                howToGet
+                howToGetGold
+                howToGetDiamond
+                multiClassGroup
+                classes
+              }
+            }
+          `,
+          variables: { id: cardId },
+        })
+        .then((result) => result.data.getCardById)
+        .catch((error) => {
+          console.error("Error fetching card by ID:", error);
+          return null;
         });
     },
 };
