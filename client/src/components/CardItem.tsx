@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import CardTooltip from "./CardTooltip";
@@ -6,6 +6,7 @@ import { Dialog } from "primereact/dialog";
 import parse from "html-react-parser";
 import {CardOverlayComponent} from "./CardOverlayComponent";
 import { OverlayPanel } from "primereact/overlaypanel";
+import { useAppSelector } from "../service/hooks";
 
 interface CardItemProps {
   card: Card;
@@ -72,9 +73,9 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
       style={{ width: "60vw", maxWidth: "400px" }}
       onHide={onClose}
       >
-      <div tabIndex={100} style={{ textAlign: "left" }}>
-      {card.attack && <p> Attack: {card.attack}</p>} 
-      {card.health && <p> Health: {card.health}</p>}
+      <div tabIndex={0} style={{ textAlign: "left" }}>
+      {card.attack != 0 && <p> Attack: {card.attack}</p>} 
+      {card.health != 0 && <p> Health: {card.health}</p>}
       {card.cost != 0 && <p> Cost: {card.cost}</p>}
       {card.rarity && <p> Rarity: {card.rarity}</p>}
       {card.text && <p style={{whiteSpace: "pre-wrap"}}>Text:  {parse(card.text.replace("[x]","").replace("#","").replace("$","").replace("\\n"," ").replace("\\n"," ").replace("\\n"," "))}</p>}
@@ -89,16 +90,15 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
   );
 }
 
-
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
+  const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
+  const idString = card.id.toString();
   const op = useRef(null); 
-  const idString = card.id.toString()
-
-  const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
+  const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
     // Prevent event from bubbling up to parent elements
     event.stopPropagation();
-    if (op.current && op.current.toggle) {
-      op.current.toggle(event);
+    if (op.current && (op.current as OverlayPanel).toggle) {
+      (op.current as OverlayPanel).toggle(event);
     }
   };
   //The onClick as defined in Props must take in a argument card
@@ -111,26 +111,28 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
     //Needs to send to const to do the onClick that has been sent.
     <button onClick={handleItemClick}  aria-haspopup aria-labelledby={idString+"set "+idString+"faction "+idString+"name"} className="col-12 border-1 surface-border surface-card border-round " >
       <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
-        <img
+        {!dataSaver && (<img
           className="w-10rem shadow-2 block xl:block mx-auto border-round align-items-center"
           src={card.img}
           alt={card.name}
         />
+        )}
         <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
           <div className="flex flex-column align-items-center sm:align-items-start gap-3">
             <div id={idString+"name"} className="text-2xl font-bold text-900">{card.name}</div>
-            {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
+            {/* Additional card details */}
             <div className="flex align-items-center gap-3">
               <span className="flex align-items-center gap-2">
                 <i className="pi pi-book"></i>
-                <span id={idString+"set"} className="font-semibold">{card.cardSet}</span>
+                <span className="font-semibold">{card.cardSet}</span>
               </span>
-              <Tag id={idString+"faction"}
+              <Tag
                 value={card.faction ? card.faction.toString() : "None"}
                 severity={getSeverity(card)}
               ></Tag>
             </div>
-            {/* <div>
+            {dataSaver && (
+            <div>
               <p className="p-0 m-0">
                 {card.attack
                   ? "Attack: " + card.attack.toString()
@@ -141,12 +143,16 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
                   ? "Health: " + card.health.toString()
                   : "No health"}
               </p>
-            </div> */}
+            </div>
+            )}
           </div>
           <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
             { <span className="text-2xl font-semibold">
               {card.type ? card.type.toString() : "No Type"}
-            </span> } 
+            </span> }             
+            <OverlayPanel ref={op} dismissable>
+              <CardOverlayComponent op={op} cardId={card.id} />
+            </OverlayPanel>   
             <Button
               id = {idString+"btn"}
               title={"Add Card: "+ card.name.toString()}
@@ -155,11 +161,8 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
               className="p-button-rounded"
               onClick={showOverlayPanel}
             />
-            <OverlayPanel ref={op} dismissable>
-            <CardOverlayComponent op={op} cardId={card.id} />
-            </OverlayPanel>   
-          </div>         
-        </div>       
+          </div>    
+        </div>   
       </div>     
     </button>   
   );
@@ -167,19 +170,16 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
 
 
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
+  const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
+  const idString = card.id.toString();
   const op = useRef(null); 
-  const idString = card.id.toString()
-  const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
+  const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
     // Prevent event from bubbling up to parent elements
     event.stopPropagation();
-    if (op.current && op.current.toggle) {
-      op.current.toggle(event);
+    if (op.current && (op.current as OverlayPanel).toggle) {
+      (op.current as OverlayPanel).toggle(event);
     }
   };
-  
-  
-  
-  
   const handleItemClick = () => {
     if (onClick) {
       onClick(card);
@@ -187,7 +187,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   };
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
-      <button className="p-4 border-1 surface-border surface-card border-round"aria-haspopup aria-labelledby={idString+"set "+idString+"faction "+idString+"name"} role="button" onClick={handleItemClick}> 
+      <button style={{width: "100%"}} className="p-4 border-1 surface-border surface-card border-round" aria-haspopup aria-labelledby={idString+"set "+idString+"faction "+idString+"name"} role="button" onClick={handleItemClick}> 
         <div>
           <div  className="flex align-items-center justify-content-between gap-2">
             <div className="flex align-items-center gap-2"> 
@@ -200,23 +200,27 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
             ></Tag>
           </div>
           <div className="flex flex-column align-items-center gap-3 py-5">
+          {!dataSaver && (
             <img
-              className={"w-9 shadow-2 border-round" + " " + card.cardId}
+              className={"w-9 shadow-2 border-round"}
               src={card.img}
               alt={card.name}
             />
-            <div id={idString+"name"} className="text-l font-bold"  >{card.name}</div>
-            {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
-            <div>
+          )}
+          
+            <div className="text-l font-bold">{card.name}</div>
+            {dataSaver && (
+            <>
               <CardTooltip card={card}></CardTooltip>
-              {/* <p className="p-0 m-0 align-items-center">
+              <p className="p-0 m-0 align-items-center">
                 {card.attack ? "Attack: " + card.attack.toString() : "No attack"}
               </p>
               <p>
                 {card.health ? "Health: " + card.health.toString() : "No health"}
-              </p> */}
-            </div>
-          </div>
+              </p>
+            </>
+          )}
+        </div>
           <div className="flex align-items-center justify-content-between">
             { <span className="text-2xl font-semibold">
               {card.type ? card.type.toString() : "No Type"} 
@@ -231,7 +235,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
             />
           </div>
           <OverlayPanel ref={op} dismissable>
-          <CardOverlayComponent op={op} cardId={card.id} />
+            <CardOverlayComponent op={op} cardId={card.id} />
           </OverlayPanel>
         </div>
       </button>
