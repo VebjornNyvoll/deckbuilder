@@ -6,6 +6,7 @@ import { ScrollTop } from "primereact/scrolltop";
 import { useAppDispatch, useAppSelector } from "../service/hooks";
 import { setCards, addCards } from "../service/cards/cardsSlice";
 import { CardService } from "../service/CardService";
+import { useLocation } from "react-router-dom";
 
 export default function CardView() {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ export default function CardView() {
   const sort = useAppSelector((state) => state.sort);
   const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
   const layout = useAppSelector((state) => state.layout.layout);
+  const location = useLocation();
   const [dialogState, setDialogState] = useState({ isOpen: false, id: undefined });
 
   const options = {
@@ -29,6 +31,7 @@ export default function CardView() {
     options.skip = 0; // Reset skip when filters change
     options.sortBy = sort; // Keep the sort options when filters change
     loadInitialCards();
+    console.log(location)
   }, [filters, sort]);
 
   useEffect(() => {
