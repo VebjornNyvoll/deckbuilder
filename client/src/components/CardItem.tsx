@@ -1,16 +1,18 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
-import CardTooltip from "./CardTooltip";
 import { Dialog } from "primereact/dialog";
-import parse from "html-react-parser";
 import {CardOverlayComponent} from "./CardOverlayComponent";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { useAppSelector } from "../service/hooks";
+import { CardService } from "../service/CardService";
+import parse from "html-react-parser";
+import CardTooltip from "./CardTooltip";
+
 
 interface CardItemProps {
   card: Card;
-  onClick?: (card: Card) => void;
+  onClick?: (cardId: string) => void;
 }
 interface Mechanic {
   name: string;
@@ -61,10 +63,27 @@ const getSeverity = (card: Card) => {
   }
 };
 
-export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
+export function CardPopUp(props: { cardId: String; open: boolean; onClose: () => void }) {
+  const { open, onClose, cardId } = props;
+  const [card, setCard] = useState(null);
   
-  const { open, onClose, card } = props;
-  const headerContent = <div style={{ textAlign: "center" }}>{card.name}</div>;
+
+  useEffect(() => {
+    if (cardId) {
+      CardService.getCardById(cardId)
+        .then(setCard)
+        .catch((error) => {
+          console.error("Error fetching card:", error);
+        });
+    }
+  }, [cardId]);
+
+  const renderCardProperties = () => {
+    if (!card) return <p>Loading card details...</p>;
+  };
+
+  const headerContent = <div style={{ textAlign: "center" }}>{card ? card.name : "Loading..."}</div>;
+
   return (
     <Dialog
       headerStyle={{ height: "70px" }}
@@ -74,18 +93,23 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
       onHide={onClose}
       >
       <div tabIndex={0} style={{ textAlign: "left" }}>
-      {card.attack != 0 && <p> Attack: {card.attack}</p>} 
-      {card.health != 0 && <p> Health: {card.health}</p>}
-      {card.cost != 0 && <p> Cost: {card.cost}</p>}
-      {card.rarity && <p> Rarity: {card.rarity}</p>}
-      {card.text && <p style={{whiteSpace: "pre-wrap"}}>Text:  {parse(card.text.replace("[x]","").replace("#","").replace("$","").replace("\\n"," ").replace("\\n"," ").replace("\\n"," "))}</p>}
-      {card.flavor && <p> Flavor: {card.flavor}</p>}
-      {card.faction && <p> Faction: {card.faction}</p>}
-      {card.cardSet && <p> Cardset: {card.cardSet}</p>}  
-      {card.playerClass && <p> Player class: {card.playerClass}</p>}
-      <br/>
-      {card.artist && <p> Artist: {card.artist}</p>}
-    </div>
+        {card && (
+          <>
+            {card.attack && <p>Attack: {card.attack}</p>}
+            {card.health && <p>Health: {card.health}</p>}
+            {card.cost != null && <p>Cost: {card.cost}</p>}
+            {card.rarity && <p>Rarity: {card.rarity}</p>}
+            {card.text && <p style={{ whiteSpace: "pre-wrap" }}>Text: {parse(card.text.replace(/\[x\]|#|\$|\\n/g, " "))}</p>}
+            {card.flavor && <p>Flavor: {card.flavor}</p>}
+            {card.faction && <p>Faction: {card.faction}</p>}
+            {card.cardSet && <p>Cardset: {card.cardSet}</p>}
+            {card.playerClass && <p>Player class: {card.playerClass}</p>}
+            {card.artist && <p>Artist: {card.artist}</p>}
+            <br />
+            {renderCardProperties()}
+          </>
+        )}
+      </div>
     </Dialog>
   );
 }
@@ -104,7 +128,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   //The onClick as defined in Props must take in a argument card
   const handleItemClick = () => {
     if (onClick) {
-      onClick(card);
+      onClick(card.id);
     }
   };
   return (
@@ -182,9 +206,9 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   };
   const handleItemClick = () => {
     if (onClick) {
-      onClick(card);
+      onClick(card.id);
     }
-  };
+  };  
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
       <button style={{width: "100%"}} className="p-4 border-1 surface-border surface-card border-round" aria-haspopup aria-labelledby={idString+"set "+idString+"faction "+idString+"name"} role="button" onClick={handleItemClick}> 
@@ -242,3 +266,4 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
     </div>
   );
 };
+

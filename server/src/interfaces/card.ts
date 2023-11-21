@@ -32,4 +32,6 @@ interface ICard {
     multiClassGroup: String
     classes: [String]
 }
+
+
 export {ICard}

@@ -5,6 +5,7 @@ import { InputText } from "primereact/inputtext";
 import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
 import { setDataSaver } from "../service/cards/dataSaverSlice";
+import { useLocation } from "react-router-dom";
 
 import debounce from 'lodash.debounce';
 
@@ -23,7 +24,9 @@ export default function Navbar() {
   const navigate = useNavigate();
   //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
-  const page: boolean = true;
+  const location = useLocation();
+
+  const page = location.pathname == "/" ? true : false;
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});
@@ -64,12 +67,11 @@ export default function Navbar() {
     dispatch({ type: "layout/switchLayout" });
   };
 
+
   function DataSaver() {
     dispatch(setDataSaver(!dataSaver));
   }
-  function DarkMode() {
-    setTheme(!darkmode);
-  }
+  
 
   enum sortOrder {
     ASC = 1,
@@ -225,6 +227,7 @@ export default function Navbar() {
       ],
     },
     {
+      visible: page,
       label: "Sort",
       icon: "pi pi-fw pi-sort-alt",
       items: [
