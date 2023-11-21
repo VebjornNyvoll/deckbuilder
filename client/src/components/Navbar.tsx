@@ -17,6 +17,7 @@ export default function Navbar() {
   // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
+  const layout = useAppSelector((state) => state.layout.layout);
   const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
   // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
   const dispatch = useAppDispatch();
@@ -26,9 +27,6 @@ export default function Navbar() {
   const location = useLocation();
 
   const page = location.pathname == "/" ? true : false;
-
-  
-  const [layout, setLayout] = useState<string>("grid");
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});
@@ -66,18 +64,14 @@ export default function Navbar() {
   var darkmode: boolean = false;
 
   const switchLayout = () => {
-    setLayout(layout === "grid" ? "list" : "grid");
+    dispatch({ type: "layout/switchLayout" });
   };
 
+
   function DataSaver() {
-   
     dispatch(setDataSaver(!dataSaver));
-    console.log(dataSaver); 
-    
   }
-  function DarkMode() {
-    setTheme(!darkmode);
-  }
+  
 
   enum sortOrder {
     ASC = 1,
@@ -360,8 +354,8 @@ export default function Navbar() {
           separator: true,
         },
         {
-          label: "Datasaver",
-          icon: "pi pi-fw pi-bolt",
+          label: dataSaver ? "Disable Data Saver" : "Enable Data Saver",
+          icon: dataSaver ? "pi pi-fw pi-times" : "pi pi-fw pi-bolt",
           command: () => {
             DataSaver();
           },
