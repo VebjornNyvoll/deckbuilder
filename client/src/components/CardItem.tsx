@@ -72,17 +72,18 @@ export function CardPopUp(props: { card: Card; open: any; onClose: any }) {
       style={{ width: "60vw", maxWidth: "400px" }}
       onHide={onClose}
       >
-      <div style={{ textAlign: "left" }}>
-      {card.rarity && <p>Rarity: {card.rarity}</p>}
+      <div tabIndex={100} style={{ textAlign: "left" }}>
+      {card.attack && <p> Attack: {card.attack}</p>} 
+      {card.health && <p> Health: {card.health}</p>}
+      {card.cost != 0 && <p> Cost: {card.cost}</p>}
+      {card.rarity && <p> Rarity: {card.rarity}</p>}
       {card.text && <p style={{whiteSpace: "pre-wrap"}}>Text:  {parse(card.text.replace("[x]","").replace("#","").replace("$","").replace("\\n"," ").replace("\\n"," ").replace("\\n"," "))}</p>}
-      {card.flavor && <p>Flavor: {card.flavor}</p>}
-      {card.faction && <p>Faction: {card.faction}</p>}
-      {card.cardSet && <p>Cardset: {card.cardSet}</p>}  
-      {card.playerClass && <p>Player class: {card.playerClass}</p>}
+      {card.flavor && <p> Flavor: {card.flavor}</p>}
+      {card.faction && <p> Faction: {card.faction}</p>}
+      {card.cardSet && <p> Cardset: {card.cardSet}</p>}  
+      {card.playerClass && <p> Player class: {card.playerClass}</p>}
       <br/>
-      {card.artist && <p>Artist: {card.artist}</p>}
-
-
+      {card.artist && <p> Artist: {card.artist}</p>}
     </div>
     </Dialog>
   );
@@ -127,7 +128,7 @@ const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
                 severity={getSeverity(card)}
               ></Tag>
             </div>
-            <div>
+            {/* <div>
               <p className="p-0 m-0">
                 {card.attack
                   ? "Attack: " + card.attack.toString()
@@ -138,30 +139,35 @@ const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
                   ? "Health: " + card.health.toString()
                   : "No health"}
               </p>
-            </div>
+            </div> */}
           </div>
           <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-            <span className="text-2xl font-semibold">
-              {card.cost ? "Cost: " + card.cost.toString() : "No cost"}
-            </span>
+            { <span className="text-2xl font-semibold">
+              {card.type ? card.type.toString() : "No Type"}
+            </span> } 
+            <Button
+              icon="pi pi-plus"
+              className="p-button-rounded"
+              onClick={showOverlayPanel}
+            />
             <OverlayPanel ref={op} dismissable>
-          <CardOverlayComponent op={op} cardId={card.id} />
-        </OverlayPanel>
-        <Button
-        icon="pi pi-plus"
-        className="p-button-rounded"
-        onClick={showOverlayPanel}
-      />
+            <CardOverlayComponent op={op} cardId={card.id} />
+            </OverlayPanel>   
           </div>
+          
         </div>
+        
       </div>
+      
     </div>
+    
   );
 };
 
 
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const op = useRef(null); 
+  const idString = card.id.toString()
   const showOverlayPanel = (event: { stopPropagation: () => void; }) => {
     // Prevent event from bubbling up to parent elements
     event.stopPropagation();
@@ -180,52 +186,54 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   };
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
-      <div className="p-4 border-1 surface-border surface-card border-round">
-
-      <div onClick={handleItemClick}>
-        <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-          <div className="flex align-items-center gap-2">
-            <i className="pi pi-book"></i>{" "}
-            <span className="font-semibold text-xs">{card.cardSet}</span>
+      <button className="p-4 border-1 surface-border surface-card border-round"aria-haspopup aria-labelledby={idString+"set "+idString+"faction "+idString+"name"} role="button" onClick={handleItemClick}> 
+        <div>
+          <div  className="flex align-items-center justify-content-between gap-2">
+            <div className="flex align-items-center gap-2"> 
+              <i className="pi pi-book"></i>{" "}
+              <span id={idString+"set"} className="font-semibold text-xs">{card.cardSet}</span>
+            </div>
+            <Tag id={idString+"faction"}
+              value={card.faction ? card.faction.toString() : "None"}
+              severity={getSeverity(card)}
+            ></Tag>
           </div>
-          <Tag
-            value={card.faction ? card.faction.toString() : "None"}
-            severity={getSeverity(card)}
-          ></Tag>
-        </div>
-        <div className="flex flex-column align-items-center gap-3 py-5">
-          <img
-            className={"w-9 shadow-2 border-round" + " " + card.cardId}
-            src={card.img}
-            alt={card.name}
-          />
-          <div className="text-xl font-bold">{card.name}</div>
-          {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
-          <div>
-            <CardTooltip card={card}></CardTooltip>
-            <p className="p-0 m-0 align-items-center">
-              {card.attack ? "Attack: " + card.attack.toString() : "No attack"}
-            </p>
-            <p>
-              {card.health ? "Health: " + card.health.toString() : "No health"}
-            </p>
+          <div className="flex flex-column align-items-center gap-3 py-5">
+            <img
+              className={"w-9 shadow-2 border-round" + " " + card.cardId}
+              src={card.img}
+              alt={card.name}
+            />
+            <div id={idString+"name"} className="text-l font-bold"  >{card.name}</div>
+            {/* <Rating stars={card.attack} value={card.attack} readOnly cancel={false}></Rating> */}
+            <div>
+              <CardTooltip card={card}></CardTooltip>
+              {/* <p className="p-0 m-0 align-items-center">
+                {card.attack ? "Attack: " + card.attack.toString() : "No attack"}
+              </p>
+              <p>
+                {card.health ? "Health: " + card.health.toString() : "No health"}
+              </p> */}
+            </div>
           </div>
+          <div className="flex align-items-center justify-content-between">
+            { <span className="text-2xl font-semibold">
+              {card.type ? card.type.toString() : "No Type"} 
+            </span> }
+            <Button
+              id = {idString+"btn"}
+              title={"Add Card: "+ card.name.toString()}
+              aria-labelledby={idString+"btn"}
+              icon="pi pi-plus"
+              className="p-button-rounded"
+              onClick={showOverlayPanel}
+            />
+          </div>
+          <OverlayPanel ref={op} dismissable>
+          <CardOverlayComponent op={op} cardId={card.id} />
+          </OverlayPanel>
         </div>
-        <div className="flex align-items-center justify-content-between">
-          <span className="text-2xl font-semibold">
-            {card.cost ? "Cost: " + card.cost.toString() : "No cost"}
-          </span>
-        </div>
-        <OverlayPanel ref={op} dismissable>
-        <CardOverlayComponent op={op} cardId={card.id} />
-      </OverlayPanel>
-      </div>
-      <Button
-        icon="pi pi-plus"
-        className="p-button-rounded"
-        onClick={showOverlayPanel}
-      />
-      </div>
+      </button>
     </div>
   );
 };
