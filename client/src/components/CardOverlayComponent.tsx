@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+import { Button } from 'primereact/button';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
@@ -45,7 +46,16 @@ export const CardOverlayComponent = ({ op, cardId }) => {
 
   const [addCardsToDeck] = useMutation(CARD_TO_DECK);
 
-  const onRowClick = async (rowData) => {
+  const addButtonTemplate = (rowData) => (
+    <Button 
+      label="Add" 
+      className="p-button-sm" 
+      onClick={(e) => handleAddButtonClick(e, rowData)}
+    />
+  );
+
+  const handleAddButtonClick = async (e, rowData) => {
+    e.stopPropagation();
     try {
       const response = await addCardsToDeck({
         variables: {
@@ -54,7 +64,7 @@ export const CardOverlayComponent = ({ op, cardId }) => {
         },
         context: {
           headers: {
-            Authorization: `${context?.token}` // Adjust as per your auth context structure
+            Authorization: `Bearer ${context?.token}` // Adjust as per your auth context structure
           },
         },
       });
@@ -70,17 +80,18 @@ export const CardOverlayComponent = ({ op, cardId }) => {
   };
 
   if (loading) return <p>Loading decks...</p>;
-  if (error) return <p>Could not load decks</p>;
+  if (error) return <p>Error loading decks</p>;
 
   const nameBodyTemplate = (rowData) => (
     <span style={{ cursor: 'pointer' }}>{rowData.name}</span>
   );
 
   return (
-    <div onClick={(e) => e.stopPropagation()} className="card flex flex-column align-items-center gap-3" style={{ width: '100%', maxWidth: '30rem' }}>
+    <div className="card flex flex-column align-items-center gap-3" style={{ width: '100%', maxWidth: '30rem', overflowY: 'auto', maxHeight: '400px' }}>
       <Toast ref={toast} />
-      <DataTable value={decks} onRowClick={onRowClick} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
-        <Column field="name" header="Add this card to the following deck" body={nameBodyTemplate}></Column>
+      <DataTable value={decks} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
+        <Column field="name" header="Deck" body={nameBodyTemplate}></Column>
+        <Column body={addButtonTemplate}></Column>
       </DataTable>
     </div>
   );
