@@ -5,133 +5,76 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+interface Filter {
+  field?: string;
+  values?: string[];
+}
+
+interface Options {
+  limit?: number;
+  skip?: number;
+  sortBy?: { field: string; order: number };
+}
+
 export const CardService = {
-  getCards(limit: number, skip: number) {
-    return client
-      .query({
-        query: gql`
-          query GetCards($limit: Int, $skip: Int) {
-            getPaginatedCards(limit: $limit, skip: $skip) {
-              cards {
-                id
-                cardId
-                dbfId
-                name
-                cardSet
-                type
-                text
-                playerClass
-                locale
-                faction
-                mechanics {
+    getFilteredCards(filters: Filter, options: Options = {}) {
+      const { limit, skip, sortBy } = options;
+
+      const filterVariables = Object.entries(filters).map(([field, values]) => ({
+        field,
+        values,
+      }));
+
+      const variables = {
+        filters: filterVariables,
+        limit,
+        skip,
+        sortBy,
+      };
+
+      return client
+        .query({
+          query: gql`
+            query FilteredCards($filters: [FilterInput!], $limit: Int, $skip: Int, $sortBy: SortInput) {
+              filteredCards(filters: $filters, limit: $limit, skip: $skip, sortBy: $sortBy) {
+                cards {
+                  id
+                  cardId
+                  dbfId
                   name
+                  cardSet
+                  type
+                  text
+                  img
+                  playerClass
+                  locale
+                  faction
+                  mechanics {
+                    name
+                  }
+                  cost
+                  attack
+                  health
+                  flavour
+                  artist
+                  elite
+                  rarity
                 }
-                cost
-                attack
-                health
-                flavour
-                artist
-                elite
-                rarity
-                spellSchool
-                race
-                img
-                durability
-                collectible
-                imgGold
-                otherRaces
-                howToGetSignature
-                armor
-                howToGet
-                howToGetGold
-                howToGetDiamond
-                multiClassGroup
-                classes
+                hasNextPage
               }
-              hasNextPage
             }
-          }
-        `,
-        variables: {
-          limit,
-          skip,
-        },
-      })
-      .then((result) => result.data.getPaginatedCards)
-      .catch((error) => {
-        console.error("Error fetching cards:", error);
-        return [];
-      });
-  },
-  getFilteredCards(field, options = {}) {
-
-    const { limit, skip, value, sortBy } = options;
-
-    let variables = { field }; 
-  
-    if (limit !== undefined) {
-      variables.limit = limit;
-    }
-    if (skip !== undefined) {
-      variables.skip = skip;
-    }
-    if (value !== undefined) {
-      variables.value = value;
-    }
-    if (sortBy !== undefined) {
-      variables.sortBy = sortBy;
-    }
-    return client
-      .query({
-        query: gql`
-        query FilteredCards($field: String!, $limit: Int, $skip: Int, $value: String, $sortBy: Int) {
-          filteredCards(field: $field, limit: $limit, skip: $skip, value: $value, sortBy: $sortBy) {
-            cards {
-              id
-              cardId
-              dbfId
-              name
-              cardSet
-              type
-              text
-              playerClass
-              locale
-              faction
-              mechanics {
-                name
-              }
-              cost
-              attack
-              health
-              flavour
-              artist
-              elite
-              rarity
-              spellSchool
-              race
-              img
-              durability
-              collectible
-              imgGold
-              otherRaces
-              howToGetSignature
-              armor
-              howToGet
-              howToGetGold
-              howToGetDiamond
-              multiClassGroup
-              classes
-            }
-            hasNextPage
-          }
-        }
-        `,
-        variables: variables,
-      })
-      .then((result) => result.data.filteredCards)
-      .catch((error) => {
-        console.error("Error fetching cards:", error);
-        return [];
-      });
-  }
+          `,
+          variables,
+        })
+        .then((result) => {
+          // Dispatch the filteredCards action with the retrieved data
+          // Currently not supported in our redux implementation
+          // dispatch(filteredCards(result.data.filteredCards));
+          return result.data.filteredCards;
+        })
+        .catch((error) => {
+          console.error("Error fetching filtered cards:", error);
+          return [];
+        });
+    },
 };

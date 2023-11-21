@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux'
+import type { TypedUseSelectorHook } from 'react-redux'
+import type { RootState, AppDispatch } from './store'
 
 // This hook is used to handle form input changes and submit
 // This code is imported from the link below
@@ -15,3 +18,6 @@ export const useForm = (initialState = {}) => {
     values,
   };
 };
+
+export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
