@@ -63,9 +63,9 @@ const getSeverity = (card: Card) => {
   }
 };
 
-export function CardPopUp(props: { cardId: String; open: boolean; onClose: () => void }) {
+export function CardPopUp(props: { cardId: string; open: boolean; onClose: () => void }) {
   const { open, onClose, cardId } = props;
-  const [card, setCard] = useState(null);
+  const [card, setCard] = useState(CardService.getEmptyCard());
   
 
   useEffect(() => {
