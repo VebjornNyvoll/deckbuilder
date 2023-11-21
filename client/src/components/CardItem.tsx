@@ -186,7 +186,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
         <div className="flex flex-wrap align-items-center justify-content-between gap-2">
           <div className="flex align-items-center gap-2">
             <i className="pi pi-book"></i>{" "}
-            <span className="font-semibold">{card.cardSet}</span>
+            <span className="font-semibold text-xs">{card.cardSet}</span>
           </div>
           <Tag
             value={card.faction ? card.faction.toString() : "None"}

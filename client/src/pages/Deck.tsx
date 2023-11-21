@@ -200,7 +200,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
         </Dialog>
 
         <div className='w-12'>
-          <DataView value={cards} itemTemplate={itemTemplate} />
+          <DataView value={cards} itemTemplate={itemTemplate}  />
         </div>
       </div>
       {errors.map(function(error){
