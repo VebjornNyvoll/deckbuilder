@@ -45,6 +45,7 @@ export const CardService = {
                   cardSet
                   type
                   text
+                  img
                   playerClass
                   locale
                   faction
