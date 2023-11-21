@@ -17,6 +17,7 @@ export default function CardView() {
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
   const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
+  const layout = useAppSelector((state) => state.layout.layout);
 
   const options = {
     limit: 20,
@@ -24,7 +25,7 @@ export default function CardView() {
     sortBy: sort,
   };
 
-  const layout = "grid";
+  
 
   useEffect(() => {
     options.limit = 20; // Reset limit when filters change

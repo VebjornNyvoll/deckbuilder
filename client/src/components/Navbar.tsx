@@ -14,14 +14,13 @@ export default function Navbar() {
   // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
+  const layout = useAppSelector((state) => state.layout.layout);
   // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const page: boolean = true;
-
-  const [layout, setLayout] = useState<string>("grid");
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});
@@ -59,7 +58,7 @@ export default function Navbar() {
   var darkmode: boolean = false;
 
   const switchLayout = () => {
-    setLayout(layout === "grid" ? "list" : "grid");
+    dispatch({ type: "layout/switchLayout" });
   };
 
   function DataSaver() {
