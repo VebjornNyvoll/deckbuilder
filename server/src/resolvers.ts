@@ -144,9 +144,7 @@ const resolvers = {
         return payload;
       } catch (error) {
         console.log(error);
-        payload.error.error = true;
-        payload.error.message = "An error occurred while deleting the user";
-        return payload;
+        throw error;
       }
     },
     
