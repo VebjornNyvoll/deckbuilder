@@ -24,6 +24,10 @@ interface FilterActionPayload {
             }
             // Filter out duplicates before updating the state
             state[field] = Array.from(new Set([...(state[field] || []), ...values]));
+            if (field==="name") {
+              if (state["name"][0] === "") {
+                delete state["name"];
+              }}
             },
       removeFilter: (state, action: PayloadAction<FilterActionPayload>) => {
         const { field, values } = action.payload;
