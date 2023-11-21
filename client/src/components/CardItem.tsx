@@ -66,7 +66,6 @@ const getSeverity = (card: Card) => {
 export function CardPopUp(props: { cardId: String; open: boolean; onClose: () => void }) {
   const { open, onClose, cardId } = props;
   const [card, setCard] = useState(null);
-  console.log("Hallo");
   
 
   useEffect(() => {
@@ -210,7 +209,6 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   
   const handleItemClick = () => {
     if (onClick) {
-      console.log(card.id);
       onClick(card.id);
     }
   };  
