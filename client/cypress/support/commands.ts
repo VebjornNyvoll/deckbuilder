@@ -48,24 +48,19 @@ Cypress.Commands.add("deleteCurrentUser", () => {
     cy.request({
         method: "POST",
         headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `${localStorage.getItem("token")}`
         },
         url: "http://localhost:4000/graphql",
         body: {
-            query: `
-        mutation {
-          deleteCurrentUser {
-            error {
-              message
-            }
-            username
-          }
-        }
-      `
+            query: `mutation Mutation {
+                deleteCurrentUser {
+                    id
+                    username
+                }
+            }`
         }
     }).then(response => {
         // Handle the response as needed
-        // For example, check for successful deletion
         if (response.body.data.deleteCurrentUser.error) {
             // Handle error case
             cy.log("Failed to delete user:", response.body.data.deleteCurrentUser.error.message);

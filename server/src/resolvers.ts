@@ -85,7 +85,6 @@ const resolvers = {
             id: null,
             username: null,
             decks: null,
-            error: { message: "User deleted", error: false },
         };
 
       try {
