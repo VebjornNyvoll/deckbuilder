@@ -40,9 +40,12 @@ export default function Navbar({
 
   useEffect(() => {
     // Check darkMode on component mount and call changeTheme if true
+    let themeLink = document.getElementById("theme-link");
     if (darkMode) {
-      console.log("USEEFFECT: " + darkMode)
-      changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
+      themeLink.href = "/themes/viva-dark/theme.css"
+    }else{
+      themeLink.href = "/themes/lara-light-indigo/theme.css";
+     
     }
   }, []);
 
@@ -57,24 +60,23 @@ export default function Navbar({
   };
 
   function DataSaver() {
+    console.log("Datasaver");
+    
     dataSaver = !dataSaver;
     //Code to turn on datasaverMode 
   }
   function toggleTheme() {      
     console.log("TOGGLETHEME: " + darkMode)
     if (darkMode) {
+
       setDarkMode(false);
       console.log("setDarkMode(false)");
       changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
-      // dispatch({type: 'darkMode/toggle'});
-      // console.log("Dark mode is: " + darkMode)
     }
     else {
       setDarkMode(true);
       console.log("setDarkMode(true)");
       changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
-      // dispatch({type: 'darkMode/toggle'});
-      // console.log("Dark mode is: " + darkMode)
 }}
 
   const items = [
