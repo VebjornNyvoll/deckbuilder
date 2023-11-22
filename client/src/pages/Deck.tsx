@@ -1,26 +1,25 @@
-import React,{ useRef, useState, useEffect } from "react";
-import { DataView } from "primereact/dataview";
-import { Menu } from "primereact/menu";
-import { classNames } from "primereact/utils";
-import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import { GridItem, ListItem } from "../components/CardItem";
-import { DeckService } from "../service/DeckService";
-import { useAppSelector } from "../service/hooks";
-
+import React, { useRef, useState, useEffect } from 'react';
+import { DataView } from 'primereact/dataview';
+import { Menu } from 'primereact/menu';
+import { classNames } from 'primereact/utils';
+import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
+import { GridItem, ListItem } from '../components/CardItem';
+import { DeckService } from '../service/DeckService';
+import { useAppSelector } from '../service/hooks';
 
 export default function Deck() {
   const [visible, setVisible] = useState<boolean>(false);
   const [errors, setErrors] = useState([]);
   const layout = useAppSelector((state) => state.layout.layout);
-  
+
   interface IDeck {
     id: string;
     deckName: string;
   }
-  
+
   const [deckData, setData] = useState(Array<IDeck>);
 
   const handleDeckSelect = (id: string) => {
@@ -39,21 +38,20 @@ export default function Deck() {
     if (!card) {
       return;
     }
-    if (layout === "list") {
+    if (layout === 'list') {
       return <ListItem card={card} onClick={handleClick} />;
-    } else if (layout === "grid") {
+    } else if (layout === 'grid') {
       return <GridItem card={card} onClick={handleClick} />;
     }
   };
 
   const clearCreateDeck = () => {
     setVisible(false);
-    document.getElementById("deckName")?.setAttribute("value", "");
+    document.getElementById('deckName')?.setAttribute('value', '');
   };
 
   const handleCreateDeck = async () => {
-    const deckName = (document.getElementById("deckName") as HTMLInputElement)
-      .value;
+    const deckName = (document.getElementById('deckName') as HTMLInputElement).value;
     await DeckService.createDeck(deckName);
     clearCreateDeck();
   };
@@ -61,7 +59,7 @@ export default function Deck() {
   const deleteDeck = async (id: string) => {
     const deckData = await DeckService.deleteDeck(id);
 
-    if(deckData.decks != null){
+    if (deckData.decks != null) {
       setData(deckData.decks);
     } else {
       setData([]);
@@ -83,19 +81,13 @@ export default function Deck() {
         onClick={() => clearCreateDeck()}
         className="p-button-text"
       />
-      <Button
-        label="Create deck"
-        severity="success"
-        icon="pi pi-check"
-        onClick={() => handleCreateDeck()}
-        autoFocus
-      />
+      <Button label="Create deck" severity="success" icon="pi pi-check" onClick={() => handleCreateDeck()} autoFocus />
     </div>
   );
 
   const items = [
     {
-      label: "My decks",
+      label: 'My decks',
       items: deckData.map((deck) => ({
         template: (item, options) => {
           return (
@@ -105,7 +97,7 @@ export default function Deck() {
                 onClick={(e) => handleDeckSelect(deck.id)}
                 className={classNames(
                   options.className,
-                  "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+                  'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround',
                 )}
               ></Button>
               <i
@@ -116,11 +108,7 @@ export default function Deck() {
           );
         },
         icon: (
-          <div
-            className="pi pi-trash"
-            style={{ padding: "5px" }}
-            onClick={() => deleteDeck(deck.id)}
-          >
+          <div className="pi pi-trash" style={{ padding: '5px' }} onClick={() => deleteDeck(deck.id)}>
             Delete deck
           </div>
         ),
@@ -128,7 +116,7 @@ export default function Deck() {
       })),
     },
     {
-      label: "Options",
+      label: 'Options',
       items: [
         {
           command: (e) => {
@@ -142,7 +130,7 @@ export default function Deck() {
                   onClick={(e) => options.onClick(e)}
                   className={classNames(
                     options.className,
-                    "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+                    'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround',
                   )}
                 >
                   <p className="p-2">New deck</p>
@@ -172,15 +160,11 @@ export default function Deck() {
           resizable={false}
           position="left"
         >
-          <InputText
-            placeholder="Deck name"
-            className="w-full mb-3"
-            id="deckName"
-          />
+          <InputText placeholder="Deck name" className="w-full mb-3" id="deckName" />
         </Dialog>
 
         <div className="w-12">
-          <DataView value={cards} itemTemplate={itemTemplate} layout={layout}/>
+          <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
         </div>
       </div>
       {errors.map(function (error) {
@@ -188,8 +172,8 @@ export default function Deck() {
           <>
             {setErrors([...new Set(errors)])};
             {toast.current?.replace({
-              severity: "error",
-              summary: "Error Message",
+              severity: 'error',
+              summary: 'Error Message',
               detail: error.message ? error.message : error,
             })}
             ;{setErrors([])};
