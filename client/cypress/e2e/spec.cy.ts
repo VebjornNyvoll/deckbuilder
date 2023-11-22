@@ -1,6 +1,7 @@
 describe('E2E test', () => {
   it('passes', () => {
     cy.visit('http://localhost:5173/project2/');
+    cy.viewport(1920, 1080);
     cy.wait(1000);
     /* ==== Generated with Cypress Studio ==== */
     cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
