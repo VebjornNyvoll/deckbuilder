@@ -128,23 +128,23 @@ const resolvers = {
   },
 
   Mutation: {
-    deleteCurrentUser: async(parent, args, contextValue) => {
-        const payload = {
-            id: null,
-            username: null,
-            decks: null,
-        };
+    deleteCurrentUser: async (parent, args, contextValue) => {
+      const payload = {
+        id: null,
+        username: null,
+        decks: null,
+      };
 
       try {
         if (contextValue.error) {
-          throw new GraphQLError("Could not authenticate user");
+          throw new GraphQLError('Could not authenticate user');
         }
 
         // Remove the user by their ID
         const result = await User.findByIdAndDelete(contextValue.result);
 
         if (!result) {
-          throw new GraphQLError("User not found");
+          throw new GraphQLError('User not found');
         }
 
         payload.id = result.id;
