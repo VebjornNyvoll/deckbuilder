@@ -1,5 +1,10 @@
-import { gql } from "@apollo/client";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import client from "./apolloClient"
+
+// DeckService will have three functions, getCardsInDeck, createDeck and deleteDeck
+// getCardsInDeck will take in a deckId and return a list of cards
+// createDeck will take in a string and return deckId
+// deleteDeck will take in a deckId and return a boolean
 
 export const DeckService = {
     getDecks: async () => {
@@ -68,14 +73,44 @@ export const DeckService = {
         mutation: gql`
         mutation RemoveDeck($deckId: String!) {
             removeDeck(deckId: $deckId) {
-                decks {
-                  deckName
-                  id
+              cards {
+                id
+                cardId
+                dbfId
+                name
+                cardSet
+                type
+                text
+                playerClass
+                locale
+                faction
+                mechanics {
+                  name
                 }
-              error {
-                message
-              
+                cost
+                attack
+                health
+                flavour
+                artist
+                elite
+                rarity
+                spellSchool
+                race
+                img
+                durability
+                collectible
+                imgGold
+                otherRaces
+                howToGetSignature
+                armor
+                howToGet
+                howToGetGold
+                howToGetDiamond
+                multiClassGroup
+                classes
               }
+              deckName
+              id
             }
           }
         `,
@@ -85,8 +120,9 @@ export const DeckService = {
     },
 
 
-    createDeck: async (deckName: string) => {
-        gql`
+    createDeck: async (deckName: String) => {
+
+        const GET_DECKS = gql`
         query Decks {
       user {
         decks {
@@ -108,7 +144,7 @@ export const DeckService = {
           return data.createDeck;
         } catch (error) {
           console.error("Error creating deck:", error);
-          throw error; 
+          throw error; // or handle it as you see fit
         }
       },
     };
