@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { DataView } from "primereact/dataview";
 import { Menu } from "primereact/menu";
-import { MenuItem } from "primereact/menuitem";
 import { classNames } from "primereact/utils";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
@@ -9,13 +8,19 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { GridItem, ListItem } from "../components/CardItem";
 import { DeckService } from "../service/DeckService";
-import React from "react";
+
 
 export default function Deck() {
   const [visible, setVisible] = useState<boolean>(false);
   const [errors, setErrors] = useState([]);
-  const [deckData, setData] = useState([]);
-  const deckName = React.useState("value");
+  const [deckName, setDeckName] = useState("value");
+  
+  interface IDeck {
+    id: string;
+    deckName: string;
+  }
+  
+  const [deckData, setData] = useState(Array<IDeck>);
 
   const handleDeckSelect = (id) => {
     DeckService.getCardsInDeck(id).then((result) => {
@@ -46,7 +51,7 @@ export default function Deck() {
   };
 
   const handleCreateDeck = async () => {
-    await DeckService.createDeck(deckName[0]);
+    await DeckService.createDeck(deckName);
     clearCreateDeck();
   };
 
@@ -167,7 +172,7 @@ export default function Deck() {
           <InputText
             placeholder="Deck name"
             className="w-full mb-3"
-            onChange={(e) => (deckName[0] = e.target.value)}
+            onChange={(e) => (setDeckName(e.target.value))}
           />
         </Dialog>
 
