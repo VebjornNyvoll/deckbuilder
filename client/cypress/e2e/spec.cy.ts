@@ -1,7 +1,6 @@
 describe("E2E test", () => {
   it("passes", () => {
-    cy.visit("http://localhost:5173/project2")
-    cy.viewport(1920, 1080);
+    cy.visit("http://localhost:5173/project2/")
     cy.wait(1000);
     /* ==== Generated with Cypress Studio ==== */
     cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
@@ -116,16 +115,15 @@ describe("E2E test", () => {
     cy.wait(500);
     cy.get('.p-button-label').click();
     cy.wait(500);
-    cy.get('#pr_id_2_1 > .p-menuitem-link > .p-menuitem-text').click();
+    /* ==== End Cypress Studio ==== */
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get(':nth-child(1) > .p-4 > .flex-column > .w-9').click();
     cy.wait(1000);
-    cy.get('.p-menuitem-link > .p-2').click();
+    cy.get('.p-dialog-header-icon > .p-icon > path').click();
     cy.wait(1000);
-    cy.get('#pr_id_244_content > .p-inputtext').clear('TE');
-    cy.get('#pr_id_244_content > .p-inputtext').type('Testing Deck');
+    cy.get('#\\36 54b71d1d5ef7bf1a2a5b5f0btn > .p-button-icon').click();
     cy.wait(1000);
-    cy.get('.p-button-success > .p-button-label').click();
-    cy.wait(1000);
-    cy.get('#pr_id_4_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('.p-overlaypanel-close > .p-icon > path').click();
     cy.wait(1000);
     /* ==== End Cypress Studio ==== */
     cy.window().then((win) => {
@@ -140,7 +138,21 @@ describe("E2E test", () => {
     cy.get('.card').invoke('scrollTop', 2500);
     cy.wait(1000);
     cy.get('.p-scrolltop-icon').click();
-
+    cy.wait(1000);
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get('#pr_id_2_6 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_6_2 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get(':nth-child(1) > .p-4 > .flex-column').click();
+    cy.wait(1000);
+    cy.get('.p-dialog-header-icon > .p-icon > path').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_6 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_6_2 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    /* ==== End Cypress Studio ==== */
   })
   after(() => {
     cy.deleteCurrentUser();
