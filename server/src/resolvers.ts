@@ -60,7 +60,7 @@ const resolvers = {
   
       const user = await User.findById(contextValue.result);
       const deck = user.decks.find((d) => d._id.toString() === args.id);
-  
+
       if (!deck) {
         throw new GraphQLError("Deck not found");
       }
@@ -71,10 +71,6 @@ const resolvers = {
       throw new GraphQLError("An error occurred while fetching cards");
     }
   },
-  
-  
-  
-
 
   getReviewsByCardId: async (parent, args) => {
     try{
@@ -245,7 +241,7 @@ const resolvers = {
             throw new GraphQLError("Could not authorize user");
           }
 
-          // Fetching the card documents that you want to add
+          // Fetching the card documents
           const cardsToAdd = await Cards.find({
               _id: { $in: args.cardIds }
           });
@@ -255,11 +251,10 @@ const resolvers = {
             throw new GraphQLError("No cards with the provided ids");
           }
 
-          // Update user's deck to include the new card documents
           const updatedUser = await User.findOneAndUpdate(
               { _id: contextValue.result, "decks._id": args.deckId },
               { $push: { "decks.$.cards": { $each: cardsToAdd } } },
-              { new: true } // This option returns the modified document
+              { new: true } 
           );
 
           if (!updatedUser) {
