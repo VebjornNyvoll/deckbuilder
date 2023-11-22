@@ -1,8 +1,8 @@
-import { ICard } from "./card";
+import { ICard } from './card';
 
 interface IDeck {
-    _id?: String
-    deckName: String
-    cards: ICard[]
+  _id?: String;
+  deckName: String;
+  cards: ICard[];
 }
-export {IDeck}
+export { IDeck };

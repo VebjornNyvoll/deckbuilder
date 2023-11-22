@@ -1,11 +1,11 @@
-import { useRef } from "react";
-import { Toast } from "primereact/toast";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-import { Button } from "primereact/button";
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { useContext } from "react";
-import { AuthContext } from "../context/authContext";
+import { useRef } from 'react';
+import { Toast } from 'primereact/toast';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { Button } from 'primereact/button';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { useContext } from 'react';
+import { AuthContext } from '../context/authContext';
 
 export const CardOverlayComponent = ({ cardId }) => {
   const context = useContext(AuthContext);
@@ -43,8 +43,8 @@ export const CardOverlayComponent = ({ cardId }) => {
 
   const showMessage = (isError, content) => {
     toast.current.replace({
-      severity: isError ? "error" : "success",
-      summary: isError ? "Error" : "Success",
+      severity: isError ? 'error' : 'success',
+      summary: isError ? 'Error' : 'Success',
       detail: content,
       life: 3000,
     });
@@ -53,11 +53,7 @@ export const CardOverlayComponent = ({ cardId }) => {
   const [addCardsToDeck] = useMutation(CARD_TO_DECK);
 
   const addButtonTemplate = (rowData) => (
-    <Button
-      label="Add"
-      className="p-button-sm"
-      onClick={(e) => handleAddButtonClick(e, rowData)}
-    />
+    <Button label="Add" className="p-button-sm" onClick={(e) => handleAddButtonClick(e, rowData)} />
   );
 
   const handleAddButtonClick = async (e, rowData) => {
@@ -88,33 +84,21 @@ export const CardOverlayComponent = ({ cardId }) => {
   if (loading) return <p>Loading decks...</p>;
   if (error) return <p>Error loading decks</p>;
 
-  const nameBodyTemplate = (rowData) => (
-    <span style={{ cursor: "pointer" }}>{rowData.name}</span>
-  );
+  const nameBodyTemplate = (rowData) => <span style={{ cursor: 'pointer' }}>{rowData.name}</span>;
 
   return (
     <div
       className="card flex flex-column align-items-center gap-3"
       style={{
-        width: "100%",
-        maxWidth: "30rem",
-        overflowY: "auto",
-        maxHeight: "400px",
+        width: '100%',
+        maxWidth: '30rem',
+        overflowY: 'auto',
+        maxHeight: '400px',
       }}
     >
       <Toast ref={toast} />
-      <DataTable
-        sortOrder={-1}
-        sortField={"name"}
-        value={decks}
-        tableStyle={{ width: "100%", maxWidth: "30rem" }}
-      >
-        <Column
-          sortable
-          field="name"
-          header="Deck"
-          body={nameBodyTemplate}
-        ></Column>
+      <DataTable sortOrder={-1} sortField={'name'} value={decks} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
+        <Column sortable field="name" header="Deck" body={nameBodyTemplate}></Column>
         <Column body={addButtonTemplate}></Column>
       </DataTable>
     </div>

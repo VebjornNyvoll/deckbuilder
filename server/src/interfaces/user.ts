@@ -1,9 +1,9 @@
-import { IDeck } from "./deck";
+import { IDeck } from './deck';
 interface IUser {
-    id: String,
-    username: String;
-    password: String;
-    decks: [IDeck];
+  id: String;
+  username: String;
+  password: String;
+  decks: [IDeck];
 }
 
-export {IUser}
+export { IUser };

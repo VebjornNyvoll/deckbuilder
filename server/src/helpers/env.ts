@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
-const production = process.env.PRODUCTION == "true" ? true : false;
+const production = process.env.PRODUCTION == 'true' ? true : false;
 
 const env = {
   PORT: parseInt(process.env.PORT),
