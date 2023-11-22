@@ -60,12 +60,16 @@ export default function Navbar() {
   }, [darkMode]);
 
   useEffect(() => {
+    console.log('USEEFFECT');
     // Check darkMode on component mount and call changeTheme if true
-    let themeLink = document.getElementById('theme-link');
-    if (darkMode && themeLink instanceof HTMLAnchorElement) {
-      themeLink.href = '/themes/viva-dark/theme.css';
-    } else if (themeLink instanceof HTMLAnchorElement) {
-      themeLink.href = '/themes/lara-light-indigo/theme.css';
+    const themeLink = document.getElementById('theme-link');
+    if (themeLink) {
+      if (darkMode) {
+        console.log(themeLink.href);
+        themeLink.href = '/themes/viva-dark/theme.css';
+      } else {
+        themeLink.href = '/themes/lara-light-indigo/theme.css';
+      }
     }
   }, [darkMode]);
 
@@ -92,11 +96,14 @@ export default function Navbar() {
   }
 
   function toggleTheme() {
+    console.log('TOGGLETHEME: ' + darkMode);
     if (darkMode) {
       setDarkMode(false);
+      console.log('setDarkMode(false)');
       changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
     } else {
       setDarkMode(true);
+      console.log('setDarkMode(true)');
       changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
     }
   }
@@ -246,7 +253,7 @@ export default function Navbar() {
     },
     {
       visible: page,
-      label: 'Sort',
+      label: <div data-testid="sort-menuitem">Sort</div>,
       icon: 'pi pi-fw pi-sort-alt',
       items: [
         {
@@ -296,12 +303,12 @@ export default function Navbar() {
           ],
         },
         {
-          label: 'Attack',
+          label: <div data-testid="attack">Attack</div>,
           icon: 'pi pi-fw pi-wrench',
           className: sort?.field == 'attack' ? activeFilterColor : '',
           items: [
             {
-              label: 'High to low',
+              label: <div data-testid="attack-htl">High to low</div>,
               icon: 'pi pi-fw pi-sort-numeric-down-alt',
               className: sort?.field == 'attack' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
@@ -354,8 +361,7 @@ export default function Navbar() {
     {
       //Searchbar
       visible: page,
-      label: "Searchbar",
-      template: <InputText placeholder="Search" type="search" onChange={debouncedResults} />,
+      template: <InputText placeholder="Search" type="text" onChange={debouncedResults} />,
     },
     {
       //Profile, swap out for avatar picture at const end, end = {end}

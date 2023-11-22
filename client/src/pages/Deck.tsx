@@ -72,17 +72,11 @@ export default function Deck() {
     });
   });
 
-  const footerContent = (
-    <div>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        severity="danger"
-        onClick={() => clearCreateDeck()}
-        className="p-button-text"
-      />
-      <Button label="Create deck" severity="success" icon="pi pi-check" onClick={() => handleCreateDeck()} autoFocus />
-    </div>
+    const footerContent = (
+      <div>
+          <Button label="Cancel" icon="pi pi-times" severity="danger" onClick={() => clearCreateDeck()} className="p-button-text" />
+          <Button label="Create deck" severity="success" icon="pi pi-check" onClick={() => handleCreateDeck()} autoFocus data-testid="createDeckButton"/>
+      </div>
   );
 
   const items = [
@@ -128,6 +122,7 @@ export default function Deck() {
                 <Button
                   icon="pi pi-plus-circle"
                   onClick={(e) => options.onClick(e)}
+                  data-testid="newDeckButton"
                   className={classNames(
                     options.className,
                     'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround',
