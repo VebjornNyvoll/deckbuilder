@@ -7,6 +7,7 @@ const typeDefs = `
     getReviewsByCardId(cardId: ID!): [Review]!
     filteredCards(filters: [FilterInput!], limit: Int, skip: Int, sortBy: SortInput): PaginatedCards
     getCardsInDeck(id: ID!): [Card]
+    getCardById(id: ID!): Card
   }
 
   input FilterInput {
@@ -103,6 +104,10 @@ const typeDefs = `
     multiClassGroup: String
     classes: [String]
   }
+  
+ 
+
+  
 
   type Mechanics {
     name: String
