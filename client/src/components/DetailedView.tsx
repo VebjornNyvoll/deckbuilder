@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { CardService } from "../service/CardService";
-import { Card } from "./CardItem";
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { CardService } from '../service/CardService';
+import { Card } from './CardItem';
 
-import Navbar from "./Navbar";
+import Navbar from './Navbar';
 
 interface Review {
   user: string;
@@ -15,8 +15,8 @@ export default function DetailedView() {
   const { cardId } = useParams();
   const [card, setCard] = useState<Card | null>(null);
   const [reviews /*setReviews*/] = useState<Review[]>([
-    { user: "John", rating: 4, comment: "Great card!" },
-    { user: "Jane", rating: 3, comment: "It's alright." },
+    { user: 'John', rating: 4, comment: 'Great card!' },
+    { user: 'Jane', rating: 3, comment: "It's alright." },
   ]);
 
   useEffect(() => {
@@ -45,9 +45,9 @@ export default function DetailedView() {
           <p>Type: {card.type}</p>
           <p>Faction: {card.faction}</p>
           <p>Rarity: {card.rarity}</p>
-          <p>Cost: {card.cost ? card.cost : "N/A"}</p>
-          <p>Attack: {card.attack ? card.attack : "N/A"}</p>
-          <p>Health: {card.health ? card.health : "N/A"}</p>
+          <p>Cost: {card.cost ? card.cost : 'N/A'}</p>
+          <p>Attack: {card.attack ? card.attack : 'N/A'}</p>
+          <p>Health: {card.health ? card.health : 'N/A'}</p>
         </div>
       </div>
 

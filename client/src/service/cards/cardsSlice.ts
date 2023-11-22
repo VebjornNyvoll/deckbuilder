@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Card } from "../../components/CardItem";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Card } from '../../components/CardItem';
 
 interface CardsState {
   cards: Card[];
@@ -10,7 +10,7 @@ const initialState: CardsState = {
 };
 
 const cardsSlice = createSlice({
-  name: "cards",
+  name: 'cards',
   initialState,
   reducers: {
     setCards: (state, action: PayloadAction<Card[]>) => {
