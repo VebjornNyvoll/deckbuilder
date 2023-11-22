@@ -128,22 +128,33 @@ const resolvers = {
   },
 
   Mutation: {
-    addReview: async (parent, args, contextValue) => {
+    deleteCurrentUser: async (parent, args, contextValue) => {
+      const payload = {
+        id: null,
+        username: null,
+        decks: null,
+      };
+
       try {
         if (contextValue.error) {
-          throw 'Authenticate user';
+          throw new GraphQLError('Could not authenticate user');
         }
-        const user = await User.findById(contextValue.result); // Make sure to await this
 
-        if (!user) {
+        // Remove the user by their ID
+        const result = await User.findByIdAndDelete(contextValue.result);
+
+        if (!result) {
           throw new GraphQLError('User not found');
         }
 
-        await Review.create({ cardId: args.cardId, text: args.text, rating: args.rating, user: user.toObject() });
+        payload.id = result.id;
+        payload.username = result.username;
+        payload.decks = result.decks;
 
-        return await Review.find({ cardId: args.cardId });
+        return payload;
       } catch (error) {
-        throw new GraphQLError(error);
+        console.log(error);
+        throw error;
       }
     },
 

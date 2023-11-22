@@ -1,8 +1,8 @@
 import { IUser } from './user';
 interface IReview {
-  cardId: String;
-  text: String;
-  rating: Number;
+  cardId: string;
+  text: string;
+  rating: number;
   user: IUser;
 }
 
