@@ -140,7 +140,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
         aria-haspopup
         aria-labelledby={idString + 'set ' + idString + 'faction ' + idString + 'name'}
         className="col-12 border-1 surface-border surface-card border-round "
-      >
+        >
         <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
           {!dataSaver && (
             <img
@@ -175,7 +175,6 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
                 </div>
               )}
             </div>
-
             <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
               {<span className="text-2xl font-semibold">{card.type ? card.type.toString() : 'No Type'}</span>}
               <Button
@@ -190,7 +189,6 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           </div>
         </div>
       </button>
-
       <OverlayPanel ref={op} dismissable showCloseIcon={true}>
         <CardOverlayComponent cardId={card.id} />
       </OverlayPanel>
@@ -198,13 +196,12 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   );
 };
 
+
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
   const idString = card.id.toString();
   const op = useRef(null);
   const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
-    // Prevent event from bubbling up to parent elements
-    event.stopPropagation();
     if (op.current && (op.current as OverlayPanel).toggle) {
       (op.current as OverlayPanel).toggle(event);
     }
@@ -216,17 +213,18 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
       onClick(card.id);
     }
   };
+  
 
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
       <button
-        style={{ width: '100%' }}
-        className="p-4 border-1 surface-border surface-card border-round"
+        style={{ width: '100%', borderBottom: "none", paddingBottom: "0"}}
+        className="p-4 border-1 surface-border surface-card"
         aria-haspopup
         aria-labelledby={idString + 'set ' + idString + 'faction ' + idString + 'name'}
         role="button"
         onClick={handleItemClick}
-      >
+        >
         <div className="flex align-items-center justify-content-between gap-2">
           <div className="flex align-items-center gap-2">
             <i className="pi pi-book"></i>{' '}
@@ -254,23 +252,21 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
             </>
           )}
         </div>
-
-        <div className="flex align-items-center justify-content-between">
-          {<span className="text-2xl font-semibold">{card.type ? card.type.toString() : 'No Type'}</span>}
-          <Button
-            id={idString + 'btn'}
-            title={'Add Card: ' + card.name.toString()}
-            aria-labelledby={idString + 'btn'}
-            icon="pi pi-plus"
-            className="p-button-rounded"
-            onClick={showOverlayPanel}
-          />
-        </div>
       </button>
-
+      <div style={{borderTop: "none"}} className="flex align-items-center p-4 justify-content-between border-1 surface-border surface-card">
+        {<span className="text-2xl font-semibold">{card.type ? card.type.toString() : 'No Type'}</span>}
+        <Button
+          id={idString + 'btn'}
+          title={'Add Card: ' + card.name.toString()}
+          aria-labelledby={idString + 'btn'}
+          icon="pi pi-plus"
+          className="p-button-rounded"
+          onClick={showOverlayPanel}
+        />
+      </div>
       <OverlayPanel ref={op} dismissable showCloseIcon={true}>
-        <CardOverlayComponent cardId={card.id} />
+      <CardOverlayComponent cardId={card.id} />
       </OverlayPanel>
-    </div>
+    </div>  
   );
 };

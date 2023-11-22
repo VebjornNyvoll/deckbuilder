@@ -359,7 +359,8 @@ export default function Navbar() {
     {
       //Searchbar
       visible: page,
-      template: <InputText placeholder="Search" type="text" onChange={debouncedResults} />,
+      label: "Searchbar",
+      template: <InputText placeholder="Search" type="search" onChange={debouncedResults} />,
     },
     {
       //Profile, swap out for avatar picture at const end, end = {end}
