@@ -52,14 +52,16 @@ export default function Deck() {
 
   const deleteDeck = async (id: string) => {
     const deckData = await DeckService.deleteDeck(id);
-    console.log(deckData, "deletion");
 
-    setData(deckData);
+    if(deckData.decks != null){
+      setData(deckData.decks);
+    } else {
+      setData([]);
+    }
   };
 
   useEffect(() => {
     DeckService.getDecks().then((decks) => {
-      console.log(decks, "Useeffect");
       setData(decks);
     });
   });

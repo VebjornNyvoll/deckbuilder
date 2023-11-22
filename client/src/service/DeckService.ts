@@ -68,44 +68,14 @@ export const DeckService = {
         mutation: gql`
         mutation RemoveDeck($deckId: String!) {
             removeDeck(deckId: $deckId) {
-              cards {
-                id
-                cardId
-                dbfId
-                name
-                cardSet
-                type
-                text
-                playerClass
-                locale
-                faction
-                mechanics {
-                  name
+                decks {
+                  deckName
+                  id
                 }
-                cost
-                attack
-                health
-                flavour
-                artist
-                elite
-                rarity
-                spellSchool
-                race
-                img
-                durability
-                collectible
-                imgGold
-                otherRaces
-                howToGetSignature
-                armor
-                howToGet
-                howToGetGold
-                howToGetDiamond
-                multiClassGroup
-                classes
+              error {
+                message
+              
               }
-              deckName
-              id
             }
           }
         `,
