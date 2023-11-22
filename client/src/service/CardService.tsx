@@ -17,6 +17,43 @@ interface Options {
 }
 
 export const CardService = {
+    getEmptyCard() {
+      return {
+        id : "",
+        cardId : "",
+        dbfId : 0,
+        name : "",
+        cardSet : "",
+        type : "",
+        text : "",
+        playerClass : "",
+        locale : "",
+        faction : "",
+        cost : 0,
+        attack : 0,
+        health : 0,
+        flavour : "",
+        artist : "",
+        elite : false,
+        rarity : "",
+        spellSchool : "",
+        race: "",
+        img : "",
+        durability : 0,
+        collectible : false,
+        imgGold : "",
+        otherRaces : "",
+        howToGetSignature : "",
+        armor : 0,
+        howToGet : "",
+        howToGetGold : "",
+        howToGetDiamond : "",
+        classes : "",
+        mechanics : [],
+        flavor: "",
+
+      };
+    },
     getFilteredCards(filters: Filter, options: Options = {}) {
       const { limit, skip, sortBy } = options;
 
@@ -66,7 +103,7 @@ export const CardService = {
         });
     },
 
-    getCardById(cardId: String) {
+    getCardById(cardId: string) {
       return client
         .query({
           query: gql`

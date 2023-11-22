@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import React,{ useRef, useState, useEffect } from "react";
 import { DataView } from "primereact/dataview";
 import { Menu } from "primereact/menu";
 import { classNames } from "primereact/utils";
@@ -13,7 +13,6 @@ import { DeckService } from "../service/DeckService";
 export default function Deck() {
   const [visible, setVisible] = useState<boolean>(false);
   const [errors, setErrors] = useState([]);
-  const [deckName, setDeckName] = useState("value");
   
   interface IDeck {
     id: string;
@@ -23,7 +22,6 @@ export default function Deck() {
   const [deckData, setData] = useState(Array<IDeck>);
 
   const handleDeckSelect = (id: string) => {
-    console.log(id)
     DeckService.getCardsInDeck(id).then((result) => {
       setCards(result);
     });
@@ -48,10 +46,12 @@ export default function Deck() {
 
   const clearCreateDeck = () => {
     setVisible(false);
-    setDeckName("");
+    document.getElementById("deckName")?.setAttribute("value", "");
   };
 
   const handleCreateDeck = async () => {
+    const deckName = (document.getElementById("deckName") as HTMLInputElement)
+      .value;
     await DeckService.createDeck(deckName);
     clearCreateDeck();
   };
@@ -173,7 +173,7 @@ export default function Deck() {
           <InputText
             placeholder="Deck name"
             className="w-full mb-3"
-            onChange={(e) => (setDeckName(e.target.value))}
+            id="deckName"
           />
         </Dialog>
 

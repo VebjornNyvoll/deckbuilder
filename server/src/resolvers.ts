@@ -52,8 +52,6 @@ const resolvers = {
 
   getCardsInDeck: async (parent, args, contextValue) => {
     try {
-      console.log(contextValue);
-      console.log("Received id: " + args.id);
       if (contextValue.error) {
         throw new GraphQLError("Could not authenticate user");
       }
