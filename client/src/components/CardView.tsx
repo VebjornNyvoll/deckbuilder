@@ -147,8 +147,8 @@ export default function CardView() {
         <ScrollTop
           target="parent"
           threshold={1000}
-          className="w-3rem h-3rem border-round bg-primary"
-          icon="pi pi-arrow-up text-base"
+          className="w-3rem h-3rem border-round bg-gray-400"
+          icon="pi pi-angle-double-up text-base text-green-700"
         />
       </div>
     </RemoveScroll>
