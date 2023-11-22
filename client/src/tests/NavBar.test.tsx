@@ -43,12 +43,14 @@ describe("Navbar test", async () => {
         fireEvent.change(inputElement, { target: { value: 'fanottem' }});
         await wait(400)
         const actions = store.getActions()[0].payload.values
+        console.log(store.getActions());
+        
         expect(actions[0]).toEqual("fanottem")
+        store.clearActions();
     });
+    
 
-
-
-    test("Test search query", async () => {
+    test("Test sort", async () => {
         render(
             <Provider store={store}>
                 <Router>
@@ -57,11 +59,45 @@ describe("Navbar test", async () => {
             </Provider>
         );
 
-        const inputElement = screen.getByPlaceholderText("Search");
-        fireEvent.change(inputElement, { target: { value: 'fanottem' }});
+        
+
+
+  
+    // Now click on 'High to low'
+    const sortMenuItem = document.getElementById("sort-menuitem");
+    console.log(sortMenuItem);
+    
+    if(sortMenuItem){
+        fireEvent.mouseEnter(sortMenuItem);
+        await wait(300)
+    }else{
+        console.log("No element sort menu item");
+        
+    }
+
+    const attack = document.getElementById("attack");
+
+    if(attack){
+        fireEvent.mouseOver(attack);
+        await wait(400);
+    }else{
+        console.log("No element attack");
+        
+    }
+
+    const highToLowOption = document.getElementById('attack-htl');
+
+    if(highToLowOption){
+        
+        fireEvent.mouseOver(highToLowOption);
         await wait(400)
-        const actions = store.getActions()[0].payload.values
-        expect(actions[0]).toEqual("fanottem")
+        const actions = store.getActions();
+        console.log(actions);
+    }else{
+        console.log("No attack high to low");
+    }
+
+   
     });
 });
 

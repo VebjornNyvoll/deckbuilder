@@ -79,6 +79,8 @@ export default function Navbar() {
   }
 
   function setSort(field: string, order: sortOrder) {
+    console.log("SETTING SORT");
+    
     dispatch({ type: "sort/sort", payload: {field: field, order: order} });
   }
 
@@ -230,6 +232,7 @@ export default function Navbar() {
       visible: page,
       label: "Sort",
       icon: "pi pi-fw pi-sort-alt",
+      id: "sort-menuitem",
       items: [
       {
         label: "Cost",
@@ -281,8 +284,10 @@ export default function Navbar() {
         label: "Attack",
         icon: "pi pi-fw pi-wrench",
         className: sort?.field == "attack" ? activeFilterColor : "",
+        id: "attack",
         items: [
           {
+            id: "attack-htl",
             label: "High to low",
             icon: "pi pi-fw pi-sort-numeric-down-alt",
             className: sort?.field == "attack" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
