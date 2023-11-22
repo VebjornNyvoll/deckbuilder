@@ -1,5 +1,5 @@
 interface IMechanics {
-  name: String;
+  name: string;
 }
 
 export { IMechanics };
