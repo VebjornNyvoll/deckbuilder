@@ -72,9 +72,6 @@ export default function Deck() {
     DeckService.getDecks().then((decks) => {
       setData(decks);
     });
-    if (deckData.length > 0) {
-      handleDeckSelect(deckData[0].id);
-    }
   });
 
   const footerContent = (
