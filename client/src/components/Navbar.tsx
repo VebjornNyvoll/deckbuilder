@@ -63,11 +63,13 @@ export default function Navbar() {
     console.log('USEEFFECT');
     // Check darkMode on component mount and call changeTheme if true
     const themeLink = document.getElementById('theme-link');
-    if (darkMode) {
-      console.log(themeLink.href);
-      themeLink.href = '/themes/viva-dark/theme.css';
-    } else {
-      themeLink.href = '/themes/lara-light-indigo/theme.css';
+    if (themeLink) {
+      if (darkMode) {
+        console.log(themeLink.href);
+        themeLink.href = '/themes/viva-dark/theme.css';
+      } else {
+        themeLink.href = '/themes/lara-light-indigo/theme.css';
+      }
     }
   }, [darkMode]);
 
@@ -252,100 +254,100 @@ export default function Navbar() {
     {
       visible: page,
       label: <div data-testid="sort-menuitem">Sort</div>,
-      icon: "pi pi-fw pi-sort-alt",
+      icon: 'pi pi-fw pi-sort-alt',
       items: [
-      {
-        label: "Cost",
-        icon: "pi pi-fw pi-money-bill",
-        className: sort?.field == "cost" ? activeFilterColor : "",
-        items: [
-          {
-            label: "High to low",
-            icon: "pi pi-fw pi-sort-numeric-down-alt",
-            className: sort?.field == "cost" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
-            command: () => {
-              setSort("cost", sortOrder.DESC)
-            }
-          },
-          {
-            label: "Low to high",
-            icon: "pi pi-fw pi-sort-numeric-up",
-            className: sort?.field == "cost" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
-            command: () => {
-              setSort("cost", sortOrder.ASC)
-            }
-          },
-        ],
-      },
-      {
-        label: "Name",
-        icon: "pi pi-fw pi-id-card",
-        className: sort?.field == "name" ? activeFilterColor : "",
-        items: [
-          {
-            label: "A-Z",
-            icon: "pi pi-fw pi-sort-alpha-down",
-            className: sort?.field == "name" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
-            command: () => {
-              setSort("name", sortOrder.ASC)
-            }
-          },
-          {
-            label: "Z-A",
-            icon: "pi pi-fw pi-sort-alpha-up-alt",
-            className: sort?.field == "name" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
-            command: () => {
-              setSort("name", sortOrder.DESC)
-            }
-          },
-        ],
-      },
-      {
-        label: <div data-testid="attack">Attack</div>,
-        icon: "pi pi-fw pi-wrench",
-        className: sort?.field == "attack" ? activeFilterColor : "",
-        items: [
-          {
-            label: <div data-testid="attack-htl">High to low</div>,
-            icon: "pi pi-fw pi-sort-numeric-down-alt",
-            className: sort?.field == "attack" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
-            command: () => {
-              setSort("attack", sortOrder.DESC)
-            }
-          },
-          {
-            label: "Low to high",
-            icon: "pi pi-fw pi-sort-numeric-up",
-            className: sort?.field == "attack" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
-            command: () => {
-              setSort("attack", sortOrder.ASC)
-            }
-          },
-        ],
-      },
-      {
-        label: "Health",
-        icon: "pi pi-fw pi-heart",
-        className: sort?.field == "health" ? activeFilterColor : "",
-        items: [
-          {
-            label: "High to low",
-            icon: "pi pi-fw pi-sort-numeric-down-alt",
-            className: sort?.field == "health" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
-            command: () => {
-              setSort("health", sortOrder.DESC)
-            }
-          },
-          {
-            label: "Low to high",
-            icon: "pi pi-fw pi-sort-numeric-up",
-            className: sort?.field == "health" && sort?.order == sortOrder.ASC ? activeFilterColor : "",
-            command: () => {
-              setSort("health", sortOrder.ASC)
-            }
-          },
-        ],
-      },
+        {
+          label: 'Cost',
+          icon: 'pi pi-fw pi-money-bill',
+          className: sort?.field == 'cost' ? activeFilterColor : '',
+          items: [
+            {
+              label: 'High to low',
+              icon: 'pi pi-fw pi-sort-numeric-down-alt',
+              className: sort?.field == 'cost' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
+              command: () => {
+                setSort('cost', sortOrder.DESC);
+              },
+            },
+            {
+              label: 'Low to high',
+              icon: 'pi pi-fw pi-sort-numeric-up',
+              className: sort?.field == 'cost' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
+              command: () => {
+                setSort('cost', sortOrder.ASC);
+              },
+            },
+          ],
+        },
+        {
+          label: 'Name',
+          icon: 'pi pi-fw pi-id-card',
+          className: sort?.field == 'name' ? activeFilterColor : '',
+          items: [
+            {
+              label: 'A-Z',
+              icon: 'pi pi-fw pi-sort-alpha-down',
+              className: sort?.field == 'name' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
+              command: () => {
+                setSort('name', sortOrder.ASC);
+              },
+            },
+            {
+              label: 'Z-A',
+              icon: 'pi pi-fw pi-sort-alpha-up-alt',
+              className: sort?.field == 'name' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
+              command: () => {
+                setSort('name', sortOrder.DESC);
+              },
+            },
+          ],
+        },
+        {
+          label: <div data-testid="attack">Attack</div>,
+          icon: 'pi pi-fw pi-wrench',
+          className: sort?.field == 'attack' ? activeFilterColor : '',
+          items: [
+            {
+              label: <div data-testid="attack-htl">High to low</div>,
+              icon: 'pi pi-fw pi-sort-numeric-down-alt',
+              className: sort?.field == 'attack' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
+              command: () => {
+                setSort('attack', sortOrder.DESC);
+              },
+            },
+            {
+              label: 'Low to high',
+              icon: 'pi pi-fw pi-sort-numeric-up',
+              className: sort?.field == 'attack' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
+              command: () => {
+                setSort('attack', sortOrder.ASC);
+              },
+            },
+          ],
+        },
+        {
+          label: 'Health',
+          icon: 'pi pi-fw pi-heart',
+          className: sort?.field == 'health' ? activeFilterColor : '',
+          items: [
+            {
+              label: 'High to low',
+              icon: 'pi pi-fw pi-sort-numeric-down-alt',
+              className: sort?.field == 'health' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
+              command: () => {
+                setSort('health', sortOrder.DESC);
+              },
+            },
+            {
+              label: 'Low to high',
+              icon: 'pi pi-fw pi-sort-numeric-up',
+              className: sort?.field == 'health' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
+              command: () => {
+                setSort('health', sortOrder.ASC);
+              },
+            },
+          ],
+        },
       ],
     },
     {
