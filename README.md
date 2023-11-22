@@ -40,7 +40,7 @@ In [client/src](/client/src) components are naturally placed into the [component
 ## Accessibility
 
 In the third underway hand-in we have significantly improved the accessibility of our website. We've added aria-labels all across the website and ensured users can now use tab to navigate instead of using the mouse. In addition, we now have dark mode!
-![Screenshot of page in dark mode](image.png)
+![Screenshot of page in dark mode](readme/img/dark-mode.png)
 If that doesn't look great, I don't know what does! Both our light mode theme and our dark mode theme have been personally customized to match contrast ratios [specified by W3C Web Content Accessibility Guidelines 2.0](https://www.oregon.gov/ode/accessibility/checklist/pages/contrast.aspx) whilst looking great, of course.
 We've also added a "scroll to top" button that makes it a lot easier for users that have scrolled far down.
 
@@ -50,13 +50,13 @@ We also only show filters, sort and the search bar when the user is on the home 
 
 Of course we've made the project as sustainable as possible! We've cleaned up our queries to ensure we don't make any unneccessary calls. We've even added a sick debounce to the search bar that caches whatever you write to ensure it doesn't make a call every time you hit a key, but it still feels responsive!
 
-In addition we've added a data saver mode! This can be enabled under the profile tab. ![Profile -> Enable Data Saver](image-1.png)
+In addition we've added a data saver mode! This can be enabled under the profile tab. ![Profile -> Enable Data Saver](/readme/img/profile-data-saver.png)
 
 You may wonder "What does this Data Saver even do?" and that's a wonderful question. The answer is really quite simple, it ensures you don't make any calls to get images. Our card images are accessed from an external database and enabling data saver replaces the images with text data from our local database. This is not only easy to read, but it also helps save the environment! So go ahead and save those turtles!  
-![Picture of a regular card](image-2.png) ![Picture of a card in data saver mode](image-3.png)
+![Picture of a regular card](/readme/img/regular-card.png) ![Picture of a card in data saver mode](/readme/img/data-saver-card.png)
 
 ## Let's talk testing!
 
 As the well known saying says "No good component goes untested" so of course we've added some tests to our project. We use [Cypress for our End-To-End tests](https://www.cypress.io/) and [Vitest for our component tests.](https://vitest.dev/) Let's talk end-to-end tests first because it looks super sick when it runs so of course you'd want to try that first!
 
-Make sure you've done the neccessary steps from [How to run the project](#how-to-run-the-project). Then all you need to do is have the client and server running and finally in the [client folder](/client/) use the command `npx cypress open`.
+Make sure you've done the neccessary steps from [How to run the project](#how-to-run-the-project). Then all you need to do is have the client and server running and finally in the [client folder](/client/) use the command `npx cypress open`. This will lead you to a crazy-looking interface, but no worries, we'll guide you through it.
