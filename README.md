@@ -46,6 +46,22 @@ We've also added a "scroll to top" button that makes it a lot easier for users t
 
 We also only show filters, sort and the search bar when the user is on the home page which makes it a lot less confusing!
 
+## Features
+
+## Filtering and sorting
+
+Our filter system on the homepage is quite advanced and supports combining multiple filters and sorting on them. We figured you might want to know what is intended behaviour here. When you select a filter from the menu we add it to your Redux store. We store the values of each field as an array and also pass several fields to our getPaginatedCards query. This means that if you select "Faction: Alliance" for instance and then select "Faction: Horde" you will now get all cards that are either Horde or Alliance!
+
+You may also select more than one field, let's say we continue building on your Alliance & Horde query by adding a "Rarity:Common" filter. Now you'll get all cards that are Alliance or Horde and are ALSO Common rarity. So you may get cards that are "Faction: Alliance, Rarity: Common" and "Faction: Horde, Rarity: Common". This allows you to build extremely complex queries that also combine with your search filter. In addition, you may use the sort field freely which works regardless of whatever filter you have chosen!
+
+## Pagination
+
+We've decided to solve pagination by passing "limit" and "skip" options with our get cards query that also works when cards are filtered. We pass these props when users scroll down our view so we can load cards dynamically as the user scrolls. This ensures we don't load cards unneccessarily, but it also feels smooth as a user! When the user has scrolled far enough down, they get a "scroll to top"-button to get them back on track as well.
+
+## Authentication
+
+We've created our own account system where users can create an account and login to said account. By using our authContext we can now if a user is authenticated in any page or component.
+
 ## How about sustainability?
 
 Of course we've made the project as sustainable as possible! We've cleaned up our queries to ensure we don't make any unneccessary calls. We've even added a sick debounce to the search bar that caches whatever you write to ensure it doesn't make a call every time you hit a key, but it still feels responsive!
@@ -59,4 +75,21 @@ You may wonder "What does this Data Saver even do?" and that's a wonderful quest
 
 As the well known saying says "No good component goes untested" so of course we've added some tests to our project. We use [Cypress for our End-To-End tests](https://www.cypress.io/) and [Vitest for our component tests.](https://vitest.dev/) Let's talk end-to-end tests first because it looks super sick when it runs so of course you'd want to try that first!
 
+### End to end
+
 Make sure you've done the neccessary steps from [How to run the project](#how-to-run-the-project). Then all you need to do is have the client and server running and finally in the [client folder](/client/) use the command `npx cypress open`. This will lead you to a crazy-looking interface, but no worries, we'll guide you through it.
+
+The first page that will greet you is this "What's new in Cypress" page. All you need to do here is press the blue **Continue** button!
+![What's new in Cypress Page](/readme/img/cypress-1.png)
+
+Next up we have this "Welcome to Cypress" page. As you might've guessed you'll choose "E2E Testing" here as it will say configured. If this page doesn't show "Configured" for "E2E Testing" something has gone wrong when you set up the project and you should probably retrace your steps.
+![Welcome to Cypress page](/readme/img/cypress-2.png)
+
+All right, finally you get some options because it's time to choose a browser! We've tried Chrome, Edge and Electron here and they've all worked well. We've also used Firefox in our localhost even though we haven't tried it in Cypress, it should work as well. We'll leave this choice up to you, but I personally enjoy using Chrome to show other people that my computer has 16 gigs of ram as Chrome hogs it. 😎
+![Choose Browser page](/readme/img/cypress-3.png)
+
+It's time for the most confusing page yet if you're not used to Cypress. On this page you need to click the **spec** button in the middle of the screen and the test will immediately begin running so make sure you have your client and server running before hitting it! After that you can sit back, relax and watch Cypress do all the testing for you! Life as a medstudentvurderingsansvarlig sure is sweet, huh? ![Specs page](/readme/img/cypress-4.png)
+
+### Component testing
+
+Our component tests are so easy to run it's almost hillarious. As long as you've completed the project setup like before all you need to do is be in the [client directory](/client) and write `npm run test`. Just like that our tests will run some nice component tests for you and tell you that they're all fine and dandy! However, if they're not fine and dandy it's quite likely something has gone wrong with your project setup. If you find your project setup to be okay, please give us feedback with some error logs and we'll check it out!
