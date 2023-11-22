@@ -53,7 +53,7 @@ const typeDefs = `
     login(username: String!, password: String!): AuthPayload!
     
     createDeck(deckName: String!): User!
-    removeDeck(deckId: String!): User!
+    removeDeck(deckId: String!): [Deck]!
     addCards(cardIds: [ID!]!, deckId: ID!): User!
     removeCards(cardIds: [ID!]!, deckId: ID!): User!
     addReview(cardId: ID!, text: String!, rating: Int!): [Review]
