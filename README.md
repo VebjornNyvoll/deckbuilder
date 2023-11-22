@@ -48,19 +48,27 @@ We also only show filters, sort and the search bar when the user is on the home 
 
 ## Features
 
-## Filtering and sorting
+### Filtering and sorting
 
 Our filter system on the homepage is quite advanced and supports combining multiple filters and sorting on them. We figured you might want to know what is intended behaviour here. When you select a filter from the menu we add it to your Redux store. We store the values of each field as an array and also pass several fields to our getPaginatedCards query. This means that if you select "Faction: Alliance" for instance and then select "Faction: Horde" you will now get all cards that are either Horde or Alliance!
 
 You may also select more than one field, let's say we continue building on your Alliance & Horde query by adding a "Rarity:Common" filter. Now you'll get all cards that are Alliance or Horde and are ALSO Common rarity. So you may get cards that are "Faction: Alliance, Rarity: Common" and "Faction: Horde, Rarity: Common". This allows you to build extremely complex queries that also combine with your search filter. In addition, you may use the sort field freely which works regardless of whatever filter you have chosen!
 
-## Pagination
+### Pagination
 
 We've decided to solve pagination by passing "limit" and "skip" options with our get cards query that also works when cards are filtered. We pass these props when users scroll down our view so we can load cards dynamically as the user scrolls. This ensures we don't load cards unneccessarily, but it also feels smooth as a user! When the user has scrolled far enough down, they get a "scroll to top"-button to get them back on track as well.
 
-## Authentication
+### Decks
 
-We've created our own account system where users can create an account and login to said account. By using our authContext we can now if a user is authenticated in any page or component.
+Users can create their own decks and get the cards in their current deck. They can also add an arbitrary amount of cards to their decks and see which cards they have in each deck. They can also delete any deck they want to.
+
+### Authentication
+
+We've created our own account system where users can create an account and login to said account. By using our authContext we can now if a user is authenticated in any page or component. This allows us to easily make queries to create new decks, add cards to deck etc and get a user's decks.
+
+### State handling
+
+We handle state in a variety of ways depending on what is most practical. For instance, we store dark mode and data saver in a users local storage as it would feel terrible if those values were changed when you logged out or refreshed the page. Filters however are stored using Redux to make it easy to pass complex values in the state and ensure they're correct. Redux also stores a user's currently loaded cards as a cache. Some GraphQL queries also use Apollo Client's cache feature to ensure they're not run more than neccessary.
 
 ## How about sustainability?
 
