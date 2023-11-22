@@ -72,24 +72,11 @@ export default function Deck() {
     });
   });
 
-  const footerContent = (
-    <div>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        severity="danger"
-        onClick={() => clearCreateDeck()}
-        className="p-button-text"
-      />
-      <Button
-        label="Create deck"
-        severity="success"
-        icon="pi pi-check"
-        onClick={() => handleCreateDeck()}
-        autoFocus
-        data-testid="createDeckButton"
-      />
-    </div>
+    const footerContent = (
+      <div>
+          <Button label="Cancel" icon="pi pi-times" severity="danger" onClick={() => clearCreateDeck()} className="p-button-text" />
+          <Button label="Create deck" severity="success" icon="pi pi-check" onClick={() => handleCreateDeck()} autoFocus data-testid="createDeckButton"/>
+      </div>
   );
 
   const items = [

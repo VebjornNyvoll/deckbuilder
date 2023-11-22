@@ -250,7 +250,7 @@ describe('E2E test', () => {
     cy.wait(1500);
     cy.get('.card').invoke('scrollTop', 9000);
     cy.wait(1000);
-    cy.get('#TB_BaconUps_255btn > .p-button-icon').click(); // Acolyte of c'thun
+    cy.get(':nth-child(41) > .p-4 > :nth-child(3) > #TB_BaconUps_255btn > .p-button-icon').click(); // Acolyte of c'thun
     cy.wait(1000);
     cy.get(':nth-child(1) > :nth-child(2) > .p-button-sm > .p-button-label').click();
     cy.wait(1000);
