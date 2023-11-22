@@ -7,7 +7,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
-export const CardOverlayComponent = ({ op, cardId }) => {
+export const CardOverlayComponent = ({cardId }) => {
   const context = useContext(AuthContext);
 
   const CARD_TO_DECK = gql`
@@ -89,8 +89,8 @@ export const CardOverlayComponent = ({ op, cardId }) => {
   return (
     <div className="card flex flex-column align-items-center gap-3" style={{ width: '100%', maxWidth: '30rem', overflowY: 'auto', maxHeight: '400px' }}>
       <Toast ref={toast} />
-      <DataTable value={decks} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
-        <Column field="name" header="Deck" body={nameBodyTemplate}></Column>
+      <DataTable sortOrder={-1} sortField={"name"} value={decks} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
+        <Column sortable field="name" header="Deck" body={nameBodyTemplate}></Column>
         <Column body={addButtonTemplate}></Column>
       </DataTable>
     </div>
