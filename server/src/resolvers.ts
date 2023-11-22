@@ -52,15 +52,13 @@ const resolvers = {
 
   getCardsInDeck: async (parent, args, contextValue) => {
     try {
-      console.log(contextValue);
-      console.log("Received id: " + args.id);
       if (contextValue.error) {
         throw new GraphQLError("Could not authenticate user");
       }
   
       const user = await User.findById(contextValue.result);
       const deck = user.decks.find((d) => d._id.toString() === args.id);
-  
+
       if (!deck) {
         throw new GraphQLError("Deck not found");
       }
@@ -71,10 +69,6 @@ const resolvers = {
       throw new GraphQLError("An error occurred while fetching cards");
     }
   },
-  
-  
-  
-
 
   getReviewsByCardId: async (parent, args) => {
     try{
@@ -245,7 +239,7 @@ const resolvers = {
             throw new GraphQLError("Could not authorize user");
           }
 
-          // Fetching the card documents that you want to add
+          // Fetching the card documents
           const cardsToAdd = await Cards.find({
               _id: { $in: args.cardIds }
           });
@@ -255,11 +249,10 @@ const resolvers = {
             throw new GraphQLError("No cards with the provided ids");
           }
 
-          // Update user's deck to include the new card documents
           const updatedUser = await User.findOneAndUpdate(
               { _id: contextValue.result, "decks._id": args.deckId },
               { $push: { "decks.$.cards": { $each: cardsToAdd } } },
-              { new: true } // This option returns the modified document
+              { new: true } 
           );
 
           if (!updatedUser) {
@@ -317,29 +310,28 @@ const resolvers = {
   },
   
     
-    // createDeck: async (parent, args, contextValue) =>{
-    //   const payload = {
-    //     id: null,
-    //     username: null,
-    //     decks: null,
-    //     error: {message: "No error occured", error: false}
-    //   }
+    createDeck: async (parent, args, contextValue) =>{
+      const payload = {
+        id: null,
+        username: null,
+        decks: null,
+        error: {message: "No error occured", error: false}
+      }
 
-    //   if(contextValue.error){
-    //     throw new GraphQLError("Could not authorize user");
-    //   }
+      if(contextValue.error){
+        throw new GraphQLError("Could not authorize user");
+      }
 
-    //   const user = await User.findById(contextValue.result);
-    //   const newDeck = {deckName: args.deckName, cards: []}
-    //   user.decks.push(newDeck);
-    //   await user.save();
+      const user = await User.findById(contextValue.result);
+      const newDeck = {deckName: args.deckName, cards: []}
+      user.decks.push(newDeck);
+      await user.save();
       
-    //   payload.id = user.id;
-    //   payload.username = user.username;
-    //   payload.decks = user.decks;
-    //   return payload;
-
-    // },
+      payload.id = user.id;
+      payload.username = user.username;
+      payload.decks = user.decks;
+      return payload;
+    },
 
     removeDeck: async (parent, args, contextValue) =>{
       const payload = {
