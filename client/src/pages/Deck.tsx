@@ -9,12 +9,13 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { GridItem, ListItem } from "../components/CardItem";
 import { DeckService } from "../service/DeckService";
+import React from "react";
 
 export default function Deck() {
   const [visible, setVisible] = useState<boolean>(false);
-  const [deckName, setDeckName] = useState("");
   const [errors, setErrors] = useState([]);
   const [deckData, setData] = useState([]);
+  const deckName = React.useState("value");
 
   const handleDeckSelect = (id) => {
     DeckService.getCardsInDeck(id).then((result) => {
@@ -45,7 +46,7 @@ export default function Deck() {
   };
 
   const handleCreateDeck = async () => {
-    await DeckService.createDeck(deckName);
+    await DeckService.createDeck(deckName[0]);
     clearCreateDeck();
   };
 
@@ -164,8 +165,7 @@ export default function Deck() {
           <InputText
             placeholder="Deck name"
             className="w-full mb-3"
-            value={deckName} // Bind the value to the deckName state variable
-            onChange={(e) => setDeckName(e.target.value)} // Update the deckName state when input changes
+            onChange={(e) => (deckName[0] = e.target.value)}
           />
         </Dialog>
 
