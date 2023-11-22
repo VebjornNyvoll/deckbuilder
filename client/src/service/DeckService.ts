@@ -20,45 +20,46 @@ export const DeckService = {
         const { data } = await client.query({
         query: gql`
             query GetCardsInDeck($getCardsInDeckId: ID!) {
-        getCardsInDeck(id: $getCardsInDeckId) {
+          getCardsInDeck(id: $getCardsInDeckId) {
             id
-            cardId
-            dbfId
+            img
             name
-            cardSet
-            type
-            text
+            otherRaces
             playerClass
-            locale
-            faction
-            mechanics {
-            name
-            }
-            cost
-            attack
-            health
-            flavour
-            artist
-            elite
+            race
             rarity
             spellSchool
-            race
-            img
-            durability
-            collectible
+            text
+            type
+            multiClassGroup
+            mechanics {
+              name
+            }
+            locale
             imgGold
-            otherRaces
             howToGetSignature
-            armor
-            howToGet
             howToGetGold
             howToGetDiamond
-            multiClassGroup
+            howToGet
+            flavour
+            health
+            faction
+            durability
+            elite
+            dbfId
+            cost
+            collectible
             classes
-        }
-        }
+            cardSet
+            cardId
+            attack
+            artist
+            armor
+          }
+        } 
         `,
         variables: { getCardsInDeckId },
+        fetchPolicy: "network-only",
         });
         return data.getCardsInDeck;
     },

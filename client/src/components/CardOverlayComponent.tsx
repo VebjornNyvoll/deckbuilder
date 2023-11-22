@@ -33,7 +33,6 @@ export const CardOverlayComponent = ({ op, cardId }) => {
   if (loadingDecks) return [{deckId: null, name: null}];
   if (errorDecks) return [{deckId: null, name: null}];
   // DO NOT REMOVE! The console log is needed to ensure data is loaded before the component is rendered
-  console.log(context.user);
   const products = data?.user?.decks?.map((deck) => {
     return {
       deckId: deck.id,

@@ -22,7 +22,8 @@ export default function Deck() {
   
   const [deckData, setData] = useState(Array<IDeck>);
 
-  const handleDeckSelect = (id) => {
+  const handleDeckSelect = (id: string) => {
+    console.log(id)
     DeckService.getCardsInDeck(id).then((result) => {
       setCards(result);
     });

@@ -30,8 +30,6 @@ export default function Navbar() {
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});
-    console.log(e.target.value)
-    console.log(filters)
   };
 
   const debouncedResults = useMemo(() => {
