@@ -27,11 +27,10 @@ export default function Navbar() {
   const location = useLocation();
 
   const page = location.pathname == "/" ? true : false;
+  const deckPage = location.pathname == "/decks" ? true : false;
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});
-    console.log(e.target.value)
-    console.log(filters)
   };
 
   const debouncedResults = useMemo(() => {
@@ -326,7 +325,7 @@ export default function Navbar() {
       ],
     },
     {
-      visible: page,
+      visible: page || deckPage,
       label: layout == "grid" ? "List" : "Grid",
       icon: layout == "grid" ? "pi pi-fw pi-list" : "pi pi-fw pi-th-large",
       command: () => {

@@ -31,7 +31,6 @@ export default function CardView() {
     options.skip = 0; // Reset skip when filters change
     options.sortBy = sort; // Keep the sort options when filters change
     loadInitialCards();
-    console.log(location)
   }, [filters, sort]);
 
   useEffect(() => {
