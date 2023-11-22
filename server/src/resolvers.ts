@@ -341,6 +341,12 @@ const resolvers = {
     },
 
     removeDeck: async (parent, args, contextValue) =>{
+      const payload = {
+        id: null,
+        username: null,
+        decks: null,
+        error: { message: "Successfully removed deck", error: false },
+      };
       try{
         if(contextValue.error){
           throw new GraphQLError("Could not authorize user");
@@ -356,10 +362,10 @@ const resolvers = {
         if(result.modifiedCount === 0){
           throw new GraphQLError("Could not delete deck");
         }
-        
-        return (await User.findById(contextValue.result)).decks;
+        return payload;
       }catch(error){
-        throw new GraphQLError(error)
+        payload.error.error = true;
+        return payload
       }
     }
 
