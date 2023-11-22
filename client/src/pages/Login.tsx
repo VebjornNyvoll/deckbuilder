@@ -76,7 +76,7 @@ function Login(props) {
     }
     return (
             <>
-            <Toast ref={toast} />
+            <Toast ref={toast} data-testid="loginToast"/>
                 <div className="flex align-items-center justify-content-center">
                     <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
                         <div className="text-center mb-5">
@@ -88,18 +88,18 @@ function Login(props) {
                         <form onSubmit={validateForm}>
                         <div className="card flex justify-content-center w-full mb-2">
                                         <span className="p-float-label w-full mb-3">
-                                            <InputText required={true} type="username" name="username" id="username" className="w-full mb-3" onChange={onChange}/>
+                                            <InputText required={true} type="username" name="username" id="username" className="w-full mb-3" onChange={onChange} data-testid="loginUsername"/>
                                             <label id="usernameLabel" htmlFor="username">Username</label>
                                         </span>
                                     </div>
                                     <div className="card flex justify-content-center w-full mb-2">
                                         <span className="p-float-label w-full mb-3 card flex">
-                                            <InputText aria-labelledby="passwordLabel" required={true} name="password" type="password" id="password" className="w-full mb-3" onChange={onChange}/>
+                                            <InputText aria-labelledby="passwordLabel" required={true} name="password" type="password" id="password" className="w-full mb-3" onChange={onChange} data-testid="loginPassword"/>
                                             <label id="usernameLabel" htmlFor="password">Password</label>
                                         </span>
                                     </div>
                             <div className="flex align-items-center justify-content-between mb-6">
-                                <a href="javascript:undefined;" onClick={showForgotPassword} className="font-medium no-underline text-blue-500 cursor-pointer">Forgot your password?</a>
+                                <a href="javascript:undefined;" onClick={showForgotPassword} className="font-medium no-underline text-blue-500 cursor-pointer" data-testid="loginForgotPassword">Forgot your password?</a>
                             </div>
                             {errors.map(function(error){
                             return (
@@ -110,7 +110,7 @@ function Login(props) {
                                 </>
                             )
                             })}
-                            <Button type="submit" label="Sign In" icon="pi pi-user" className="w-full"/>
+                            <Button type="submit" label="Sign In" icon="pi pi-user" className="w-full" data-testid="loginSubmit"/>
                         </form>
                     </div>
                 </div>

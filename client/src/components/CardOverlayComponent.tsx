@@ -8,6 +8,8 @@ import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 
 export const CardOverlayComponent = ({ cardId }) => {
+  
+  
   const context = useContext(AuthContext);
 
   const CARD_TO_DECK = gql`
@@ -70,7 +72,7 @@ export const CardOverlayComponent = ({ cardId }) => {
         },
         context: {
           headers: {
-            Authorization: `Bearer ${context?.token}`,
+            Authorization: `${context?.token}`,
           },
         },
       });
@@ -85,7 +87,7 @@ export const CardOverlayComponent = ({ cardId }) => {
     }
   };
 
-  if (loading) return <p>Loading decks...</p>;
+  if (loading) return <p data-testid={cardId}>Loading decks...</p>;
   if (error) return <p>Error loading decks</p>;
 
   const nameBodyTemplate = (rowData) => (

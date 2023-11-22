@@ -5,8 +5,17 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+
+const jsdom = require('jsdom');
+const virtualConsole = new jsdom.VirtualConsole();
+virtualConsole.on("error", () => {
+  // No-op to skip console errors.
+});
+
+
 const initialState = {
     filters: {},
+    sort: {},
     layout: {
         layout: "grid" 
     },
@@ -27,8 +36,6 @@ function wait(milliseconds: number) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
-
-
 describe("Navbar test", async () => {
     test("Test search query", async () => {
         render(
@@ -42,11 +49,14 @@ describe("Navbar test", async () => {
         const inputElement = screen.getByPlaceholderText("Search");
         fireEvent.change(inputElement, { target: { value: 'fanottem' }});
         await wait(400)
-        const actions = store.getActions()[0].payload.values
-        console.log(store.getActions());
-        
-        expect(actions[0]).toEqual("fanottem")
+        const expectedPayload =   {
+            type: 'filters/addFilter',
+            payload: { field: 'name', values: ["fanottem"] }
+        }
+        const actions = store.getActions()[0]
+        expect(actions).toEqual(expectedPayload)
         store.clearActions();
+       
     });
     
 
@@ -58,46 +68,35 @@ describe("Navbar test", async () => {
                 </Router>
             </Provider>
         );
-
         
+        const sortMenuItem = screen.getByTestId("sort-menuitem");
+        if(sortMenuItem){
+            fireEvent.click(sortMenuItem);
+            await wait(300)
+        }else{
+            console.log("No element sort menu item");
+        }
 
+        const attack = screen.getByTestId("attack")
 
-  
-    // Now click on 'High to low'
-    const sortMenuItem = document.getElementById("sort-menuitem");
-    console.log(sortMenuItem);
-    
-    if(sortMenuItem){
-        fireEvent.mouseEnter(sortMenuItem);
-        await wait(300)
-    }else{
-        console.log("No element sort menu item");
-        
-    }
+        if(attack){
+            fireEvent.click(attack);
+            await wait(400);
+        }else{
+            console.log("No element attack");
+        }
 
-    const attack = document.getElementById("attack");
+        const highToLowOption = screen.getByTestId('attack-htl');
 
-    if(attack){
-        fireEvent.mouseOver(attack);
-        await wait(400);
-    }else{
-        console.log("No element attack");
-        
-    }
-
-    const highToLowOption = document.getElementById('attack-htl');
-
-    if(highToLowOption){
-        
-        fireEvent.mouseOver(highToLowOption);
-        await wait(400)
-        const actions = store.getActions();
-        console.log(actions);
-    }else{
-        console.log("No attack high to low");
-    }
-
-   
+        if(highToLowOption){
+            fireEvent.click(highToLowOption);
+            await wait(400)
+            const expectedPayload = { type: 'sort/sort', payload: { field: 'attack', order: -1 } } 
+            const actions = store.getActions()[0]
+            expect(actions).toEqual(expectedPayload)
+        }else{
+            console.log("No attack high to low");
+        }
     });
 });
 

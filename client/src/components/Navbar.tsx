@@ -78,9 +78,7 @@ export default function Navbar() {
     DESC = -1
   }
 
-  function setSort(field: string, order: sortOrder) {
-    console.log("SETTING SORT");
-    
+  function setSort(field: string, order: sortOrder) {    
     dispatch({ type: "sort/sort", payload: {field: field, order: order} });
   }
 
@@ -230,9 +228,8 @@ export default function Navbar() {
     },
     {
       visible: page,
-      label: "Sort",
+      label: <div data-testid="sort-menuitem">Sort</div>,
       icon: "pi pi-fw pi-sort-alt",
-      id: "sort-menuitem",
       items: [
       {
         label: "Cost",
@@ -281,14 +278,12 @@ export default function Navbar() {
         ],
       },
       {
-        label: "Attack",
+        label: <div data-testid="attack">Attack</div>,
         icon: "pi pi-fw pi-wrench",
         className: sort?.field == "attack" ? activeFilterColor : "",
-        id: "attack",
         items: [
           {
-            id: "attack-htl",
-            label: "High to low",
+            label: <div data-testid="attack-htl">High to low</div>,
             icon: "pi pi-fw pi-sort-numeric-down-alt",
             className: sort?.field == "attack" && sort?.order == sortOrder.DESC ? activeFilterColor : "",
             command: () => {

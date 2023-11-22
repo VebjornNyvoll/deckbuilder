@@ -80,7 +80,7 @@ function CreateAccount(props) {
 
     return (
         <>
-         <Toast ref={toast} />
+         <Toast ref={toast} data-testid="createAccountToast"/>
             <div className="flex align-items-center justify-content-center">
                 <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
                     <div className="text-center mb-5">
@@ -92,21 +92,21 @@ function CreateAccount(props) {
                         <form onSubmit={validateForm}>
                         <div className="card flex justify-content-center w-full mb-2">
                             <span className="p-float-label w-full mb-3">
-                                <InputText required={true} type="username" name="username" id="username" className="w-full mb-3" onChange={onChange}/>
+                                <InputText required={true} type="username" name="username" id="username" className="w-full mb-3" onChange={onChange} data-testid="createAccountUsername"/>
                                 <label id="usernameLabel" htmlFor="username">Username</label>
                             </span>
                         </div>
                         <div className="card flex justify-content-center w-full mb-2">
                             <span className="p-float-label w-full mb-3 card flex">
-                                <InputText aria-labelledby="passwordLabel" required={true} name="password" type="password" id="password" className="w-full mb-3" onChange={onChange}/>
+                                <InputText aria-labelledby="passwordLabel" required={true} name="password" type="password" id="password" className="w-full mb-3" onChange={onChange} data-testid="createAccountPassword"/>
                                 <label id="usernameLabel" htmlFor="password">Password</label>
                             </span>
                         </div>
                         <div className="flex align-items-center justify-content-between mb-6">
                             <div className="flex align-items-center">
-                                <Checkbox aria-labelledby="termsOfServiceLabel" required={true} type="checkbox" name="termsOfService" id="termsOfService" onChange={e => setChecked(e.checked)} checked={checked} className="mr-2" />
+                                <Checkbox aria-labelledby="termsOfServiceLabel" required={true} type="checkbox" name="termsOfService" id="termsOfService" onChange={e => setChecked(e.checked)} checked={checked} className="mr-2" data-testid="createAccountTOS"/>
                                
-                                <label id="termsOfServiceLabel" htmlFor="termsOfService">I accept the <a href="javascript:undefined;" onClick={show}>Terms of Service</a></label>
+                                <label id="termsOfServiceLabel" htmlFor="termsOfService">I accept the <a href="javascript:undefined;" onClick={show} data-testid="createAccountTOSA">Terms of Service</a></label>
                             </div>
                         </div>
                         {errors.map(function(error){
@@ -118,7 +118,7 @@ function CreateAccount(props) {
                                 </>
                             )
                         })}
-                        <Button type="submit" label="Create account" icon="pi pi-user" className="w-full"/>
+                        <Button type="submit" label="Create account" icon="pi pi-user" className="w-full" data-testid="createAccountSubmit"/>
                         </form>
                         
                     

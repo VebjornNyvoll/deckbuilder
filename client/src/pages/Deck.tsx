@@ -144,7 +144,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
     const footerContent = (
       <div>
           <Button label="Cancel" icon="pi pi-times" severity="danger" onClick={() => clearCreateDeck()} className="p-button-text" />
-          <Button label="Create deck" severity="success" icon="pi pi-check" onClick={() => handleCreateDeck()} autoFocus />
+          <Button label="Create deck" severity="success" icon="pi pi-check" onClick={() => handleCreateDeck()} autoFocus data-testid="createDeckButton"/>
       </div>
   );
 
@@ -172,7 +172,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
               template: (item, options) => {
                   return (
                     <div className='card flex justify-content-center'>
-                      <Button icon="pi pi-plus-circle" onClick={(e) => options.onClick(e)} className={classNames(options.className, 'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround')}>
+                      <Button data-testid="newDeckButton" icon="pi pi-plus-circle" onClick={(e) => options.onClick(e)} className={classNames(options.className, 'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround')}>
                           <p className="p-2">New deck</p>
                       </Button>
                     </div>
@@ -188,7 +188,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
       <>
       {/* <p>{cards}</p> */}
       <div className="flex">
-        <Toast ref={toast} />
+        <Toast ref={toast}/>
         <Menu id="deckMenu" model={items}/>
         <Dialog header="Create new deck" footer={footerContent} modal={false} visible={visible} onHide={() => setVisible(false)} draggable={false} resizable={false} position='left'>
           <InputText
@@ -205,7 +205,7 @@ const {loadingDecks, errorDecks, data} = useQuery(GET_DECKS);
       </div>
       {errors.map(function(error){
                             return (
-                                <>  
+                                <>
                                     {setErrors([...new Set(errors)])};
                                     {toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error.message ? error.message : error })};
                                     {setErrors([])};
