@@ -81,6 +81,7 @@ export const CardService = {
                 name
                 img
                 cardSet
+                cardId
                 id
                 type
               }

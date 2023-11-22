@@ -121,10 +121,6 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get('.p-dialog-header-icon > .p-icon > path').click();
     cy.wait(1000);
-    cy.get('#\\36 54b71d1d5ef7bf1a2a5b5f0btn > .p-button-icon').click();
-    cy.wait(1000);
-    cy.get('.p-overlaypanel-close > .p-icon > path').click();
-    cy.wait(1000);
     /* ==== End Cypress Studio ==== */
     cy.window().then((win) => {
       const event = new MouseEvent('mousemove', {
@@ -165,13 +161,13 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
-    cy.get('#\\36 54b71d1d5ef7bf1a2a5b474btn > .p-button-icon').click();
+    cy.get('#CFM_648tbtn > .p-button-icon').click(); // a little friend
     cy.wait(1000);
     cy.get('.p-button-sm').click();
     cy.wait(1000);
     cy.get('.p-overlaypanel-close > .p-icon > path').click();
     cy.wait(1000);
-    cy.get('#\\36 54b71d2d5ef7bf1a2a5c084btn > .p-button-icon').click();
+    cy.get('#TB_BaconShop_HP_041btn > .p-button-icon').click(); // a tale of kings
     cy.wait(1000);
     cy.get('.p-button-sm > .p-button-label').click();
     cy.wait(1000);
@@ -188,7 +184,7 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
-    cy.get('#\\36 54b71d1d5ef7bf1a2a5b5f0btn').click();
+    cy.get('#CFM_648tbtn').click(); // a litle friend
     cy.wait(1000);
     cy.get('.p-sortable-column').click();
     cy.wait(1000);
@@ -210,7 +206,7 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
-    cy.get('#\\36 54b71d2d5ef7bf1a2a5cfd4btn').click();
+    cy.get('#OG_311btn').click();
     cy.wait(1000);
     cy.get('[data-pc-section="sort"]').click();
     cy.wait(1000);
@@ -237,7 +233,7 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get(':nth-child(2) > .card > .p-menuitem-link > .p-button-label').click();
     cy.wait(1000);
-    cy.get('#\\36 54b71d2d5ef7bf1a2a5c084btn > .p-button-icon').click();
+    cy.get('#TB_BaconShop_HP_041btn > .p-button-icon').click(); // a tale of kings
     cy.wait(1000);
     cy.get('.p-row-odd > :nth-child(2) > .p-button-sm > .p-button-label').click();
     cy.wait(1000);
@@ -253,7 +249,7 @@ describe('E2E test', () => {
     cy.wait(1500);
     cy.get('.card').invoke('scrollTop', 9000);
     cy.wait(1000);
-    cy.get(':nth-child(41) > .p-4 > :nth-child(3) > #\\36 54b71d2d5ef7bf1a2a5c011btn > .p-button-icon').click();
+    cy.get(':nth-child(41) > .p-4 > :nth-child(3) > #TB_BaconUps_255btn > .p-button-icon').click(); // Acolyte of c'thun
     cy.wait(1000);
     cy.get(':nth-child(1) > :nth-child(2) > .p-button-sm > .p-button-label').click();
     cy.wait(1000);
@@ -271,7 +267,7 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get('.p-dialog-header-icon > .p-icon > path').click();
     cy.wait(1000);
-    cy.get('#\\36 54b71d1d5ef7bf1a2a5afc6btn > .p-button-icon').click();
+    cy.get('#BG_CS2_065btn > .p-button-icon').click(); // Voidwalker
     cy.wait(1000);
     cy.get('.p-row-odd > :nth-child(2) > .p-button-sm > .p-button-label').click();
     cy.wait(1000);

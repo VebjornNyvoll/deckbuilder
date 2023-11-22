@@ -116,7 +116,7 @@ export function CardPopUp(props: { cardId: string; open: boolean; onClose: () =>
 
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
-  const idString = card.id.toString();
+  const idString = card.cardId;
   const op = useRef(null);
   const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
     // Prevent event from bubbling up to parent elements
@@ -200,7 +200,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
 
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
-  const idString = card.id.toString();
+  const idString = card.cardId;
   const op = useRef(null);
   const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
     // Prevent event from bubbling up to parent elements
