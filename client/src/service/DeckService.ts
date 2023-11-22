@@ -17,7 +17,8 @@ export const DeckService = {
             id
             } 
         }
-        }`
+        }`,
+        fetchPolicy: "network-only",
         })
         return data.user.decks;},
     getCardsInDeck: async (getCardsInDeckId: string) => {
@@ -70,13 +71,52 @@ export const DeckService = {
     deleteDeck: async (deckId: string) => {
         const { data } = await client.mutate({
         mutation: gql`
-            mutation DeleteDeck($deckId: String!) {
-            deleteDeck(deckId: $deckId)
+        mutation RemoveDeck($deckId: String!) {
+            removeDeck(deckId: $deckId) {
+              cards {
+                id
+                cardId
+                dbfId
+                name
+                cardSet
+                type
+                text
+                playerClass
+                locale
+                faction
+                mechanics {
+                  name
+                }
+                cost
+                attack
+                health
+                flavour
+                artist
+                elite
+                rarity
+                spellSchool
+                race
+                img
+                durability
+                collectible
+                imgGold
+                otherRaces
+                howToGetSignature
+                armor
+                howToGet
+                howToGetGold
+                howToGetDiamond
+                multiClassGroup
+                classes
+              }
+              deckName
+              id
             }
+          }
         `,
         variables: { deckId },
         });
-        return data.deleteDeck;
+        return data.removeDeck;
     },
 
 
@@ -100,20 +140,6 @@ export const DeckService = {
                 }
               }`,
             variables: { deckName },
-            update: (cache, { data: { createDeck } }) => {
-              const existingDecks = cache.readQuery({ query: GET_DECKS });
-              if (existingDecks) {
-                cache.writeQuery({
-                  query: GET_DECKS,
-                  data: {
-                    user: {
-                      ...existingDecks.user,
-                      decks: [...existingDecks.user.decks, createDeck],
-                    },
-                  },
-                });
-              }
-            },
           });
           return data.createDeck;
         } catch (error) {

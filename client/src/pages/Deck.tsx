@@ -3,30 +3,18 @@ import { DataView } from "primereact/dataview";
 import { Menu } from "primereact/menu";
 import { MenuItem } from "primereact/menuitem";
 import { classNames } from "primereact/utils";
-import { useContext } from "react";
-import { AuthContext } from "../context/authContext";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { gql } from "graphql-tag";
-import { useMutation, useQuery } from "@apollo/client";
 import { Toast } from "primereact/toast";
 import { GridItem, ListItem } from "../components/CardItem";
 import { DeckService } from "../service/DeckService";
 
 export default function Deck() {
-  const { user } = useContext(AuthContext);
   const [visible, setVisible] = useState<boolean>(false);
   const [deckName, setDeckName] = useState("");
   const [errors, setErrors] = useState([]);
   const [deckData, setData] = useState([]);
-  useEffect(() => {
-    DeckService.getDecks().then((decks) => {
-      setData(decks);
-    });
-  });
-
-  // All cards
 
   const handleDeckSelect = (id) => {
     DeckService.getCardsInDeck(id).then((result) => {
@@ -51,18 +39,6 @@ export default function Deck() {
     }
   };
 
-  function Decks() {
-    if (deckData.length > 0) {
-      return deckData.map((deck) => ({
-        label: deck.deckName,
-        icon: "pi pi-book",
-        id: deck.id,
-      }));
-    } else {
-      return [{ label: "No decks found", icon: "pi pi-times" }];
-    }
-  }
-
   const clearCreateDeck = () => {
     setVisible(false);
     setDeckName("");
@@ -72,6 +48,20 @@ export default function Deck() {
     await DeckService.createDeck(deckName);
     clearCreateDeck();
   };
+
+  const deleteDeck = async (id: string) => {
+    const deckData = await DeckService.deleteDeck(id);
+    console.log(deckData, "deletion");
+
+    setData(deckData);
+  };
+
+  useEffect(() => {
+    DeckService.getDecks().then((decks) => {
+      console.log(decks, "Useeffect");
+      setData(decks);
+    });
+  });
 
   const footerContent = (
     <div>
@@ -92,12 +82,37 @@ export default function Deck() {
     </div>
   );
 
-  const items: MenuItem = [
+  const items = [
     {
       label: "My decks",
-      items: Decks().map((deck) => ({
-        label: deck.label,
-        icon: "pi pi-book",
+      items: deckData.map((deck) => ({
+        template: (item, options) => {
+          return (
+            <div className="card flex justify-content-center">
+              <Button
+                label={deck.deckName}
+                onClick={(e) => handleDeckSelect(deck.id)}
+                className={classNames(
+                  options.className,
+                  "w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround"
+                )}
+              ></Button>
+              <i
+                className="flex p-2 pl-4 text-color hover:surface-200 border-noround pi pi-trash"
+                onClick={() => deleteDeck(deck.id)}
+              ></i>
+            </div>
+          );
+        },
+        icon: (
+          <div
+            className="pi pi-trash"
+            style={{ padding: "5px" }}
+            onClick={() => deleteDeck(deck.id)}
+          >
+            Delete deck
+          </div>
+        ),
         command: () => handleDeckSelect(deck.id),
       })),
     },
