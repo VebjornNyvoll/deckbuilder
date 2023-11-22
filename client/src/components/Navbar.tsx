@@ -60,7 +60,6 @@ export default function Navbar() {
   }, [darkMode]);
 
   useEffect(() => {
-    console.log('USEEFFECT');
     // Check darkMode on component mount and call changeTheme if true
     const themeLink = document.getElementById('theme-link');
     if (themeLink) {
@@ -96,14 +95,11 @@ export default function Navbar() {
   }
 
   function toggleTheme() {
-    console.log('TOGGLETHEME: ' + darkMode);
     if (darkMode) {
       setDarkMode(false);
-      console.log('setDarkMode(false)');
       changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
     } else {
       setDarkMode(true);
-      console.log('setDarkMode(true)');
       changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
     }
   }
@@ -361,7 +357,8 @@ export default function Navbar() {
     {
       //Searchbar
       visible: page,
-      template: <InputText placeholder="Search" type="text" onChange={debouncedResults} />,
+      label: 'Searchbar',
+      template: <InputText placeholder="Search" type="search" onChange={debouncedResults} />,
     },
     {
       //Profile, swap out for avatar picture at const end, end = {end}

@@ -8,8 +8,6 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
 export const CardOverlayComponent = ({ cardId }) => {
-  
-  
   const context = useContext(AuthContext);
 
   const CARD_TO_DECK = gql`
