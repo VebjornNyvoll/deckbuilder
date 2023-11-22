@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from "react";
-import { DataView } from "primereact/dataview";
-import { ListItem, GridItem, Card, CardPopUp } from "./CardItem";
-import { RemoveScroll } from "react-remove-scroll";
-import { ScrollTop } from "primereact/scrolltop";
-import { useAppDispatch, useAppSelector } from "../service/hooks";
-import { setCards, addCards } from "../service/cards/cardsSlice";
-import { CardService } from "../service/CardService";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from 'react';
+import { DataView } from 'primereact/dataview';
+import { ListItem, GridItem, Card, CardPopUp } from './CardItem';
+import { RemoveScroll } from 'react-remove-scroll';
+import { ScrollTop } from 'primereact/scrolltop';
+import { useAppDispatch, useAppSelector } from '../service/hooks';
+import { setCards, addCards } from '../service/cards/cardsSlice';
+import { CardService } from '../service/CardService';
+import { useLocation } from 'react-router-dom';
 
 export default function CardView() {
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,6 @@ export default function CardView() {
     options.skip = 0; // Reset skip when filters change
     options.sortBy = sort; // Keep the sort options when filters change
     loadInitialCards();
-    console.log(location)
   }, [filters, sort]);
 
   useEffect(() => {
@@ -54,7 +53,7 @@ export default function CardView() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching cards:", error);
+        console.error('Error fetching cards:', error);
         dispatch(setCards([])); // Dispatch the action to set an empty array on error
         setHasMore(false);
         setLoading(false);
@@ -77,7 +76,7 @@ export default function CardView() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching more cards:", error);
+        console.error('Error fetching more cards:', error);
         setHasMore(false);
         setLoading(false);
       });
@@ -97,20 +96,17 @@ export default function CardView() {
 
   useEffect(() => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.addEventListener("scroll", handleScroll);
+      scrollContainerRef.current.addEventListener('scroll', handleScroll);
     }
 
     return () => {
       if (scrollContainerRef.current) {
-        scrollContainerRef.current.removeEventListener("scroll", handleScroll);
+        scrollContainerRef.current.removeEventListener('scroll', handleScroll);
       }
     };
   }, [handleScroll, scrollContainerRef]);
 
-  
   const openDialog = (card) => {
-    
-
     setDialogState({ isOpen: true, id: card.id });
   };
 
@@ -119,37 +115,26 @@ export default function CardView() {
   };
 
   const itemTemplate = (card: Card, layout: string) => {
-
     if (!card) {
       return null;
     }
-    if (layout === "list") {
+    if (layout === 'list') {
       return <ListItem card={card} onClick={() => openDialog(card)} />;
-    } else if (layout === "grid") {
+    } else if (layout === 'grid') {
       return <GridItem card={card} onClick={() => openDialog(card)} />;
     }
   };
-  
+
   return (
     <RemoveScroll>
-      <div
-        className="card"
-        ref={scrollContainerRef}
-        style={{ height: "calc(100vh - 62px)", overflow: "auto" }}
-      >
+      <div className="card" ref={scrollContainerRef} style={{ height: 'calc(100vh - 62px)', overflow: 'auto' }}>
         <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
-        {dialogState.id && (
-                  <CardPopUp 
-                  cardId={dialogState.id} 
-                  open={dialogState.isOpen} 
-                  onClose={closeDialog} 
-                />
-        )}
+        {dialogState.id && <CardPopUp cardId={dialogState.id} open={dialogState.isOpen} onClose={closeDialog} />}
         <ScrollTop
           target="parent"
           threshold={1000}
-          className="w-3rem h-3rem border-round bg-primary"
-          icon="pi pi-arrow-up text-base"
+          className="w-3rem h-3rem border-round bg-gray-400"
+          icon="pi pi-angle-double-up text-base text-green-700"
         />
       </div>
     </RemoveScroll>

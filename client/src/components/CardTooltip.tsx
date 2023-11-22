@@ -1,5 +1,5 @@
-import React from "react";
-import { Tooltip } from "primereact/tooltip";
+import React from 'react';
+import { Tooltip } from 'primereact/tooltip';
 
 interface Mechanic {
   name: string;
@@ -32,19 +32,19 @@ interface ToolTipProps {
 }
 
 const CardTooltip: React.FC<ToolTipProps> = ({ card }) => {
-  const whitelistedKeys = ["cardId", "name", "type", "faction", "rarity"]; // Add or remove keys as needed
+  const whitelistedKeys = ['cardId', 'name', 'type', 'faction', 'rarity']; // Add or remove keys as needed
 
   return (
     <div className="card">
-      <Tooltip target={"." + card.cardId} autoHide={true}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+      <Tooltip target={'.' + card.cardId} autoHide={true}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           {Object.entries(card)
             .filter(([key]) => whitelistedKeys.includes(key))
             .map(([key, value], index) => {
               return (
                 <div key={index} className="flex align-items-center mb-2">
-                  <span style={{ minWidth: "5rem" }}>{key}:</span>
-                  <span style={{ minWidth: "5rem" }}>{value}</span>
+                  <span style={{ minWidth: '5rem' }}>{key}:</span>
+                  <span style={{ minWidth: '5rem' }}>{value}</span>
                 </div>
               );
             })}

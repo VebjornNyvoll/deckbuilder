@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Card } from "../../components/CardItem";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Card } from '../../components/CardItem';
 
 interface DataSaverState {
   datasaver: boolean;
@@ -10,7 +10,7 @@ const initialState: DataSaverState = {
 };
 
 const dataSaverSlice = createSlice({
-  name: "cards",
+  name: 'cards',
   initialState,
   reducers: {
     setDataSaver: (state, action: PayloadAction<boolean>) => {

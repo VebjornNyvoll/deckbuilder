@@ -1,6 +1,7 @@
-import { defineConfig } from "cypress";
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
+  projectId: 'cvqn9t',
   e2e: {
     experimentalStudio: true,
     setupNodeEvents() {

@@ -1,24 +1,26 @@
-import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
-import { InputText } from "primereact/inputtext";
-import { useContext, useRef, useState } from "react";
-import { Avatar } from "primereact/avatar";
-import placeholder_avatar from "../img/placeholder_avatar.png";
-import { Toast } from "primereact/toast";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../context/authContext";
-import { useForm } from "../service/hooks";
-import { useMutation } from "@apollo/client";
-import { gql } from "graphql-tag";
-import { useNavigate } from "react-router-dom";
+import { Button } from 'primereact/button';
+import { Checkbox } from 'primereact/checkbox';
+import { InputText } from 'primereact/inputtext';
+import { useContext, useRef, useState } from 'react';
+import { Avatar } from 'primereact/avatar';
+import placeholder_avatar from '../img/placeholder_avatar.png';
+import { Toast } from 'primereact/toast';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
+import { useForm } from '../service/hooks';
+import { useMutation } from '@apollo/client';
+import { gql } from 'graphql-tag';
+import { useNavigate } from 'react-router-dom';
 
 const CREATE_USER = gql`
-    mutation CreateUser($username: String!, $password: String!){
-        createUser(username: $username, password: $password){
-            user{username}
-            token   
-        }
+  mutation CreateUser($username: String!, $password: String!) {
+    createUser(username: $username, password: $password) {
+      user {
+        username
+      }
+      token
     }
+  }
 `;
 
 function CreateAccount(props) {
@@ -26,57 +28,57 @@ function CreateAccount(props) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
-    const validateForm = (event) => {
-        event.preventDefault();
-    
-        if (!values.username || values.username.length < 3) {
-            setErrors(['Username needs to be minimum 3 characters']);
-        }
-    
-        if (!values.password || values.password.length < 3) {
-            setErrors(['Password needs to be minimum 3 characters']);
-        }
-    
-        if (!checked) {
-            setErrors(['You need to accept the terms of service']);
-        }
-    
-        if (errors.length == 0) {
-            createUser();
-        } else {
-            console.log('Validation failed');
-            // Display validation errors using the toast
-            toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: "Validation failed" });
-        }
-    };
-    
-    
-    
+  const validateForm = (event) => {
+    event.preventDefault();
 
-    const { onChange, values } = useForm( {
-        username: '',
-        password: '',
-    });
-    
-    
-    const [ createUser, { loading }] = useMutation(CREATE_USER,{
-        update(proxy, { data: {createUser: userData}}) {
-            context.login(userData);
-            navigate('/');
-        },
-        onError({graphQLErrors}) {
-            setErrors(graphQLErrors)
-        },
-        variables: {username: values.username, password: values.password}
-    });
+    if (!values.username || values.username.length < 3) {
+      setErrors(['Username needs to be minimum 3 characters']);
+    }
+
+    if (!values.password || values.password.length < 3) {
+      setErrors(['Password needs to be minimum 3 characters']);
+    }
+
+    if (!checked) {
+      setErrors(['You need to accept the terms of service']);
+    }
+
+    if (errors.length == 0) {
+      createUser();
+    } else {
+      console.log('Validation failed');
+      // Display validation errors using the toast
+      toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: 'Validation failed' });
+    }
+  };
+
+  const { onChange, values } = useForm({
+    username: '',
+    password: '',
+  });
+
+  const [createUser, { loading }] = useMutation(CREATE_USER, {
+    update(proxy, { data: { createUser: userData } }) {
+      context.login(userData);
+      navigate('/');
+    },
+    onError({ graphQLErrors }) {
+      setErrors(graphQLErrors);
+    },
+    variables: { username: values.username, password: values.password },
+  });
 
   const [checked, setChecked] = useState(false);
 
   const toast = useRef<Toast>(null);
 
-    const show = () => {
-        toast.current?.replace({ severity: 'info', summary: 'Terms of Service', detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.' });
-    };
+  const show = () => {
+    toast.current?.replace({
+      severity: 'info',
+      summary: 'Terms of Service',
+      detail: 'Man skal ikke plage andre, man skal være grei og snill, og for øvrig kan man gjøre hva man vil.',
+    });
+  };
 
     return (
         <>

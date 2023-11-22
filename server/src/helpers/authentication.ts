@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
-import jwt, { Secret, JwtPayload } from "jsonwebtoken";
-import { env } from "./env.js";
+import bcrypt from 'bcrypt';
+import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import { env } from './env.js';
 
 const saltRounds = 10;
 const Authenticate = {
@@ -17,7 +17,7 @@ const Authenticate = {
         if (res) {
           return { result: true, error: false };
         } else {
-          return { result: "Could not validate password", error: true };
+          return { result: 'Could not validate password', error: true };
         }
       });
     } catch (err) {
@@ -27,7 +27,7 @@ const Authenticate = {
 
   createToken: (id) => {
     try {
-      const token = jwt.sign({ id: id }, env.JWT_SECRET, { expiresIn: "2h" });
+      const token = jwt.sign({ id: id }, env.JWT_SECRET, { expiresIn: '2h' });
       return { result: token, error: false };
     } catch (error) {
       return { result: error, error: true };
@@ -38,7 +38,7 @@ const Authenticate = {
     try {
       const user = jwt.verify(token, env.JWT_SECRET);
 
-      return { result: user["id"], error: false };
+      return { result: user['id'], error: false };
     } catch (err) {
       return { result: err, error: true };
     }

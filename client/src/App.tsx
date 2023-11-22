@@ -1,75 +1,72 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-} from "react-router-dom";
-import DetailedView from "./components/DetailedView";
-import Login from "./pages/Login";
-import CreateAccount from "./pages/CreateAccount";
-import Index from "./pages/Index";
-import Deck from "./pages/Deck";
-import Navbar from "./components/Navbar";
-import RequireAuth from "./service/RequireAuth";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { PrimeReactProvider } from "primereact/api";
-import "primereact/resources/themes/lara-light-indigo/theme.css"; // theme
-import "primeflex/primeflex.css"; // css utility
-import "primeicons/primeicons.css";
-import "primereact/resources/primereact.css"; // core css
-import { ApolloProvider } from "@apollo/client";
-import client from "./service/apolloClient";
-import { AuthProvider } from "./context/authContext";
-import { store } from "./service/store";
-import { Provider } from "react-redux";
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import DetailedView from './components/DetailedView';
+import Login from './pages/Login';
+import CreateAccount from './pages/CreateAccount';
+import Index from './pages/Index';
+import Deck from './pages/Deck';
+import Navbar from './components/Navbar';
+import RequireAuth from './service/RequireAuth';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { PrimeReactProvider } from 'primereact/api';
+import 'primeflex/primeflex.css'; // css utility
+import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.css'; // core css
+import { ApolloProvider } from '@apollo/client';
+import client from './service/apolloClient';
+import { AuthProvider } from './context/authContext';
+import { store } from './service/store';
+import { Provider } from 'react-redux';
 
 const HeaderLayout = () => (
   <>
-  <Navbar/>
-  <Outlet/>
+    <Navbar />
+    <Outlet />
   </>
-)
+);
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
     {
       element: <HeaderLayout />,
       children: [
         {
-          path: "/",
+          path: '/',
           element: <Index />,
         },
         {
-          path: "/detail/:cardId",
+          path: '/detail/:cardId',
           element: <DetailedView />,
         },
         {
-          path: "/login",
+          path: '/login',
           element: <Login />,
         },
         {
-          path: "/create-account",
+          path: '/create-account',
           element: <CreateAccount />,
         },
         {
-          path: "/decks",
+          path: '/decks',
           element: (
             <RequireAuth>
               <Deck />
             </RequireAuth>
           ),
         },
-      ]
-    }
-  ], {basename: '/project2/'});
+      ],
+    },
+  ],
+  { basename: '/project2/' },
+);
 
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <AuthProvider>
     <Provider store={store}>
       <ApolloProvider client={client}>
         <React.StrictMode>
           <PrimeReactProvider>
-            <RouterProvider router={router}/>
+            <RouterProvider router={router} />
           </PrimeReactProvider>
         </React.StrictMode>
       </ApolloProvider>
@@ -77,11 +74,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   </AuthProvider>,
 );
 
-function App() { 
-
-  return (
-    <RouterProvider router={router}/>
-  );
+function App() {
+  return <RouterProvider router={router} />;
 }
 
 export default App;

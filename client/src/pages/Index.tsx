@@ -1,9 +1,9 @@
-import CardView from "../components/CardView";
+import CardView from '../components/CardView';
 
 export default function Index() {
   return (
     <div>
-      <CardView/>
+      <CardView />
     </div>
   );
 }

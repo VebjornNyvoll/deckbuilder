@@ -1,9 +1,10 @@
-import { afterAll, beforeAll, describe, test, vi, expect } from 'vitest';
+import { afterAll, beforeAll, describe, test, vi, expect, beforeEach, afterEach} from 'vitest';
 import NavBar from "../components/Navbar";
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { PrimeReactContext } from 'primereact/api';
 
 
 const jsdom = require('jsdom');
@@ -25,7 +26,8 @@ const initialState = {
 
     cards: {
         cards: [] 
-    }
+    },
+
 
 };
 const mockStore = configureStore();
@@ -41,8 +43,11 @@ describe("Navbar test", async () => {
         render(
             <Provider store={store}>
                 <Router>
+                    
                     <NavBar />
-                </Router>
+                   
+                    
+                </Router>                
             </Provider>
         );
 

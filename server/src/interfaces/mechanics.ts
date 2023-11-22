@@ -1,5 +1,5 @@
-interface IMechanics{
-    name: String
+interface IMechanics {
+  name: string;
 }
 
-export {IMechanics}
+export { IMechanics };

@@ -1,9 +1,9 @@
-import { IUser } from "./user"
-interface IReview{
-    cardId: String
-    text: String
-    rating: Number
-    user: IUser
+import { IUser } from './user';
+interface IReview {
+  cardId: string;
+  text: string;
+  rating: number;
+  user: IUser;
 }
 
-export {IReview}
+export { IReview };

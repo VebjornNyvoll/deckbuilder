@@ -1,21 +1,20 @@
-import { createContext, useReducer } from "react";
-import { jwtDecode, JwtPayload } from "jwt-decode";
+import { createContext, useReducer } from 'react';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 const initialState = {
   user: null,
 };
 
 if (
-  localStorage.getItem("token") &&
-  localStorage.getItem("token") != "undefined" &&
-  localStorage.getItem("token") != "null"
+  localStorage.getItem('token') &&
+  localStorage.getItem('token') != 'undefined' &&
+  localStorage.getItem('token') != 'null'
 ) {
-  console.log("AUTHCONTEXT: " + localStorage.getItem("token"));
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   const decodedToken = jwtDecode<JwtPayload>(token);
 
   if (decodedToken.exp * 1000 < Date.now()) {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
   } else {
     initialState.user = decodedToken;
   }
@@ -29,12 +28,12 @@ const AuthContext = createContext({
 
 function authReducer(state, action) {
   switch (action.type) {
-    case "LOGIN":
+    case 'LOGIN':
       return {
         ...state,
         user: action.payload,
       };
-    case "LOGOUT":
+    case 'LOGOUT':
       return {
         ...state,
         user: null,
@@ -48,24 +47,19 @@ function AuthProvider(props) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const login = (userData) => {
-    localStorage.setItem("token", userData.token);
+    localStorage.setItem('token', userData.token);
     dispatch({
-      type: "LOGIN",
+      type: 'LOGIN',
       payload: userData,
     });
   };
 
   function logout() {
-    localStorage.removeItem("token");
-    dispatch({ type: "LOGOUT" });
+    localStorage.removeItem('token');
+    dispatch({ type: 'LOGOUT' });
   }
 
-  return (
-    <AuthContext.Provider
-      value={{ user: state.user, login, logout }}
-      {...props}
-    />
-  );
+  return <AuthContext.Provider value={{ user: state.user, login, logout }} {...props} />;
 }
 
 export { AuthContext, AuthProvider };

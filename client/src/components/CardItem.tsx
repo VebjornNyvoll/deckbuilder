@@ -1,13 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Tag } from "primereact/tag";
-import { Button } from "primereact/button";
-import CardTooltip from "./CardTooltip";
-import { Dialog } from "primereact/dialog";
-import { CardOverlayComponent } from "./CardOverlayComponent";
-import { OverlayPanel } from "primereact/overlaypanel";
-import { useAppSelector } from "../service/hooks";
-import { CardService } from "../service/CardService";
-import parse from "html-react-parser";
+import React, { useRef, useState, useEffect } from 'react';
+import { Tag } from 'primereact/tag';
+import { Button } from 'primereact/button';
+import CardTooltip from './CardTooltip';
+import { Dialog } from 'primereact/dialog';
+import { CardOverlayComponent } from './CardOverlayComponent';
+import { OverlayPanel } from 'primereact/overlaypanel';
+import { useAppSelector } from '../service/hooks';
+import { CardService } from '../service/CardService';
+import parse from 'html-react-parser';
 
 interface CardItemProps {
   card: Card;
@@ -39,34 +39,30 @@ export interface Card {
   locale: string;
   mechanics: Mechanic[];
 }
-const getSeverity = (card: Card) => {
+const getColor = (card: Card) => {
   switch (card.faction) {
-    case "Alliance":
-      return "success";
-    case "Scourge":
-      return "success";
-    case "Explorer":
-      return "warning";
-    case "Legion":
-      return "warning";
-    case "Horde":
-      return "danger";
-    case "Empire":
-      return "danger";
-    case "Pirate":
-      return "danger";
-    case "Neutral":
-      return "info";
+    case 'Alliance':
+      return 'var(--green-500)';
+    case 'Scourge':
+      return 'var(--green-500)';
+    case 'Explorer':
+      return 'var(--yellow-500)';
+    case 'Legion':
+      return 'var(--orange-500)';
+    case 'Horde':
+      return 'var(--red-600)';
+    case 'Empire':
+      return 'var(--red-500)';
+    case 'Pirate':
+      return 'var(--brown-500)';
+    case 'Neutral':
+      return 'var(--blue-600)';
     default:
-      return null;
+      return 'var(--gray-800';
   }
 };
 
-export function CardPopUp(props: {
-  cardId: string;
-  open: boolean;
-  onClose: () => void;
-}) {
+export function CardPopUp(props: { cardId: string; open: boolean; onClose: () => void }) {
   const { open, onClose, cardId } = props;
   const [card, setCard] = useState(CardService.getEmptyCard());
 
@@ -75,7 +71,7 @@ export function CardPopUp(props: {
       CardService.getCardById(cardId)
         .then(setCard)
         .catch((error) => {
-          console.error("Error fetching card:", error);
+          console.error('Error fetching card:', error);
         });
     }
   }, [cardId]);
@@ -84,19 +80,17 @@ export function CardPopUp(props: {
     if (!card) return <p>Loading card details...</p>;
   };
 
-  const headerContent = (
-    <div style={{ textAlign: "center" }}>{card ? card.name : "Loading..."}</div>
-  );
+  const headerContent = <div style={{ textAlign: 'center' }}>{card ? card.name : 'Loading...'}</div>;
 
   return (
     <Dialog
-      headerStyle={{ height: "70px" }}
+      headerStyle={{ height: '70px' }}
       header={headerContent}
       visible={open}
-      style={{ width: "60vw", maxWidth: "400px" }}
+      style={{ width: '60vw', maxWidth: '400px' }}
       onHide={onClose}
     >
-      <div tabIndex={0} style={{ textAlign: "left" }}>
+      <div tabIndex={0} style={{ textAlign: 'left' }}>
         {card && (
           <>
             {card.attack && <p>Attack: {card.attack}</p>}
@@ -104,9 +98,7 @@ export function CardPopUp(props: {
             {card.cost != null && <p>Cost: {card.cost}</p>}
             {card.rarity && <p>Rarity: {card.rarity}</p>}
             {card.text && (
-              <p style={{ whiteSpace: "pre-wrap" }}>
-                Text: {parse(card.text.replace(/\[x]|#|\$|\\n/g, " "))}
-              </p>
+              <p style={{ whiteSpace: 'pre-wrap' }}>Text: {parse(card.text.replace(/\[x]|#|\$|\\n/g, ' '))}</p>
             )}
             {card.flavor && <p>Flavor: {card.flavor}</p>}
             {card.faction && <p>Faction: {card.faction}</p>}
@@ -124,7 +116,7 @@ export function CardPopUp(props: {
 
 export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
-  const idString = card.id.toString();
+  const idString = card.cardId;
   const op = useRef(null);
   const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
     // Prevent event from bubbling up to parent elements
@@ -146,9 +138,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
       <button
         onClick={handleItemClick}
         aria-haspopup
-        aria-labelledby={
-          idString + "set " + idString + "faction " + idString + "name"
-        }
+        aria-labelledby={idString + 'set ' + idString + 'faction ' + idString + 'name'}
         className="col-12 border-1 surface-border surface-card border-round "
       >
         <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
@@ -161,50 +151,37 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           )}
           <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
             <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-              <div
-                id={idString + "name"}
-                className="text-2xl font-bold text-900"
-              >
+              <div id={idString + 'name'} className="text-2xl font-bold text-900">
                 {card.name}
               </div>
               {/* Additional card details */}
               <div className="flex align-items-center gap-3">
                 <span className="flex align-items-center gap-2">
                   <i className="pi pi-book"></i>
-                  <span className="font-semibold">{card.cardSet}</span>
+                  <span id={idString + 'set'} className="font-semibold">
+                    {card.cardSet}
+                  </span>
                 </span>
                 <Tag
-                  value={card.faction ? card.faction.toString() : "None"}
-                  severity={getSeverity(card)}
+                  value={card.faction ? card.faction.toString() : 'None'}
+                  style={{ background: getColor(card) }}
                 ></Tag>
               </div>
 
               {dataSaver && (
                 <div>
-                  <p className="p-0 m-0">
-                    {card.attack
-                      ? "Attack: " + card.attack.toString()
-                      : "No attack"}
-                  </p>
-                  <p>
-                    {card.health
-                      ? "Health: " + card.health.toString()
-                      : "No health"}
-                  </p>
+                  <p className="p-0 m-0">{card.attack ? 'Attack: ' + card.attack.toString() : 'No attack'}</p>
+                  <p>{card.health ? 'Health: ' + card.health.toString() : 'No health'}</p>
                 </div>
               )}
             </div>
 
             <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-              {
-                <span className="text-2xl font-semibold">
-                  {card.type ? card.type.toString() : "No Type"}
-                </span>
-              }
+              {<span className="text-2xl font-semibold">{card.type ? card.type.toString() : 'No Type'}</span>}
               <Button
-                id={idString + "btn"}
-                title={"Add Card: " + card.name.toString()}
-                aria-labelledby={idString + "btn"}
+                id={idString + 'btn'}
+                title={'Add Card: ' + card.name.toString()}
+                aria-labelledby={idString + 'btn'}
                 icon="pi pi-plus"
                 className="p-button-rounded"
                 onClick={showOverlayPanel}
@@ -224,7 +201,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
 
 export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
-  const idString = card.id.toString();
+  const idString = card.cardId;
   const op = useRef(null);
   const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
     // Prevent event from bubbling up to parent elements
@@ -244,65 +221,47 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
       <button
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         className="p-4 border-1 surface-border surface-card border-round"
         aria-haspopup
-        aria-labelledby={
-          idString + "set " + idString + "faction " + idString + "name"
-        }
+        aria-labelledby={idString + 'set ' + idString + 'faction ' + idString + 'name'}
         role="button"
         onClick={handleItemClick}
       >
         <div className="flex align-items-center justify-content-between gap-2">
           <div className="flex align-items-center gap-2">
-            <i className="pi pi-book"></i>{" "}
-            <span id={idString + "set"} className="font-semibold text-xs">
+            <i className="pi pi-book"></i>{' '}
+            <span id={idString + 'set'} className="font-semibold text-xs">
               {card.cardSet}
             </span>
           </div>
           <Tag
-            id={idString + "faction"}
-            value={card.faction ? card.faction.toString() : "None"}
-            severity={getSeverity(card)}
+            id={idString + 'faction'}
+            value={card.faction ? card.faction.toString() : 'None'}
+            style={{ backgroundColor: getColor(card) }}
           ></Tag>
         </div>
 
         <div className="flex flex-column align-items-center gap-3 py-5">
-          {!dataSaver && (
-            <img
-              className={"w-9 shadow-2 border-round"}
-              src={card.img}
-              alt={card.name}
-            />
-          )}
+          {!dataSaver && <img className={'w-9 shadow-2 border-round'} src={card.img} alt={card.name} />}
           <div className="text-l font-bold">{card.name}</div>
           {dataSaver && (
             <>
               <CardTooltip card={card}></CardTooltip>
               <p className="p-0 m-0 align-items-center">
-                {card.attack
-                  ? "Attack: " + card.attack.toString()
-                  : "No attack"}
+                {card.attack ? 'Attack: ' + card.attack.toString() : 'No attack'}
               </p>
-              <p>
-                {card.health
-                  ? "Health: " + card.health.toString()
-                  : "No health"}
-              </p>
+              <p>{card.health ? 'Health: ' + card.health.toString() : 'No health'}</p>
             </>
           )}
         </div>
 
         <div className="flex align-items-center justify-content-between">
-          {
-            <span className="text-2xl font-semibold">
-              {card.type ? card.type.toString() : "No Type"}
-            </span>
-          }
+          {<span className="text-2xl font-semibold">{card.type ? card.type.toString() : 'No Type'}</span>}
           <Button
-            id={idString + "btn"}
-            title={"Add Card: " + card.name.toString()}
-            aria-labelledby={idString + "btn"}
+            id={idString + 'btn'}
+            title={'Add Card: ' + card.name.toString()}
+            aria-labelledby={idString + 'btn'}
             icon="pi pi-plus"
             className="p-button-rounded"
             onClick={showOverlayPanel}

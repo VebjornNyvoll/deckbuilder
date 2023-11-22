@@ -63,10 +63,6 @@ describe("Deck click test", async () => {
 
         const createDeckButton = screen.getByTestId("createDeckButton");
         fireEvent.click(createDeckButton);
-
-        
-        
-
         
     })
 } )

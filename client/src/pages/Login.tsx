@@ -1,64 +1,62 @@
-import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
-import { InputText } from "primereact/inputtext";
-import { useContext, useRef, useState } from "react";
-import { Avatar } from "primereact/avatar";
-import placeholder_avatar from '../img/placeholder_avatar.png'
-import { Toast } from "primereact/toast";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../context/authContext";
-import { useForm } from "../service/hooks";
+import { Button } from 'primereact/button';
+import { Checkbox } from 'primereact/checkbox';
+import { InputText } from 'primereact/inputtext';
+import { useContext, useRef, useState } from 'react';
+import { Avatar } from 'primereact/avatar';
+import placeholder_avatar from '../img/placeholder_avatar.png';
+import { Toast } from 'primereact/toast';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
+import { useForm } from '../service/hooks';
 import { useMutation } from '@apollo/client';
-import {gql} from 'graphql-tag';
-import { useNavigate } from "react-router-dom";
+import { gql } from 'graphql-tag';
+import { useNavigate } from 'react-router-dom';
 
 const LOGIN = gql`
-    mutation login($username: String!, $password: String!){
-        login(username: $username, password: $password){
-            user {
-                username
-            }
-            token
-        }
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      user {
+        username
+      }
+      token
     }
+  }
 `;
 
 function Login(props) {
-    const navigate = useNavigate();
-    const context = useContext(AuthContext);
-    const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
+  const context = useContext(AuthContext);
+  const [errors, setErrors] = useState([]);
 
+  const { onChange, values } = useForm({
+    username: '',
+    password: '',
+  });
 
+  const validateForm = (event) => {
+    event.preventDefault();
 
-    const { onChange, values } = useForm({
-        username: '',
-        password: '',
-    });
+    const errors = [];
+    // Ideally neither of these errors will appear due to the HTML5 required attribute, but it's good to have a backup
+    if (!values.username) {
+      errors.push('Username is required');
+    }
 
-    const validateForm = (event) => {
-        event.preventDefault();
-    
-        const errors = [];
-        // Ideally neither of these errors will appear due to the HTML5 required attribute, but it's good to have a backup
-        if (!values.username) {
-            errors.push('Username is required');
-        }
-    
-        if (!values.password) {
-            errors.push('Password is required');
-        }
-    
-        console.log('Validation Errors:', errors);
-    
-        if (errors.length === 0) {
-            login();
-        } else {
-            // Display validation errors using the toast
-            errors.forEach(error => {
-                toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error });
-            });
-        }
-    };
+    if (!values.password) {
+      errors.push('Password is required');
+    }
+
+    console.log('Validation Errors:', errors);
+
+    if (errors.length === 0) {
+      login();
+    } else {
+      // Display validation errors using the toast
+      errors.forEach((error) => {
+        toast.current?.replace({ severity: 'error', summary: 'Error Message', detail: error });
+      });
+    }
+  };
 
     const [login, { loading }] = useMutation(LOGIN, {
         update(proxy, { data: {login: userData}}) {
@@ -118,7 +116,4 @@ function Login(props) {
     )
 }
 
-
-
 export default Login;
-    
