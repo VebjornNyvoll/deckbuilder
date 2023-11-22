@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
 
-export const CardOverlayComponent = ({ op, cardId }) => {
+export function CardOverlayComponent ( op, cardId: string) {
   const context = useContext(AuthContext);
   const CARD_TO_DECK =  gql`
   mutation AddCards($cardIds: [ID!]!, $deckId: ID!) {
@@ -20,6 +20,28 @@ export const CardOverlayComponent = ({ op, cardId }) => {
     }
   `;
 
+
+
+  const toast = useRef<Toast>(null);
+  
+  const show = (error, content) => {
+    if(error){
+      toast.current.replace({severity:'error', summary: 'Error', detail:content, life: 3000});
+    }else{
+      toast.current.replace({severity:'success', summary: 'Success', detail:content, life: 3000});
+    }
+  }
+  const handleClick = (e) => {
+    e.stopPropagation();
+
+  };
+
+
+  
+  // Hook to call the mutation
+  const [addCardsToDeck] = useMutation(CARD_TO_DECK);
+
+  
   const GET_DECKS = gql`
   query Decks {
   user {
@@ -40,25 +62,6 @@ export const CardOverlayComponent = ({ op, cardId }) => {
       name: deck.deckName
     }
   });
-
-  const toast = useRef<Toast>(null);
-  
-  const show = (error, content) => {
-    if(error){
-      toast.current.replace({severity:'error', summary: 'Error', detail:content, life: 3000});
-    }else{
-      toast.current.replace({severity:'success', summary: 'Success', detail:content, life: 3000});
-    }
-  }
-  const handleClick = (e) => {
-    e.stopPropagation();
-
-  };
-
-
-  
-  // Hook to call the mutation
-  const [addCardsToDeck] = useMutation(CARD_TO_DECK);
 
   const onRowClick = async (e) => {
     const rowData = e.data
@@ -89,26 +92,28 @@ export const CardOverlayComponent = ({ op, cardId }) => {
 
   const nameBodyTemplate = (rowData) => {
     return (
-      <React.Fragment>
+      <>
         <span style={{ cursor: 'pointer' }}>
           {rowData.name}
         </span>
-      </React.Fragment>
+      </>
     );
   };
 
   return (
+    <>    
     <div onClick={handleClick} className="card flex flex-column align-items-center gap-3"  style={{ width: '100%', maxWidth: '30rem' }}>
       <Toast ref={toast} />
       <DataTable  value={products} 
-  paginator
-  rows={10}
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-  rowsPerPageOptions={[10,20,50]}
-  onRowClick={(e) => onRowClick(e)} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
+          paginator
+          rows={10}
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+          rowsPerPageOptions={[10,20,50]}
+          onRowClick={(e) => onRowClick(e)} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
         <Column field="name" header="Add this card to the following deck" body={nameBodyTemplate}></Column>
       </DataTable>
     </div>
+    </>
   );
 }
