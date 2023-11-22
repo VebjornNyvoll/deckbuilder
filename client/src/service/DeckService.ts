@@ -1,10 +1,5 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 import client from "./apolloClient"
-
-// DeckService will have three functions, getCardsInDeck, createDeck and deleteDeck
-// getCardsInDeck will take in a deckId and return a list of cards
-// createDeck will take in a string and return deckId
-// deleteDeck will take in a deckId and return a boolean
 
 export const DeckService = {
     getDecks: async () => {
@@ -120,9 +115,8 @@ export const DeckService = {
     },
 
 
-    createDeck: async (deckName: String) => {
-
-        const GET_DECKS = gql`
+    createDeck: async (deckName: string) => {
+        gql`
         query Decks {
       user {
         decks {
@@ -144,7 +138,7 @@ export const DeckService = {
           return data.createDeck;
         } catch (error) {
           console.error("Error creating deck:", error);
-          throw error; // or handle it as you see fit
+          throw error; 
         }
       },
     };
