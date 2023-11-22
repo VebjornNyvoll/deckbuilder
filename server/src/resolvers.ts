@@ -3,7 +3,6 @@ import { Authenticate } from "./helpers/authentication.js";
 import { Cards } from "./models/Card.js"; 
 import { Review } from "./models/Review.js";
 import mongoose from "mongoose";
-import { error } from "console";
 import { GraphQLError } from 'graphql';
 const resolvers = {
   Query: {
@@ -17,6 +16,7 @@ const resolvers = {
       }
       return user;
     },
+    users: async (parent, args) => await User.find({}),
     cards:  async (parent, args) => await Cards.find({}),
     getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
@@ -30,6 +30,46 @@ const resolvers = {
       };
   },
 
+  getCardById: async (parent, args) => {
+
+    try{
+      if (!mongoose.Types.ObjectId.isValid(args.id)) {
+        throw new GraphQLError("Invalid ID format");
+      }
+  
+      const card = await Cards.findById(args.id);
+      if (!card) {
+        throw new GraphQLError("Card not found");
+      }
+  
+      return card;
+
+    }catch(error){
+      throw new GraphQLError(error)
+    }
+    
+  },
+
+  getCardsInDeck: async (parent, args, contextValue) => {
+    try {
+      if (contextValue.error) {
+        throw new GraphQLError("Could not authenticate user");
+      }
+  
+      const user = await User.findById(contextValue.result);
+      const deck = user.decks.find((d) => d._id.toString() === args.id);
+
+      if (!deck) {
+        throw new GraphQLError("Deck not found");
+      }
+  
+      return deck.cards;
+    } catch (error) {
+      console.error(error);
+      throw new GraphQLError("An error occurred while fetching cards");
+    }
+  },
+
   getReviewsByCardId: async (parent, args) => {
     try{
       const cardId = args.cardId;
@@ -39,46 +79,58 @@ const resolvers = {
       return error;
     }
   },
-
+  
   filteredCards: async (parent, args) => {
-    const {skip = 0, limit = 10, field, value, gt, lt, sortBy } = args;
+    const { limit, skip, sortBy, filters } = args;
     let query = {};
 
-    // If value is provided, perform a string match
-    if (value) {
-      query[field] = new RegExp(value, 'i'); // Case-insensitive matching
+    if (filters && filters.length > 0) {
+      filters.forEach((filter) => {
+        if (filter.values && Array.isArray(filter.values) && filter.values.length > 0) {
+          // Case-insensitive matching for string fields
+          if (filter.field === "name") {
+            query[filter.field] = { $regex: new RegExp(filter.values.join("|"), 'i') };
+          } else {
+            // For other fields, apply default matching
+            query[filter.field] = { $in: filter.values };
+          }
+        } else if (filter.value) {
+          // Case-insensitive matching for string fields
+          if (filter.field === "name") {
+            query[filter.field] = { $regex: new RegExp(filter.value, 'i') };
+          } else {
+            // For other fields, apply default matching
+            query[filter.field] = filter.value;
+          }
+        } else if (filter.gt !== undefined || filter.lt !== undefined) {
+          // Numerical comparisons for numeric fields
+          query[filter.field] = {};
+          if (filter.gt !== undefined) query[filter.field]['$gt'] = filter.gt;
+          if (filter.lt !== undefined) query[filter.field]['$lt'] = filter.lt;
+        }
+      });
     }
-
-    // If gt or lt is provided, perform numerical comparisons
-    if (gt !== undefined || lt !== undefined) {
-      query[field] = {};
-      if (gt !== undefined) query[field]['$gt'] = gt;
-      if (lt !== undefined) query[field]['$lt'] = lt;
-    }
+    
 
     try {
-      // Base query with possibility of sorting
-      let itemsQuery = Cards.find(query).skip(skip).limit(limit);
+      // Sorting logic
+      let sortOption = {};
       if (sortBy) {
-        itemsQuery = itemsQuery.sort({ [field]: sortBy }); // 1 for ascending order
+        sortOption[sortBy.field] = sortBy.order;
       }
 
-      // Execute the query
-      const items = await itemsQuery.exec();
-      const totalCards = await Cards.find(query).countDocuments();
-
+      const items = await Cards.find(query).skip(skip).limit(limit).sort(sortOption);
+      const totalCards = await Cards.countDocuments(query);
       const hasNextPage = skip + limit < totalCards;
-      console.log(items, hasNextPage);
-      
-      
-      return {cards: items, hasNextPage:hasNextPage};
+
+      return { cards: items, hasNextPage };
     } catch (error) {
       console.error(error);
       throw new GraphQLError("Could not fetch items");
     }
   },
-  
   },
+
   Mutation: {
     addReview: async(parent, args, contextValue) => {
 
@@ -187,7 +239,7 @@ const resolvers = {
             throw new GraphQLError("Could not authorize user");
           }
 
-          // Fetching the card documents that you want to add
+          // Fetching the card documents
           const cardsToAdd = await Cards.find({
               _id: { $in: args.cardIds }
           });
@@ -197,11 +249,10 @@ const resolvers = {
             throw new GraphQLError("No cards with the provided ids");
           }
 
-          // Update user's deck to include the new card documents
           const updatedUser = await User.findOneAndUpdate(
               { _id: contextValue.result, "decks._id": args.deckId },
               { $push: { "decks.$.cards": { $each: cardsToAdd } } },
-              { new: true } // This option returns the modified document
+              { new: true } 
           );
 
           if (!updatedUser) {
@@ -280,7 +331,6 @@ const resolvers = {
       payload.username = user.username;
       payload.decks = user.decks;
       return payload;
-
     },
 
     removeDeck: async (parent, args, contextValue) =>{
@@ -316,4 +366,3 @@ const resolvers = {
 };
 
 export { resolvers };
-

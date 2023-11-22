@@ -2,41 +2,15 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 
-// Filters is already an array, let's just add objects with field and values
-// interface FilterState {
-//     field: string,
-//     values: Array<string>
-// }
-
-// const initialState: Array<FilterState> = [{field: 'name', values: ['Rock']}]
-
-// export const filterSlice = createSlice({
-//     name: 'filters',
-//     initialState,
-//     reducers: {
-//         addFilter: (state, action: PayloadAction<FilterState>) => {
-//             state.push(action.payload)
-//         },
-//         removeFilter: (state, action: PayloadAction<FilterState>) => {
-//             state = state.filter(filter => filter.field !== action.payload.field)
-//         },
-//         clearFilters: (state) => {
-//             state = []
-//         }
-//     }
-// })
-
-// Let's store with name as key and values as array of strings
 interface FilterActionPayload {
     field: string;
     values: Array<string>;
   }
-  
   interface FilterState {
     [key: string]: Array<string>;
   }
   
-  const initialState: FilterState = { name: ['Rock'] };
+  const initialState: FilterState = {};
   
   export const filterSlice = createSlice({
     name: 'filters',
@@ -44,12 +18,23 @@ interface FilterActionPayload {
     reducers: {
         addFilter: (state, action: PayloadAction<FilterActionPayload>) => {
             const { field, values } = action.payload;
+            // Check if field is "name", if so, clear all other filters in name field
+            if (field === "name") {
+                delete state[field];
+            }
             // Filter out duplicates before updating the state
             state[field] = Array.from(new Set([...(state[field] || []), ...values]));
+            if (field==="name") {
+              if (state["name"][0] === "") {
+                delete state["name"];
+              }}
             },
       removeFilter: (state, action: PayloadAction<FilterActionPayload>) => {
         const { field, values } = action.payload;
         state[field] = state[field].filter((value) => !values.includes(value));
+        if (state[field].length === 0) {
+          delete state[field];
+        }
       },
       clearFilters: (state) => {
         Object.keys(state).forEach((key) => {
@@ -58,6 +43,13 @@ interface FilterActionPayload {
       },
     },
   });
+
+  // Add filter and remove filter are the two actions that will be used to update the state
+  // clearFilters is used to reset the state
+  // A typical action creator would look like this:
+  // dispatch({ type: "filters/addFilter", payload: {field: "name", values: ["Voidwalker"]} })
+  // The above action can be dispatched from any component that has access to the store by using the useAppDispatch hook from hooks.ts (see Navbar.tsx for an example)
+  // Similarly, the state can be accessed from any component by using the useAppSelector hook from hooks.ts (see Navbar.tsx for an example)
   
   export const { addFilter, removeFilter, clearFilters } = filterSlice.actions;
   
