@@ -1,22 +1,23 @@
 # Deckbuilder
 
-## Introduction
+## Concept
 
-This project is a deckbuilding application for the game Hearthstone. The database has been created by scraping the [Hearthstone API](https://hearthstoneapi.com/) before using a custom Python script to clean the data. The main page loads different cards for the user to look at and add to their decks by hittng the plus button. The users can filter and search for cards to find the card they're looking for. Users may also click on a card or hover over the image to get more info about a card.
+![Alt text](readme/img/image.png)
+This project is a deckbuilding application for the digital collectible card game Hearthstone. In the game, users can get different cards and build decks using them. Our application makes designing such decks significantly easier and gives the users access to all cards so they can design their dream decks!
 
-In the /decks page, users can look at their decks and see which cards are in each deck. To access this page, users must be authenticated. If a user is not authenticated they're redirected to the login page. Here they can either log in or hit the "create account" link to create their own account. Users are then stored in the database with their password hashed and we return a JWT token to the user that is stored in their localstorage and is valid for 2 hours.
+The database has been created by scraping the [Hearthstone API](https://hearthstoneapi.com/) before using a custom Python script to clean the data. The main page loads different cards for the user to look at and add to their decks by hittng the plus button. The users can filter and search for cards to find the card they're looking for. Users may also click on a card to get more info about it.
+
+In the /decks page, users can look at their decks, create new decks and delete decks. They can also see what cards are in a specific deck by clicking on it. To access this page, users must be authenticated. If a user is not authenticated they're redirected to the login page. Here they can either log in or hit the "create account" link to create their own account. Users are then stored in the database with their password hashed and we return a JWT token to the user that is stored in their localstorage and is valid for 2 hours.
 
 The project's styling mostly comes from the component library PrimeReact and we use PrimeFlex as our utility library. PrimeFlex is very similar to Tailwind which is why the syntax will probably be familiar to a lot of people.
 
-## Supported browsers
-
-The project does not support Mozilla FireFox. It is currently only confirmed working on Google Chrome. We also recommend disabling adblock as it may interfere with certain calls. Some adblocks, for instance, may result in CORS errors.
-
 ## How to run the project
 
-The project assumes the user has Node v.20.6.0 or higher. The project is also reliant on a MongoDB database which the user has to initialize with card data. We no longer store the card data in Gitlab as a huge json file is not ideal for storing and merging in Git. Looking at the Hearthstone API documentation can give users a good idea of how cards should be filled into the database, although we highly recommend testing out the project in our VM instead of running it locally.
+The project assumes the user has Node v.20.6.0 or higher. The project is also reliant on a MongoDB database which the user has to initialize with card data. If you'd like to avoid setting up the database locally, [you may access our VM's database using this url.](http://it2810-66.idi.ntnu.no:4000/Hearthstone) We highly reccommend connecting to the VM database instead of creating one locally as it saves you a lot of time.
 
-The repository is split into two parts: client and server. This is because we want the frontend to be as independent as possible of the backend. Subsequently after cloning the project users have to cd into both the client and the server directory, for instance using a split terminal. In the server folder, the server can be initialized using the command "npm start" and in the client folder the command is "npm run dev". To run the server you also need a .env file in the server folder created by yourself. We do not store this in Gitlab for security reasons as well as to allow users to select their own ports. Your .env file should look like this:
+The repository is split into two parts: client and server. This is because we want the frontend to be as independent as possible of the backend. After cloning the project you should run the command `npm i` in [our root folder.](/../../)
+
+Subsequently after cloning the project users have to cd into both [the client](/client) and [the server directory](/server), for instance using a split terminal. In the server folder. You then need to run `npm i` the server can be initialized using the command "npm start" and in the client folder the command is "npm run dev". To run the server you also need a .env file in the server folder created by yourself. We do not store this in Gitlab for security reasons as well as to allow users to select their own ports. Your .env file should look like this:
 
 ```
 PORT = 4000
