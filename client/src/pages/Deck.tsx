@@ -8,11 +8,13 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { GridItem, ListItem } from "../components/CardItem";
 import { DeckService } from "../service/DeckService";
+import { useAppSelector } from "../service/hooks";
 
 
 export default function Deck() {
   const [visible, setVisible] = useState<boolean>(false);
   const [errors, setErrors] = useState([]);
+  const layout = useAppSelector((state) => state.layout.layout);
   
   interface IDeck {
     id: string;
@@ -70,6 +72,9 @@ export default function Deck() {
     DeckService.getDecks().then((decks) => {
       setData(decks);
     });
+    if (deckData.length > 0) {
+      handleDeckSelect(deckData[0].id);
+    }
   });
 
   const footerContent = (
@@ -178,7 +183,7 @@ export default function Deck() {
         </Dialog>
 
         <div className="w-12">
-          <DataView value={cards} itemTemplate={itemTemplate} />
+          <DataView value={cards} itemTemplate={itemTemplate} layout={layout}/>
         </div>
       </div>
       {errors.map(function (error) {
