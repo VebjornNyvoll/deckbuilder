@@ -135,7 +135,7 @@ export default function CardView({ layout, filter }: { layout: "grid" | "list"; 
       {popCard && (
         <CardPopUp card={popCard} open={isDialogOpen} onClose={closeDialog} />
       )}
-      <ScrollTop target="parent" threshold={1000} className="w-3rem h-3rem border-round bg-primary" icon="pi pi-arrow-up text-base" />
+      <ScrollTop target="parent" threshold={1000} className="w-3rem h-3rem border-round" icon="pi pi-angle-double-up text-base" />
     </div>
       </RemoveScroll>
   );

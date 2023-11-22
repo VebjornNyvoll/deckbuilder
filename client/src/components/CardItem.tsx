@@ -51,11 +51,11 @@ const getColor = (card: Card) => {
     case "Empire":
       return "var(--red-500)";
     case "Pirate":
-      return "var(--gray-500)";
+      return "var(--brown-500)";
     case "Neutral":
-      return "var(--blue-500)";
+      return "var(--blue-600)";
     default:
-      return null;
+      return "var(--gray-800";
   }
 };
 
