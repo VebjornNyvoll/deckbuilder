@@ -96,10 +96,10 @@ describe("Authentication behaviours", async () => {
         
         fireEvent.change(username, { target: { value: 'username' }});
         fireEvent.change(password, { target: { value: 'password' }});
-
+        
         expect(username.value).toEqual("username")
         expect(password.value).toEqual("password")
-        
+
         fireEvent.click(loginSubmit);
         console.log(loginToast.innerHTML);
 
