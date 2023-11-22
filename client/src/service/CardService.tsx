@@ -17,6 +17,43 @@ interface Options {
 }
 
 export const CardService = {
+    getEmptyCard() {
+      return {
+        id : "",
+        cardId : "",
+        dbfId : 0,
+        name : "",
+        cardSet : "",
+        type : "",
+        text : "",
+        playerClass : "",
+        locale : "",
+        faction : "",
+        cost : 0,
+        attack : 0,
+        health : 0,
+        flavour : "",
+        artist : "",
+        elite : false,
+        rarity : "",
+        spellSchool : "",
+        race: "",
+        img : "",
+        durability : 0,
+        collectible : false,
+        imgGold : "",
+        otherRaces : "",
+        howToGetSignature : "",
+        armor : 0,
+        howToGet : "",
+        howToGetGold : "",
+        howToGetDiamond : "",
+        classes : "",
+        mechanics : [],
+        flavor: "",
+
+      };
+    },
     getFilteredCards(filters: Filter, options: Options = {}) {
       const { limit, skip, sortBy } = options;
 
@@ -38,27 +75,15 @@ export const CardService = {
             query FilteredCards($filters: [FilterInput!], $limit: Int, $skip: Int, $sortBy: SortInput) {
               filteredCards(filters: $filters, limit: $limit, skip: $skip, sortBy: $sortBy) {
                 cards {
-                  id
-                  cardId
-                  dbfId
-                  name
-                  cardSet
-                  type
-                  text
-                  img
-                  playerClass
-                  locale
-                  faction
-                  mechanics {
-                    name
-                  }
-                  cost
                   attack
                   health
-                  flavour
-                  artist
-                  elite
-                  rarity
+                  cost
+                  faction
+                  name
+                  img
+                  cardSet
+                  id
+                  type
                 }
                 hasNextPage
               }
@@ -75,6 +100,58 @@ export const CardService = {
         .catch((error) => {
           console.error("Error fetching filtered cards:", error);
           return [];
+        });
+    },
+
+    getCardById(cardId: string) {
+      return client
+        .query({
+          query: gql`
+            query GetCardById($id: ID!) {
+              getCardById(id: $id) {
+                id
+                cardId
+                dbfId
+                name
+                cardSet
+                type
+                text
+                playerClass
+                locale
+                faction
+                mechanics {
+                  name
+                }
+                cost
+                attack
+                health
+                flavour
+                artist
+                elite
+                rarity
+                spellSchool
+                race
+                img
+                durability
+                collectible
+                imgGold
+                otherRaces
+                howToGetSignature
+                armor
+                howToGet
+                howToGetGold
+                howToGetDiamond
+                multiClassGroup
+                classes
+              }
+            }
+          `,
+          variables: { id: cardId },
+        })
+        .then((result) => result.data.getCardById)
+        .catch((error) => {
+          console.error("Error fetching card by ID:", error);
+          return null;
         });
     },
 };
