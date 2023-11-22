@@ -16,7 +16,6 @@ export default function Deck() {
   const [errors, setErrors] = useState([]);
   const [deckData, setData] = useState([]);
   const deckName = React.useState("value");
-
   const handleDeckSelect = (id) => {
     DeckService.getCardsInDeck(id).then((result) => {
       setCards(result);
@@ -42,7 +41,6 @@ export default function Deck() {
 
   const clearCreateDeck = () => {
     setVisible(false);
-    setDeckName("");
   };
 
   const handleCreateDeck = async () => {
