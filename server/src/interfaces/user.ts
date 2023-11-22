@@ -1,8 +1,8 @@
 import { IDeck } from './deck';
 interface IUser {
-  id: String;
-  username: String;
-  password: String;
+  id: string;
+  username: string;
+  password: string;
   decks: [IDeck];
 }
 

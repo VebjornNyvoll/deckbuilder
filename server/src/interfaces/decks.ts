@@ -1,5 +1,5 @@
 interface IDeck {
-  deckId: String;
+  deckId: string;
 }
 
 export { IDeck };

@@ -21,8 +21,8 @@ export default function Navbar() {
   //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
-  const page = location.pathname == '/' ? true : false;
-  const deckPage = location.pathname == '/decks' ? true : false;
+  const page = location.pathname == '/';
+  const deckPage = location.pathname == '/decks';
 
   const handleSearchChange = (e: { target: { value: string } }) => {
     addFilter({ field: 'name', values: [e.target.value] });
@@ -36,7 +36,7 @@ export default function Navbar() {
 
   const debouncedResults = useMemo(() => {
     return debounce(handleSearchChange, 300);
-  }, []);
+  }, [handleSearchChange]);
   useEffect(() => {
     return () => {
       debouncedResults.cancel();
@@ -67,7 +67,7 @@ export default function Navbar() {
     } else if (themeLink instanceof HTMLAnchorElement) {
       themeLink.href = '/themes/lara-light-indigo/theme.css';
     }
-  }, []);
+  }, [darkMode]);
 
   const onLogout = () => {
     logout();
