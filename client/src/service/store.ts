@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import filterSliceReducer from "./cards/filterSlice";
+import darkModeSliceReducer from "./darkModeSlice";
 import sortSliceReducer from "./cards/sortSlice";
 import cardsSliceReducer from "./cards/cardsSlice";
 import layoutSliceReducer from "./cards/layoutSlice";
@@ -13,6 +14,7 @@ export const store = configureStore({
         cards: cardsSliceReducer,
         layout: layoutSliceReducer,
         datasaver: dataSaverReducer,
+        darkMode: darkModeSliceReducer,
     }
 
     },

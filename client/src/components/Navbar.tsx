@@ -6,12 +6,9 @@ import { AuthContext } from "../context/authContext";
 import { useAppSelector, useAppDispatch } from "../service/hooks";
 import { setDataSaver } from "../service/cards/dataSaverSlice";
 import { useLocation } from "react-router-dom";
-
 import debounce from 'lodash.debounce';
+import { PrimeReactContext } from "primereact/api";
 
-//const { changeTheme } = useContext(PrimeReactContext);
-
-//changeTheme(currentTheme: "string", newTheme: "string", linkElementId: "string", callback: Function)
 
 export default function Navbar() {
   // Gets filters from redux store
@@ -25,13 +22,19 @@ export default function Navbar() {
   //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
-
   const page = location.pathname == "/" ? true : false;
   const deckPage = location.pathname == "/decks" ? true : false;
   
   const handleSearchChange = (e: { target: { value: string; }; }) => {
     addFilter({field: "name", values: [e.target.value]});
   };
+  const { changeTheme } = useContext(PrimeReactContext);
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    // Load dark mode preference from localStorage on component mount
+    const storedDarkMode = localStorage.getItem("darkMode");
+    return storedDarkMode !== null ? JSON.parse(storedDarkMode) : false;
+  });
+
 
   const debouncedResults = useMemo(() => {
     return debounce(handleSearchChange, 300);
@@ -41,6 +44,7 @@ export default function Navbar() {
       debouncedResults.cancel();
     };
   });
+  
 
   function addFilter(filter: {field: string, values: string[]}) {
     // Check if filter already exists
@@ -53,24 +57,37 @@ export default function Navbar() {
     dispatch({ type: "filters/addFilter", payload: filter });
   }
   
-  const activeFilterColor = "bg-teal-100";
+  
+
+  useEffect(() => {
+    // Save dark mode preference to localStorage when it changes
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  useEffect(() => {
+    console.log("USEEFFECT")
+    // Check darkMode on component mount and call changeTheme if true
+    let themeLink = document.getElementById("theme-link");
+    if (darkMode) {
+      console.log(themeLink.href);
+      themeLink.href = "/themes/viva-dark/theme.css";
+    }else{
+      themeLink.href = "/themes/lara-light-indigo/theme.css";
+    }
+  }, []);
 
   const onLogout = () => {
     logout();
     navigate("/");
   };
-  var datasaver: boolean = false;
-  var darkmode: boolean = false;
-
+  
   const switchLayout = () => {
     dispatch({ type: "layout/switchLayout" });
   };
 
-
   function DataSaver() {
     dispatch(setDataSaver(!dataSaver));
   }
-  
 
   enum sortOrder {
     ASC = 1,
@@ -80,6 +97,22 @@ export default function Navbar() {
   function setSort(field: string, order: sortOrder) {
     dispatch({ type: "sort/sort", payload: {field: field, order: order} });
   }
+
+  function toggleTheme() {      
+    console.log("TOGGLETHEME: " + darkMode)
+    if (darkMode) {
+
+      setDarkMode(false);
+      console.log("setDarkMode(false)");  
+      changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
+    }
+    else {
+      setDarkMode(true);
+      console.log("setDarkMode(true)");
+      changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
+    }
+  }
+  const activeFilterColor = "bg-teal-100";
 
   const items = [
     {
@@ -360,10 +393,10 @@ export default function Navbar() {
           },
         },
         {
-          label: "Darkmode",
-          icon: darkmode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
+          label: darkMode ? "Light mode" : "Dark mode",
+          icon: darkMode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
           command: () => {
-            DarkMode();
+            toggleTheme();
           },
         },
       ],

@@ -39,26 +39,26 @@ export interface Card {
   locale: string;
   mechanics: Mechanic[];
 }
-const getSeverity = (card: Card) => {
+const getColor = (card: Card) => {
   switch (card.faction) {
     case "Alliance":
-      return "success";
+      return "var(--green-500)";
     case "Scourge":
-      return "success";
+      return "var(--green-500)";
     case "Explorer":
-      return "warning";
+      return "var(--yellow-500)";
     case "Legion":
-      return "warning";
+      return "var(--orange-500)";
     case "Horde":
-      return "danger";
+      return "var(--red-600)";
     case "Empire":
-      return "danger";
+      return "var(--red-500)";
     case "Pirate":
-      return "danger";
+      return "var(--brown-500)";
     case "Neutral":
-      return "info";
+      return "var(--blue-600)";
     default:
-      return null;
+      return "var(--gray-800";
   }
 };
 
@@ -171,11 +171,11 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
               <div className="flex align-items-center gap-3">
                 <span className="flex align-items-center gap-2">
                   <i className="pi pi-book"></i>
-                  <span className="font-semibold">{card.cardSet}</span>
+                  <span id={idString + "set"}  className="font-semibold">{card.cardSet}</span>
                 </span>
                 <Tag
                   value={card.faction ? card.faction.toString() : "None"}
-                  severity={getSeverity(card)}
+                  style={{background: getColor(card)}}
                 ></Tag>
               </div>
 
@@ -262,7 +262,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           <Tag
             id={idString + "faction"}
             value={card.faction ? card.faction.toString() : "None"}
-            severity={getSeverity(card)}
+            style={{backgroundColor: getColor(card)}}
           ></Tag>
         </div>
 
@@ -310,7 +310,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
       </button>
 
       <OverlayPanel ref={op} dismissable showCloseIcon={true}>
-        <CardOverlayComponent cardId={card.id} />
+        <CardOverlayComponent  cardId={card.id} />
       </OverlayPanel>
     </div>
   );
