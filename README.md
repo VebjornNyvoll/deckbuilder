@@ -17,6 +17,22 @@ The project's styling mostly comes from the component library PrimeReact and we 
 
 The project assumes the user has Node v.20.6.0 or higher. The project is also reliant on a MongoDB database which the user has to initialize with card data. If you'd like to avoid setting up the database locally, [you may access our VM's database using this url.](http://it2810-66.idi.ntnu.no:4000/Hearthstone) We highly reccommend connecting to the VM database instead of creating one locally as it saves you a lot of time.
 
+If you'd like to create your own local version however, here's how to do it:
+
+### Set up local database
+
+1. Copy the contents of the file [allcards3.json from the allcards branch](../../allcards/all_cards/allcards3.json).
+2. Download [MongoDB Compass GUI](https://www.mongodb.com/try/download/compass) that suits your OS.
+3. Create a new connection to whatever URI you set in your `.env` file. (The next chapter explains how the `.env` file should be set up.) Here's an example of how our connection page looks:
+
+![mongodb://localhost:27017/ connection](/readme/img/mongodb-connection.png){width=35% height=35%}
+
+4. Create a database named "Hearthstone".
+5. Create a collection named "cards" and then click "Add data" within that collection and select "Import Json".
+6. Import the contents of the allcards3.json file you copied earlier.
+7. Create another collection within the "Hearthstone" database called "users" and leave it empty. It will be filled when you beigin creating accounts.
+8. Your database is now ready to roll!
+
 The repository is split into two parts: client and server. This is because we want the frontend to be as independent as possible of the backend. After cloning the project you should run the command `npm i` in [our root folder.](/../../)
 
 Subsequently after cloning the project users have to cd into both [the client](/client) and [the server directory](/server), for instance using a split terminal. You then need to run `npm i` in both directories. **Beware: ** The server can be initialized using the command `npm start` and in the client folder the command is `npm run dev`. To run the server you also need a `.env` file in the server folder created by yourself. We do not store this in Gitlab for security reasons as well as to allow users to select their own ports. Your `.env` file should look like this:
@@ -74,10 +90,12 @@ We handle state in a variety of ways depending on what is most practical. For in
 
 Of course we've made the project as sustainable as possible! We've cleaned up our queries to ensure we don't make any unneccessary calls. We've even added a sick debounce to the search bar that caches whatever you write to ensure it doesn't make a call every time you hit a key, but it still feels responsive!
 
-In addition we've added a data saver mode! This can be enabled under the profile tab. ![Profile -> Enable Data Saver](/readme/img/profile-data-saver.png)
+In addition we've added a data saver mode! This can be enabled under the profile tab.
+
+![Profile -> Enable Data Saver](/readme/img/profile-data-saver.png)
 
 You may wonder "What does this Data Saver even do?" and that's a wonderful question. The answer is really quite simple, it ensures you don't make any calls to get images. Our card images are accessed from an external database and enabling data saver replaces the images with text data from our local database. This is not only easy to read, but it also helps save the environment! So go ahead and save those turtles!  
-![Picture of a regular card](/readme/img/regular-card.png) ![Picture of a card in data saver mode](/readme/img/data-saver-card.png)
+![Picture of a regular card](/readme/img/regular-card.png){width=30% height=30%} ![Picture of a card in data saver mode](/readme/img/data-saver-card.png){width=30% height=30%}
 
 ## Let's talk testing!
 
