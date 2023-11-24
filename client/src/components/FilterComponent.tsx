@@ -6,6 +6,7 @@ import '../Filters.css';
 import filters from '../data/filters.json';
 
 export default function FilterComponent() {
+  
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterValue, setFilterValue] = useState('');
   const [filterInput, setFilterInput] = useState<string | null>(null);
