@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SelectButton } from 'primereact/selectbutton';
+import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import '../Filters.css';
@@ -26,7 +26,7 @@ export default function FilterComponent() {
     value: filter,
   }));
 
-  const onFilterChange = (e) => {
+  const onFilterChange = (e : SelectButtonChangeEvent) => {
     const filterData = e.value;
     setSelectedFilter(filterData); // Save the entire filter object
 
