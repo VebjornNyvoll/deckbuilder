@@ -7,9 +7,8 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
-export const CardOverlayComponent = ( cardId: string ) => {
-  
-  
+export function CardOverlayComponent(props: {cardId: string} ) {
+  const {cardId} = props;
   const context = useContext(AuthContext);
 
   const CARD_TO_DECK = gql`
