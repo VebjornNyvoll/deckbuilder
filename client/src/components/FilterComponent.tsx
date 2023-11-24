@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
@@ -8,7 +8,7 @@ import filters from '../data/filters.json';
 export default function FilterComponent() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterValue, setFilterValue] = useState('');
-  const [filterInput, setFilterInput] = useState(null);
+  const [filterInput, setFilterInput] = useState<string | null>(null);
   const [comparison, setComparison] = useState(null);
   const [sorting, setSorting] = useState(null);
   const sortOptions = [
