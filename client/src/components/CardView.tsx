@@ -6,7 +6,6 @@ import { ScrollTop } from 'primereact/scrolltop';
 import { useAppDispatch, useAppSelector } from '../service/hooks';
 import { setCards, addCards } from '../service/cards/cardsSlice';
 import { CardService } from '../service/CardService';
-import { useLocation } from 'react-router-dom';
 
 export default function CardView() {
   const [loading, setLoading] = useState(false);
@@ -17,8 +16,7 @@ export default function CardView() {
   const sort = useAppSelector((state) => state.sort);
   const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
   const layout = useAppSelector((state) => state.layout.layout);
-  const location = useLocation();
-  const [dialogState, setDialogState] = useState({ isOpen: false, id: undefined });
+  const [dialogState, setDialogState] = useState({ isOpen: false, id: "none" });
 
   const options = {
     limit: 20,
@@ -85,12 +83,13 @@ export default function CardView() {
   const handleScroll = () => {
     if (loading || !hasMore) return;
 
-    const scrollY = scrollContainerRef.current.scrollTop;
-    const windowHeight = scrollContainerRef.current.clientHeight;
-    const contentHeight = scrollContainerRef.current.scrollHeight;
-
-    if (contentHeight - (scrollY + windowHeight) < 500) {
-      loadMoreCards();
+    if(scrollContainerRef.current){
+      const scrollY = scrollContainerRef.current.scrollTop;
+      const windowHeight = scrollContainerRef.current.clientHeight;
+      const contentHeight = scrollContainerRef.current.scrollHeight;
+      if (contentHeight - (scrollY + windowHeight) < 500) {
+        loadMoreCards();
+      }
     }
   };
 
@@ -106,12 +105,12 @@ export default function CardView() {
     };
   }, [handleScroll, scrollContainerRef]);
 
-  const openDialog = (card) => {
+  const openDialog = (card : Card) => {
     setDialogState({ isOpen: true, id: card.id });
   };
 
   const closeDialog = () => {
-    setDialogState({ isOpen: false, id: null });
+    setDialogState({ isOpen: false, id: "none" });
   };
 
   const itemTemplate = (card: Card, layout: string) => {
