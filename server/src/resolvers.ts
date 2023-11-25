@@ -16,9 +16,9 @@ const resolvers = {
       }
       return user;
     },
-    users: async (parent, args) => await User.find({}),
-    cards: async (parent, args) => await Cards.find({}),
-    getPaginatedCards: async (parent, args) => {
+    users: async () => await User.find({}),
+    cards: async () => await Cards.find({}),
+    getPaginatedCards: async (args) => {
       const { limit = 10, skip = 0 } = args;
       const cards = await Cards.find().skip(skip).limit(limit);
 
@@ -30,7 +30,7 @@ const resolvers = {
       };
     },
 
-    getCardById: async (parent, args) => {
+    getCardById: async (args) => {
       try {
         if (!mongoose.Types.ObjectId.isValid(args.id)) {
           throw new GraphQLError('Invalid ID format');
@@ -67,7 +67,7 @@ const resolvers = {
       }
     },
 
-    getReviewsByCardId: async (parent, args) => {
+    getReviewsByCardId: async (args) => {
       try {
         const cardId = args.cardId;
         const reviews = await Review.find({ cardId: cardId });
@@ -77,9 +77,9 @@ const resolvers = {
       }
     },
 
-    filteredCards: async (parent, args) => {
+    filteredCards: async (args) => {
       const { limit, skip, sortBy, filters } = args;
-      let query = {};
+      const query = {};
 
       if (filters && filters.length > 0) {
         filters.forEach((filter) => {
@@ -110,7 +110,7 @@ const resolvers = {
 
       try {
         // Sorting logic
-        let sortOption = {};
+        const sortOption = {};
         if (sortBy) {
           sortOption[sortBy.field] = sortBy.order;
         }
