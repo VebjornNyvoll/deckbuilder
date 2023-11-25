@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 import { IDeck } from '../interfaces/deck';
-import { cardSchema } from './Card.js';
+import { cardSchema } from './Card';
 
 const deckSchema = new Schema<IDeck>({
   deckName: { type: String, required: false },

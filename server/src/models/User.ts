@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { IUser } from '../interfaces/user';
-import { deckSchema } from './Deck.js';
+import { deckSchema } from './Deck';
 
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true },
