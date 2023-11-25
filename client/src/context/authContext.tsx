@@ -22,8 +22,9 @@ if (
 
 const AuthContext = createContext({
   user: null,
-  login: (userData) => {},
+  login: () => {},
   logout: () => {},
+  token: null,
 });
 
 function authReducer(state, action) {
