@@ -35,7 +35,7 @@ const store = mockStore(initialState);
 
 describe("Authentication behaviours", async () => {
     test("Test create user behaviour", async () => {
-        const {} = render(
+        render(
             
             <Provider store={store}>
                 <ApolloProvider client={client}>
@@ -65,7 +65,7 @@ describe("Authentication behaviours", async () => {
     })
 
     test("Test create user behaviour", async () => {
-        const {} = render(
+        render(
             
             <Provider store={store}>
                 <ApolloProvider client={client}>
