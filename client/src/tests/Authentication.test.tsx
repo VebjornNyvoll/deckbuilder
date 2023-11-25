@@ -7,9 +7,8 @@ import { ApolloProvider } from "@apollo/client";
 import client from "../service/apolloClient";
 import CreateAccount from "../pages/CreateAccount";
 import Login from "../pages/Login";
+import jsdom from 'jsdom';
 
-
-const jsdom = require('jsdom');
 const virtualConsole = new jsdom.VirtualConsole();
 virtualConsole.on("error", () => {
   // No-op to skip console errors.
