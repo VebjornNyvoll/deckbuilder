@@ -45,7 +45,6 @@ function Login() {
       errors.push('Password is required');
     }
 
-    console.log('Validation Errors:', errors);
 
     if (errors.length === 0) {
       login();

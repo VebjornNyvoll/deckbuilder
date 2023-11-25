@@ -9,8 +9,9 @@ import type { RootState, AppDispatch } from './store';
 export const useForm = (initialState = {}) => {
   const [values, setValues] = useState(initialState);
 
-  const onChange = (event: any) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
+  const onChange = (event: InputEvent) => {
+    
+    setValues({ ...values, [(event.target as HTMLFormElement).name]: (event.target as HTMLFormElement).value });
   };
 
   return {

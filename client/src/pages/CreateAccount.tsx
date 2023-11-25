@@ -24,7 +24,7 @@ const CREATE_USER = gql`
   }
 `;
 
-function CreateAccount(props) {
+function CreateAccount() {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
   const [errors, setErrors] = useState<string[]>([]);
@@ -58,7 +58,7 @@ function CreateAccount(props) {
     password: '',
   });
 
-  const [createUser, { loading }] = useMutation(CREATE_USER, {
+  const [createUser] = useMutation(CREATE_USER, {
     update(proxy, { data: { createUser: userData } }) {
       context.login(userData);
       navigate('/');

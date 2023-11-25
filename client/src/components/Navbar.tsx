@@ -61,7 +61,7 @@ export default function Navbar() {
 
   useEffect(() => {
     // Check darkMode on component mount and call changeTheme if true
-    let themeLink = document.getElementById('theme-link');
+    const themeLink = document.getElementById('theme-link');
     if (darkMode && themeLink instanceof HTMLAnchorElement) {
       themeLink.href = '/themes/viva-dark/theme.css';
     } else if (themeLink instanceof HTMLAnchorElement) {
