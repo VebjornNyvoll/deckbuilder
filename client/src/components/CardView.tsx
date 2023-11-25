@@ -102,10 +102,11 @@ export default function CardView() {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.addEventListener('scroll', handleScroll);
     }
+    const copyScrollContainerRef = scrollContainerRef; 
 
     return () => {
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.removeEventListener('scroll', handleScroll);
+      if (copyScrollContainerRef.current) {
+        copyScrollContainerRef.current.removeEventListener('scroll', handleScroll);
       }
     };
   }, [handleScroll, scrollContainerRef]);

@@ -88,7 +88,7 @@ export default function Deck() {
             <div className="card flex justify-content-center">
               <Button
                 label={deck.deckName}
-                onClick={(e) => handleDeckSelect(deck.id)}
+                onClick={() => handleDeckSelect(deck.id)}
                 className={classNames(
                   options.className,
                   'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround',
@@ -113,7 +113,7 @@ export default function Deck() {
       label: 'Options',
       items: [
         {
-          command: (e) => {
+          command: () => {
             setVisible(true);
           },
           template: (item, options) => {

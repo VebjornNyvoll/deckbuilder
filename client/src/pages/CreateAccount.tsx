@@ -1,7 +1,7 @@
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useRef, useState, FormEvent } from 'react';
 import { Avatar } from 'primereact/avatar';
 import placeholder_avatar from '../img/placeholder_avatar.png';
 import { Toast } from 'primereact/toast';
@@ -11,6 +11,7 @@ import { useForm } from '../service/hooks';
 import { useMutation } from '@apollo/client';
 import { gql } from 'graphql-tag';
 import { useNavigate } from 'react-router-dom';
+
 
 const CREATE_USER = gql`
   mutation CreateUser($username: String!, $password: String!) {
@@ -26,9 +27,9 @@ const CREATE_USER = gql`
 function CreateAccount(props) {
   const context = useContext(AuthContext);
   const navigate = useNavigate();
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
-  const validateForm = (event) => {
+  const validateForm = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!values.username || values.username.length < 3) {
@@ -63,7 +64,7 @@ function CreateAccount(props) {
       navigate('/');
     },
     onError({ graphQLErrors }) {
-      setErrors(graphQLErrors);
+      setErrors([graphQLErrors.toString()]);
     },
     variables: { username: values.username, password: values.password },
   });

@@ -1,5 +1,4 @@
 import { Button } from 'primereact/button';
-import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
 import { useContext, useRef, useState } from 'react';
 import { Avatar } from 'primereact/avatar';
@@ -23,7 +22,7 @@ const LOGIN = gql`
   }
 `;
 
-function Login(props) {
+function Login() {
   const navigate = useNavigate();
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState([]);
@@ -58,7 +57,7 @@ function Login(props) {
     }
   };
 
-    const [login, { loading }] = useMutation(LOGIN, {
+    const [login] = useMutation(LOGIN, {
         update(proxy, { data: {login: userData}}) {
             context.login(userData);
             navigate('/');

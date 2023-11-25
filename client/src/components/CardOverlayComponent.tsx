@@ -3,7 +3,7 @@ import { Toast } from 'primereact/toast';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Button } from 'primereact/button';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { ApolloError, gql, useMutation, useQuery } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
@@ -87,8 +87,12 @@ export function CardOverlayComponent(props: {cardId: string} ) {
       } else {
         showMessage(false, `Added card to ${rowData.name}`);
       }
-    } catch (error: any) {
-      showMessage(true, `An error occurred: ${error.message}`);
+    } catch (error) {
+      if (error instanceof ApolloError){
+        showMessage(true, `An Apollo error occurred: ${error.message}`);
+      } else {
+        showMessage(true, `An error occurred:`);
+      }
     }
   };
 
@@ -114,4 +118,4 @@ export function CardOverlayComponent(props: {cardId: string} ) {
       </DataTable>
     </div>
   );
-};
+}
