@@ -1,15 +1,13 @@
-import { afterAll, beforeAll, describe, test, vi, expect } from 'vitest';
-import {ListItem} from "../components/CardItem";
+import { describe, test } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ApolloProvider } from "@apollo/client";
 import client from "../service/apolloClient";
-import Deck from  "../pages/Deck"
+import Deck from  "../pages/Deck";
+import jsdom from 'jsdom';
 
-
-const jsdom = require('jsdom');
 const virtualConsole = new jsdom.VirtualConsole();
 virtualConsole.on("error", () => {
   // No-op to skip console errors.
@@ -33,11 +31,6 @@ const initialState = {
 };
 const mockStore = configureStore();
 const store = mockStore(initialState);
-
-
-function wait(milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
 
 
 describe("Deck click test", async () => {

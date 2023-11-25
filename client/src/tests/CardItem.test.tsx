@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, test, vi, expect } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import {ListItem} from "../components/CardItem";
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -6,8 +6,8 @@ import configureStore from 'redux-mock-store';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ApolloProvider } from "@apollo/client";
 import client from "../service/apolloClient";
+import jsdom from 'jsdom';
 
-const jsdom = require('jsdom');
 const virtualConsole = new jsdom.VirtualConsole();
 virtualConsole.on("error", () => {
   // No-op to skip console errors.
@@ -33,20 +33,10 @@ const mockStore = configureStore();
 const store = mockStore(initialState);
 
 
-function wait(milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
-
-
-
-interface CardItemProps {
-    card: Card;
-    onClick?: (cardId: string) => void;
-  }
-  interface Mechanic {
+interface Mechanic {
     name: string;
-  }
-  export interface Card {
+}
+interface Card {
     id: string;
     cardId: string;
     dbfId: number;
@@ -68,19 +58,32 @@ interface CardItemProps {
     imgGold: string | undefined;
     locale: string;
     mechanics: Mechanic[];
-  }
+}
 
-const mockupCard = {
-    __typename: "Card",
+const mockupCard : Card = {
+    //__typename: "Card",
     attack: 6,
     cardSet: "Mean Streets of Gadgetzan",
     cost: 6,
-    faction: null,
+    faction: "",
     health: 6,
     id: "655caba86ead681c6450b0e7",
     img: "https://d15f34w2p8l1cc.cloudfront.net/hearthstone/f8b2f6eef5466fb1fb0bed9cc06c667e032df2b847bc6b72fb1e3bca28b4c939.png",
     name: '"Little Friend"',
-    type: "Minion"
+    type: "Minion",
+
+    cardId: "string",
+    dbfId: 2,
+    rarity: "string",
+    text: "string",
+    flavor: "string",
+    artist: "string",
+    collectible: true,
+    elite: true,
+    playerClass: "string",
+    imgGold: "string",
+    locale: "string",
+    mechanics: [],
 }
 
 describe("Card item test", async () => {

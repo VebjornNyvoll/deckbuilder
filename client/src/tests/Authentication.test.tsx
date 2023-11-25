@@ -1,11 +1,10 @@
-import { afterAll, beforeAll, describe, test, vi, expect } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ApolloProvider } from "@apollo/client";
 import client from "../service/apolloClient";
-
 import CreateAccount from "../pages/CreateAccount";
 import Login from "../pages/Login";
 
@@ -35,15 +34,9 @@ const initialState = {
 const mockStore = configureStore();
 const store = mockStore(initialState);
 
-
-function wait(milliseconds: number) {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
-
-
 describe("Authentication behaviours", async () => {
     test("Test create user behaviour", async () => {
-        const {debug} = render(
+        const {} = render(
             
             <Provider store={store}>
                 <ApolloProvider client={client}>
@@ -73,7 +66,7 @@ describe("Authentication behaviours", async () => {
     })
 
     test("Test create user behaviour", async () => {
-        const {debug} = render(
+        const {} = render(
             
             <Provider store={store}>
                 <ApolloProvider client={client}>
