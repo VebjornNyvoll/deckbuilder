@@ -1,10 +1,10 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { resolvers } from './resolvers';
-import { typeDefs } from './models/typeDef';
-import { env } from './helpers/env';
+import { resolvers } from './resolvers.js';
+import { typeDefs } from './models/typeDef.js';
+import { env } from './helpers/env.js';
 import { connect } from 'mongoose';
-import { Authenticate } from './helpers/authentication';
+import { Authenticate } from './helpers/authentication.js';
 
 run().catch((err) => console.log(err));
 async function run() {

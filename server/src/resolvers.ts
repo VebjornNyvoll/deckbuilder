@@ -1,7 +1,7 @@
-import { User } from './models/User';
-import { Authenticate } from './helpers/authentication';
-import { Cards } from './models/Card';
-import { Review } from './models/Review';
+import { User } from './models/User.js';
+import { Authenticate } from './helpers/authentication.js';
+import { Cards } from './models/Card.js';
+import { Review } from './models/Review.js';
 import mongoose from 'mongoose';
 import { GraphQLError } from 'graphql';
 const resolvers = {

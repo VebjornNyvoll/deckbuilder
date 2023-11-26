@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { ICard } from '../interfaces/card';
-import { IMechanics } from '../interfaces/mechanics';
+import { ICard } from '../interfaces/card.js';
+import { IMechanics } from '../interfaces/mechanics.js';
 
 const cardSchema = new Schema<ICard>({
   cardId: { type: String, required: false },

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { IReview } from '../interfaces/review';
-import { userSchema } from './User';
+import { IReview } from '../interfaces/review.js';
+import { userSchema } from './User.js';
 const reviewSchema = new Schema<IReview>({
   cardId: { type: String, required: true },
   text: { type: String, required: true },

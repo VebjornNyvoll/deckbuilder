@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { env } from './env';
+import { env } from './env.js';
 
 const saltRounds = 10;
 const Authenticate = {
