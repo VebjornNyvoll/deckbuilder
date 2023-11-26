@@ -1,5 +1,5 @@
 import { describe, test, expect, } from 'vitest';
-import NavBar from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
@@ -39,7 +39,7 @@ describe('Navbar test', async () => {
       <Provider store={store}>
         <Router>
           <PrimeReactProvider>
-            <NavBar />
+            <Navbar />
           </PrimeReactProvider>
         </Router>
       </Provider>,
@@ -62,7 +62,7 @@ describe('Navbar test', async () => {
       <Provider store={store}>
         <Router>
           <PrimeReactProvider>
-            <NavBar />
+            <Navbar />
           </PrimeReactProvider>
         </Router>
       </Provider>,
