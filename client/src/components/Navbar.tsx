@@ -8,6 +8,8 @@ import { setDataSaver } from '../service/cards/dataSaverSlice';
 import { useLocation } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import { PrimeReactContext } from 'primereact/api';
+import './navbarIcon.css';
+
 
 export default function Navbar() {
   // Gets filters from redux store
