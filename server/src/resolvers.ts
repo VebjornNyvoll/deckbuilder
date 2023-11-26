@@ -18,7 +18,7 @@ const resolvers = {
     },
     users: async () => await User.find({}),
     cards: async () => await Cards.find({}),
-    getPaginatedCards: async (args) => {
+    getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
       const cards = await Cards.find().skip(skip).limit(limit);
 
@@ -30,7 +30,7 @@ const resolvers = {
       };
     },
 
-    getCardById: async (args) => {
+    getCardById: async (parent, args) => {
       try {
         if (!mongoose.Types.ObjectId.isValid(args.id)) {
           throw new GraphQLError('Invalid ID format');
@@ -67,7 +67,7 @@ const resolvers = {
       }
     },
 
-    getReviewsByCardId: async (args) => {
+    getReviewsByCardId: async (parent, args) => {
       try {
         const cardId = args.cardId;
         const reviews = await Review.find({ cardId: cardId });
@@ -77,7 +77,7 @@ const resolvers = {
       }
     },
 
-    filteredCards: async (args) => {
+    filteredCards: async (parent, args) => {
       const { limit, skip, sortBy, filters } = args;
       const query = {};
 
