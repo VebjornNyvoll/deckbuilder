@@ -6,7 +6,6 @@ import '../Filters.css';
 import filters from '../data/filters.json';
 
 export default function FilterComponent() {
-  
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterValue, setFilterValue] = useState('');
   const [filterInput, setFilterInput] = useState<string | null>(null);
@@ -27,7 +26,7 @@ export default function FilterComponent() {
     value: filter,
   }));
 
-  const onFilterChange = (e : SelectButtonChangeEvent) => {
+  const onFilterChange = (e: SelectButtonChangeEvent) => {
     const filterData = e.value;
     setSelectedFilter(filterData); // Save the entire filter object
 

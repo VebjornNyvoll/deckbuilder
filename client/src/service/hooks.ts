@@ -10,7 +10,6 @@ export const useForm = (initialState = {}) => {
   const [values, setValues] = useState(initialState);
 
   const onChange = (event: InputEvent) => {
-    
     setValues({ ...values, [(event.target as HTMLFormElement).name]: (event.target as HTMLFormElement).value });
   };
 

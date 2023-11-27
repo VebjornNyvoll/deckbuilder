@@ -1,4 +1,4 @@
-import { describe, test, expect, } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import Navbar from '../components/Navbar';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';

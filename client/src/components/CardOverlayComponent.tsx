@@ -7,8 +7,8 @@ import { ApolloError, gql, useMutation, useQuery } from '@apollo/client';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
-export function CardOverlayComponent(props: {cardId: string} ) {
-  const {cardId} = props;
+export function CardOverlayComponent(props: { cardId: string }) {
+  const { cardId } = props;
   const context = useContext(AuthContext);
 
   const CARD_TO_DECK = gql`
@@ -34,12 +34,12 @@ export function CardOverlayComponent(props: {cardId: string} ) {
   `;
 
   interface Deck {
-    deckName: string
-    id: string,
+    deckName: string;
+    id: string;
   }
   interface AddDeckItem {
-    deckId: string
-    name: string
+    deckId: string;
+    name: string;
   }
 
   const { loading, error, data } = useQuery(GET_DECKS);
@@ -52,7 +52,7 @@ export function CardOverlayComponent(props: {cardId: string} ) {
   const toast = useRef(null);
 
   const showMessage = (isError: boolean, content: string) => {
-    if (toast.current){
+    if (toast.current) {
       (toast.current as Toast).replace({
         severity: isError ? 'error' : 'success',
         summary: isError ? 'Error' : 'Success',
@@ -65,7 +65,7 @@ export function CardOverlayComponent(props: {cardId: string} ) {
   const [addCardsToDeck] = useMutation(CARD_TO_DECK);
 
   const addButtonTemplate = (rowData: AddDeckItem) => (
-    <Button label="Add" className="p-button-sm" onClick={() => handleAddButtonClick( rowData)} />
+    <Button label="Add" className="p-button-sm" onClick={() => handleAddButtonClick(rowData)} />
   );
 
   const handleAddButtonClick = async (rowData: AddDeckItem) => {
@@ -88,7 +88,7 @@ export function CardOverlayComponent(props: {cardId: string} ) {
         showMessage(false, `Added card to ${rowData.name}`);
       }
     } catch (error) {
-      if (error instanceof ApolloError){
+      if (error instanceof ApolloError) {
         showMessage(true, `An Apollo error occurred: ${error.message}`);
       } else {
         showMessage(true, `An error occurred:`);

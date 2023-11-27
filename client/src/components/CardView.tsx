@@ -16,11 +16,11 @@ export default function CardView() {
   const sort = useAppSelector((state) => state.sort);
   const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
   const layout = useAppSelector((state) => state.layout.layout);
-  
+
   type DialogState = {
     isOpen: boolean;
     id: null | string;
-  }
+  };
   const [dialogState, setDialogState] = useState<DialogState>({ isOpen: false, id: null });
 
   const options = {
@@ -88,7 +88,7 @@ export default function CardView() {
   const handleScroll = () => {
     if (loading || !hasMore) return;
 
-    if(scrollContainerRef.current){
+    if (scrollContainerRef.current) {
       const scrollY = scrollContainerRef.current.scrollTop;
       const windowHeight = scrollContainerRef.current.clientHeight;
       const contentHeight = scrollContainerRef.current.scrollHeight;
@@ -102,7 +102,7 @@ export default function CardView() {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.addEventListener('scroll', handleScroll);
     }
-    const copyScrollContainerRef = scrollContainerRef; 
+    const copyScrollContainerRef = scrollContainerRef;
 
     return () => {
       if (copyScrollContainerRef.current) {
@@ -111,7 +111,7 @@ export default function CardView() {
     };
   }, [handleScroll, scrollContainerRef]);
 
-  const openDialog = (card : Card) => {
+  const openDialog = (card: Card) => {
     setDialogState({ isOpen: true, id: card.id });
   };
 

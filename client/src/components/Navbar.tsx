@@ -10,7 +10,6 @@ import debounce from 'lodash.debounce';
 import { PrimeReactContext } from 'primereact/api';
 import './navbarIcon.css';
 
-
 export default function Navbar() {
   // Gets filters from redux store
   const filters = useAppSelector((state) => state.filters);
@@ -85,7 +84,7 @@ export default function Navbar() {
     logout();
     navigate('/');
   };
-  
+
   const switchLayout = () => {
     dispatch({ type: 'layout/switchLayout' });
   };
@@ -247,9 +246,9 @@ export default function Navbar() {
     },
     {
       visible: page,
-      label: "Sort",
+      label: 'Sort',
       data: <div data-testid="sort-menuitem"></div>,
-      icon: <i data-testid="sort-menuitem" className='pi pi-fw pi-sort-alt'/>,
+      icon: <i data-testid="sort-menuitem" className="pi pi-fw pi-sort-alt" />,
       items: [
         {
           label: 'Cost',
@@ -298,15 +297,15 @@ export default function Navbar() {
           ],
         },
         {
-          label: "Attack",
-          data: <div data-testid="attack"/>,
-          icon: <i data-testid="attack" className='pi pi-fw pi-wrench'/>,
+          label: 'Attack',
+          data: <div data-testid="attack" />,
+          icon: <i data-testid="attack" className="pi pi-fw pi-wrench" />,
           className: sort?.field == 'attack' ? activeFilterColor : '',
           items: [
             {
-              label: "High to low",
-              data: <div data-testid="attack-htl"/>,
-              icon: <i data-testid="attack-htl" className='pi pi-fw pi-sort-numeric-down-alt'/>,
+              label: 'High to low',
+              data: <div data-testid="attack-htl" />,
+              icon: <i data-testid="attack-htl" className="pi pi-fw pi-sort-numeric-down-alt" />,
               className: sort?.field == 'attack' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('attack', sortOrder.DESC);
@@ -357,7 +356,7 @@ export default function Navbar() {
     },
     {
       visible: page,
-      label: "Searchbar",
+      label: 'Searchbar',
       template: <InputText placeholder="Search" type="search" onChange={debouncedResults} />,
     },
     {
