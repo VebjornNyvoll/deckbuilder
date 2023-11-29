@@ -5,7 +5,7 @@ interface DeckState {
 }
 
 const initialState: DeckState = {
-  triggerShowDeckEvent: false
+  triggerShowDeckEvent: false,
 };
 
 const deckSlice = createSlice({
@@ -13,8 +13,8 @@ const deckSlice = createSlice({
   initialState,
   reducers: {
     showDecks: (state, action: PayloadAction<boolean>) => {
-        state.triggerShowDeckEvent = action.payload;
-      },
+      state.triggerShowDeckEvent = action.payload;
+    },
   },
 });
 
