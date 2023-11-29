@@ -1,4 +1,4 @@
-import {env} from "../../custom.config"
+import { env } from '../../custom.config';
 
 /// <reference types="cypress" />
 declare global {
@@ -6,11 +6,10 @@ declare global {
   namespace Cypress {
     interface Chainable {
       deleteCurrentUser: (token: string) => Chainable<Element>;
-      getToken: (username: string, password: string) => Chainable<{ token: string, error: boolean }>;
+      getToken: (username: string, password: string) => Chainable<{ token: string; error: boolean }>;
     }
   }
 }
-
 
 Cypress.Commands.add('deleteCurrentUser', (token: string) => {
   cy.request({
@@ -38,11 +37,12 @@ Cypress.Commands.add('deleteCurrentUser', (token: string) => {
   });
 });
 Cypress.Commands.add('getToken', (username, password) => {
-  return cy.request({
-    method: 'POST',
-    url: env.REACT_APP_BACKEND_URL,
-    body: {
-      query: `
+  return cy
+    .request({
+      method: 'POST',
+      url: env.REACT_APP_BACKEND_URL,
+      body: {
+        query: `
         mutation Login($username: String!, $password: String!) {
           login(username: $username, password: $password) {
             token
@@ -52,21 +52,19 @@ Cypress.Commands.add('getToken', (username, password) => {
             }
           }
         }`,
-      variables: {
-        username: username,
-        password: password
+        variables: {
+          username: username,
+          password: password,
+        },
+      },
+    })
+    .then((response) => {
+      if (response.body.data.login.error.error) {
+        return { token: null, error: true };
+      } else {
+        return { token: response.body.data.login.token, error: false };
       }
-    },
-  }).then(response => {
-    
-    
-    if (response.body.data.login.error.error) {
-      return { token: null, error: true };
-    } else {
-      return { token: response.body.data.login.token, error: false };
-    }
-  });
+    });
 });
-
 
 export {};
