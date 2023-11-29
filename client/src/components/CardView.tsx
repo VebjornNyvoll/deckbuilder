@@ -14,9 +14,10 @@ export default function CardView() {
   const dispatch = useAppDispatch();
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
-  const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
+  const cards = useAppSelector((state) => state.cards.cards); 
   const layout = useAppSelector((state) => state.layout.layout);
 
+  // CardpopUp is a dialog that shows the card details
   type DialogState = {
     isOpen: boolean;
     id: null | string;
@@ -30,9 +31,9 @@ export default function CardView() {
   };
 
   useEffect(() => {
-    options.limit = 20; // Reset limit when filters change
-    options.skip = 0; // Reset skip when filters change
-    options.sortBy = sort; // Keep the sort options when filters change
+    options.limit = 20; 
+    options.skip = 0; 
+    options.sortBy = sort; 
     loadInitialCards();
   }, [filters, sort]);
 
@@ -40,6 +41,7 @@ export default function CardView() {
     loadInitialCards();
   }, []);
 
+  // Fetches the initial cards for frontpage
   const loadInitialCards = () => {
     if (loading) return;
     setLoading(true);
@@ -47,22 +49,23 @@ export default function CardView() {
     CardService.getFilteredCards(filters, options)
       .then((data) => {
         if (data.cards) {
-          dispatch(setCards(data.cards)); // Dispatch the action to set initial cards
+          dispatch(setCards(data.cards)); 
           setHasMore(true);
         } else {
-          dispatch(setCards([])); // Dispatch the action to set an empty array
+          dispatch(setCards([])); 
           setHasMore(false);
         }
         setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching cards:', error);
-        dispatch(setCards([])); // Dispatch the action to set an empty array on error
+        dispatch(setCards([])); 
         setHasMore(false);
         setLoading(false);
       });
   };
 
+  // Fetches more cards when the user scrolls down
   const loadMoreCards = () => {
     if (loading || !hasMore) return;
     setLoading(true);
@@ -119,6 +122,7 @@ export default function CardView() {
     setDialogState({ isOpen: false, id: null });
   };
 
+  //Getting list or grid cardItems with the ability to be pressed
   const itemTemplate = (card: Card, layout: string) => {
     if (!card) {
       return null;
@@ -131,10 +135,12 @@ export default function CardView() {
   };
 
   return (
-    <RemoveScroll>
+    // RemoveScroll is used to prevent the whole page from scrolling when the user scrolls through the cards
+    <RemoveScroll> 
       <div className="card" ref={scrollContainerRef} style={{ height: 'calc(100vh - 62px)', overflow: 'auto' }}>
         <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
         {dialogState.id && <CardPopUp cardId={dialogState.id} open={dialogState.isOpen} onClose={closeDialog} />}
+        {/* A button that scrolls to the top of the page */}
         <ScrollTop
           target="parent"
           threshold={1000}

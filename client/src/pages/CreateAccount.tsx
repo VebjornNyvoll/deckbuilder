@@ -59,11 +59,11 @@ function CreateAccount() {
 
   const [createUser] = useMutation(CREATE_USER, {
     update(proxy, { data: { createUser: userData } }) {
-      context.login(userData);
+      context.login(userData); 
       navigate('/');
     },
     onError({ graphQLErrors }) {
-      setErrors([graphQLErrors.toString()]);
+      setErrors([graphQLErrors[0].message]);
     },
     variables: { username: values.username, password: values.password },
   });
