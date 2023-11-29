@@ -17,7 +17,7 @@ The project's styling mostly comes from the component library PrimeReact and we 
 
 The project assumes the user has Node v.20.6.0 or higher. The client is set up to automatically use the backend and database from the virtual machine. This means you can simply run the client and avoid having to boot the server at all! If you prefer to host the server and database locally however you can of course do so.
 
-After cloning the project you should run the command `npm i` in [our root folder.](/../../) before navigating to the [the client directory.](/client) You also have to run `npm i` in this client folder to get all required dependencies. Finally, just write 'npm run dev' in the client folder and you're done!
+After cloning the project you should run the command `npm i` in [our root folder.](/../../) before navigating to the [the client directory.](/client) You also have to run `npm i` in this client folder to get all required dependencies. Finally, just write `npm run dev` in the client folder and you're done!
 
 ## Folder structure
 
