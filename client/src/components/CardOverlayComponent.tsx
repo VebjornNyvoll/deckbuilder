@@ -8,8 +8,6 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 
 export const CardOverlayComponent = ({ cardId }) => {
-  
-  
   const context = useContext(AuthContext);
 
   const CARD_TO_DECK = gql`
@@ -84,7 +82,7 @@ export const CardOverlayComponent = ({ cardId }) => {
   };
 
   if (loading) return <p data-testid={cardId}>Loading decks...</p>;
-  if (error) return <p>Error loading decks</p>;
+  if (error) return <p>Make sure to have a user first!</p>;
 
   const nameBodyTemplate = (rowData) => <span style={{ cursor: 'pointer' }}>{rowData.name}</span>;
 
