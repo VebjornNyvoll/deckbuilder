@@ -1,0 +1,172 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Create accoutn page matches snapshot > snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    class="p-toast p-component p-toast-top-right p-ripple-disabled"
+    data-pc-name="toast"
+    data-pc-section="root"
+    data-testid="createAccountToast"
+    style="position: fixed; top: 20px; right: 20px;"
+  >
+    <div />
+  </div>
+  <div
+    class="flex align-items-center justify-content-center"
+  >
+    <div
+      class="surface-card p-4 shadow-2 border-round w-full lg:w-6"
+    >
+      <div
+        class="text-center mb-5"
+      >
+        <div
+          class="p-avatar p-component p-avatar-image p-avatar-circle p-avatar-xl"
+          data-pc-name="avatar"
+          data-pc-section="root"
+        >
+          <img
+            alt="avatar"
+            data-pc-section="image"
+            src="/project2/src/img/placeholder_avatar.png"
+          />
+        </div>
+        <div
+          class="text-900 text-3xl font-medium mb-3"
+        >
+          Welcome to Deckbuilder!
+        </div>
+        <span
+          class="text-600 font-medium line-height-3"
+        >
+          Already have an account?
+        </span>
+        <a
+          class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
+          href="/login"
+        >
+          Log in here!
+        </a>
+      </div>
+      <form>
+        <div
+          class="card flex justify-content-center w-full mb-2"
+        >
+          <span
+            class="p-float-label w-full mb-3"
+          >
+            <input
+              class="p-inputtext p-component w-full mb-3 w-full mb-3"
+              data-pc-name="inputtext"
+              data-pc-section="root"
+              data-testid="createAccountUsername"
+              id="username"
+              name="username"
+              required=""
+              type="username"
+            />
+            <label
+              for="username"
+              id="usernameLabel"
+            >
+              Username
+            </label>
+          </span>
+        </div>
+        <div
+          class="card flex justify-content-center w-full mb-2"
+        >
+          <span
+            class="p-float-label w-full mb-3 card flex"
+          >
+            <input
+              aria-labelledby="passwordLabel"
+              class="p-inputtext p-component w-full mb-3 w-full mb-3"
+              data-pc-name="inputtext"
+              data-pc-section="root"
+              data-testid="createAccountPassword"
+              id="password"
+              name="password"
+              required=""
+              type="password"
+            />
+            <label
+              for="password"
+              id="usernameLabel"
+            >
+              Password
+            </label>
+          </span>
+        </div>
+        <div
+          class="flex align-items-center justify-content-between mb-6"
+        >
+          <div
+            class="flex align-items-center"
+          >
+            <div
+              class="mr-2 p-checkbox p-component"
+              data-pc-name="checkbox"
+              data-pc-section="root"
+              data-testid="createAccountTOS"
+              id="termsOfService"
+              type="checkbox"
+            >
+              <div
+                class="p-hidden-accessible"
+                data-pc-section="hiddeninputwrapper"
+              >
+                <input
+                  aria-labelledby="termsOfServiceLabel"
+                  data-pc-section="hiddeninput"
+                  name="termsOfService"
+                  required=""
+                  type="checkbox"
+                />
+              </div>
+              <div
+                class="p-checkbox-box"
+                data-p-disabled="false"
+                data-p-focus="false"
+                data-p-highlight="false"
+                data-pc-section="input"
+              />
+            </div>
+            <label
+              for="termsOfService"
+              id="termsOfServiceLabel"
+            >
+              I accept the 
+              <a
+                data-testid="createAccountTOSA"
+                href="javascript:undefined;"
+              >
+                Terms of Service
+              </a>
+            </label>
+          </div>
+        </div>
+        <button
+          aria-label="Create account"
+          class="w-full p-button p-component"
+          data-pc-name="button"
+          data-pc-section="root"
+          data-testid="createAccountSubmit"
+          type="submit"
+        >
+          <span
+            class="p-button-icon p-c p-button-icon-left pi pi-user"
+            data-pc-section="icon"
+          />
+          <span
+            class="p-button-label p-c"
+            data-pc-section="label"
+          >
+            Create account
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;

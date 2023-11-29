@@ -95,3 +95,18 @@ describe('Authentication behaviours', async () => {
     console.log(loginToast.innerHTML);
   });
 });
+
+describe('Create accoutn page matches snapshot', async () => {
+  test('snapshot test', async () => {
+    const { asFragment } = render(
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <Router>
+            <CreateAccount></CreateAccount>
+          </Router>
+        </ApolloProvider>
+      </Provider>,
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});

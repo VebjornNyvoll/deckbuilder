@@ -1,0 +1,102 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Card item matches snapshot > snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    class="col-12 border-1 surface-border surface-card border-round "
+  >
+    <button
+      aria-haspopup="true"
+      aria-labelledby="stringset stringfaction stringname"
+      class="col-12 border-1 surface-border surface-card border-round cursor-pointer"
+    >
+      <div
+        class="flex rem flex-row xl:align-items-start p-4 gap-4"
+      >
+        <img
+          alt=""
+          class="w-10rem shadow-2 block xl:block mx-auto border-round align-items-center"
+          friend=""
+          little=""
+          src="https://d15f34w2p8l1cc.cloudfront.net/hearthstone/f8b2f6eef5466fb1fb0bed9cc06c667e032df2b847bc6b72fb1e3bca28b4c939.png"
+        />
+        <div
+          class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
+        >
+          <div
+            class="flex flex-column align-items-center sm:align-items-start gap-3"
+          >
+            <div
+              class="text-2xl font-bold text-900"
+              id="stringname"
+            >
+              "Little Friend"
+            </div>
+            <div
+              class="flex align-items-center gap-3"
+            >
+              <span
+                class="flex align-items-center gap-2"
+              >
+                <i
+                  class="pi pi-book"
+                />
+                <span
+                  class="font-semibold"
+                  id="stringset"
+                >
+                  Mean Streets of Gadgetzan
+                </span>
+              </span>
+              <span
+                class="p-tag p-component"
+                data-pc-name="tag"
+                data-pc-section="root"
+                style=""
+              >
+                <span
+                  class="p-tag-value"
+                  data-pc-section="value"
+                >
+                  None
+                </span>
+                <span />
+              </span>
+            </div>
+          </div>
+          <div
+            class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2"
+          >
+            <span
+              class="text-2xl font-semibold"
+            >
+              Minion
+            </span>
+          </div>
+        </div>
+      </div>
+    </button>
+    <button
+      aria-labelledby="stringbtn"
+      class="p-button-rounded p-button p-component p-button-icon-only"
+      data-pc-name="button"
+      data-pc-section="root"
+      data-testid="overlayPanelButton"
+      friend=""
+      id="stringbtn"
+      little=""
+      title="Add Card: "
+    >
+      <span
+        class="p-button-icon p-c pi pi-plus"
+        data-pc-section="icon"
+      />
+      <span
+        class="p-button-label p-c"
+      >
+         
+      </span>
+    </button>
+  </div>
+</DocumentFragment>
+`;

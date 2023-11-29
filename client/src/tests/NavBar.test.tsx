@@ -104,3 +104,18 @@ describe('Navbar test', async () => {
     }
   });
 });
+
+describe('Navbar should match snapshot', async () => {
+  test('snapshot test', async () => {
+    const { asFragment } = render(
+      <Provider store={store}>
+        <Router>
+          <PrimeReactProvider>
+            <Navbar />
+          </PrimeReactProvider>
+        </Router>
+      </Provider>,
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
