@@ -70,7 +70,7 @@ export default function Navbar() {
     };
   });
   const searchBar = (
-    <InputText  placeholder="Search" type="search" onChange={debouncedResults}   />
+    <InputText id="search"  placeholder="Search" type="search" onChange={debouncedResults}   />
     );
 
   //Filterchange handling
@@ -87,6 +87,10 @@ export default function Navbar() {
 
   const resetFilters = () => {
     dispatch({ type: 'filters/clearFilters'});
+    const searchBarById = document.getElementById('search');
+    if (searchBarById instanceof HTMLInputElement) {
+      searchBarById.value = '';
+    }
   };
 
   const onLogout = () => {
@@ -258,6 +262,7 @@ export default function Navbar() {
           separator: true,
         },
         {
+          disabled: Object.keys(filters).length > 0 ? false : true,
           label: 'Reset filters',
           icon: <i className="pi pi-fw pi-filter-slash" />,
           command: () => {
