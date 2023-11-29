@@ -203,7 +203,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   const dataSaver = useAppSelector((state) => state.datasaver.datasaver);
   const idString = card.cardId;
   const op = useRef(null);
-  const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => { 
+  const showOverlayPanel = (event: React.SyntheticEvent<Element, Event>) => {
     if (op.current && (op.current as OverlayPanel).toggle) {
       (op.current as OverlayPanel).toggle(event);
     }
@@ -219,7 +219,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
   return (
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
       <button
-        style={{ width: '100%', borderBottom: "none", paddingBottom: "0"}}
+        style={{ width: '100%', borderBottom: 'none', paddingBottom: '0' }}
         className="p-4 border-1 surface-border surface-card cursor-pointer"
         aria-haspopup
         aria-labelledby={idString + 'set ' + idString + 'faction ' + idString + 'name'}
@@ -254,7 +254,10 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           )}
         </div>
       </button>
-      <div style={{borderTop: "none"}} className="flex align-items-center p-4 justify-content-between border-1 surface-border surface-card">
+      <div
+        style={{ borderTop: 'none' }}
+        className="flex align-items-center p-4 justify-content-between border-1 surface-border surface-card"
+      >
         {<span className="text-2xl font-semibold">{card.type ? card.type.toString() : 'No Type'}</span>}
         <Button
           id={idString + 'btn'}
