@@ -10,7 +10,6 @@ import debounce from 'lodash.debounce';
 import { PrimeReactContext } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { showDecks } from '../service/navbar/deckSlice';
-import './NavbarIcon.css';
 
 export default function Navbar() {
   // Gets filters from redux store
