@@ -106,3 +106,18 @@ describe('Card item test', async () => {
     expect(panel.innerHTML).toEqual('Loading decks...');
   });
 });
+
+describe('Card item matches snapshot', async () => {
+  test('snapshot test', async () => {
+    const { asFragment } = render(
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <Router>
+            <ListItem card={mockupCard}></ListItem>
+          </Router>
+        </ApolloProvider>
+      </Provider>,
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+});
