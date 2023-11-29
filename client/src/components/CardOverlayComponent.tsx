@@ -37,16 +37,12 @@ export function CardOverlayComponent(props: { cardId: string }) {
     deckName: string;
     id: string;
   }
-  interface AddDeckItem {
-    deckId: string;
-    name: string;
-  }
 
   const { loading, error, data } = useQuery(GET_DECKS);
   const decks =
     data?.user?.decks?.map((deck: Deck) => ({
-      deckId: deck.id,
-      name: deck.deckName,
+      id: deck.id,
+      deckName: deck.deckName,
     })) || [];
 
   const toast = useRef(null);
@@ -64,16 +60,16 @@ export function CardOverlayComponent(props: { cardId: string }) {
 
   const [addCardsToDeck] = useMutation(CARD_TO_DECK);
 
-  const addButtonTemplate = (rowData: AddDeckItem) => (
+  const addButtonTemplate = (rowData: Deck) => (
     <Button label="Add" className="p-button-sm" onClick={() => handleAddButtonClick(rowData)} />
   );
 
-  const handleAddButtonClick = async (rowData: AddDeckItem) => {
+  const handleAddButtonClick = async (rowData: Deck) => {
     try {
       const response = await addCardsToDeck({
         variables: {
           cardIds: [cardId],
-          deckId: rowData.deckId,
+          deckId: rowData.id,
         },
         context: {
           headers: {
@@ -83,9 +79,9 @@ export function CardOverlayComponent(props: { cardId: string }) {
       });
 
       if (response?.data?.addCards?.error?.error) {
-        showMessage(true, `Could not add card to ${rowData.name}`);
+        showMessage(true, `Could not add card to ${rowData.deckName}`);
       } else {
-        showMessage(false, `Added card to ${rowData.name}`);
+        showMessage(false, `Added card to ${rowData.deckName}`);
       }
     } catch (error) {
       if (error instanceof ApolloError) {
@@ -99,7 +95,7 @@ export function CardOverlayComponent(props: { cardId: string }) {
   if (loading) return <p data-testid={cardId}>Loading decks...</p>;
   if (error) return <p>Error loading decks</p>;
 
-  const nameBodyTemplate = (rowData: AddDeckItem) => <span style={{ cursor: 'pointer' }}>{rowData.name}</span>;
+  const nameBodyTemplate = (rowData: Deck) => <span style={{ cursor: 'pointer' }}>{rowData.deckName}</span>;
 
   return (
     <div
