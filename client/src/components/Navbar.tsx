@@ -86,11 +86,7 @@ export default function Navbar() {
   }
 
   const resetFilters = () => {
-    Object.keys(filters).forEach((filter) => {
-      filters[filter].forEach((value) => {
-        dispatch({ type: 'filters/removeFilter', payload: { field: filter, values: [value] } });
-      });
-    });
+    dispatch({ type: 'filters/clearFilters'});
   };
 
   const onLogout = () => {
