@@ -1,12 +1,12 @@
-import { afterAll, beforeAll, describe, test, vi, expect, beforeEach, afterEach } from 'vitest';
-import NavBar from '../components/Navbar';
+import { describe, test, expect } from 'vitest';
+import Navbar from '../components/Navbar';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { PrimeReactContext, PrimeReactProvider } from 'primereact/api';
+import { PrimeReactProvider } from 'primereact/api';
+import jsdom from 'jsdom';
 
-const jsdom = require('jsdom');
 const virtualConsole = new jsdom.VirtualConsole();
 virtualConsole.on('error', () => {
   // No-op to skip console errors.
@@ -39,7 +39,7 @@ describe('Navbar test', async () => {
       <Provider store={store}>
         <Router>
           <PrimeReactProvider>
-            <NavBar />
+            <Navbar />
           </PrimeReactProvider>
         </Router>
       </Provider>,
@@ -62,7 +62,7 @@ describe('Navbar test', async () => {
       <Provider store={store}>
         <Router>
           <PrimeReactProvider>
-            <NavBar />
+            <Navbar />
           </PrimeReactProvider>
         </Router>
       </Provider>,

@@ -110,7 +110,7 @@ export default function Deck() {
             <div className="card flex justify-content-center">
               <Button
                 label={deck.deckName}
-                onClick={(e) => handleDeckSelect(deck.id)}
+                onClick={() => handleDeckSelect(deck.id)}
                 className={classNames(
                   options.className,
                   'w-full p-link flex align-items-center p-2 pl-4 text-color hover:surface-200 border-noround',
@@ -135,7 +135,7 @@ export default function Deck() {
       label: 'Options',
       items: [
         {
-          command: (e) => {
+          command: () => {
             setVisible(true);
           },
           template: (item, options) => {
@@ -181,7 +181,12 @@ export default function Deck() {
         </Dialog>
 
         <div className="w-12">
-          <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
+          <DataView
+            value={cards}
+            emptyMessage="Please select a deck from the sidebar."
+            itemTemplate={itemTemplate}
+            layout={layout}
+          />
           {dialogState.id && <CardPopUp cardId={dialogState.id} open={dialogState.isOpen} onClose={closeDialog} />}
         </div>
       </div>

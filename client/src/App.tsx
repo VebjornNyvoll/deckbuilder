@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import DetailedView from './components/DetailedView';
 import Login from './pages/Login';
 import CreateAccount from './pages/CreateAccount';
 import Index from './pages/Index';
@@ -33,10 +32,6 @@ const router = createBrowserRouter(
         {
           path: '/',
           element: <Index />,
-        },
-        {
-          path: '/detail/:cardId',
-          element: <DetailedView />,
         },
         {
           path: '/login',

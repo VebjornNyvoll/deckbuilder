@@ -8,6 +8,7 @@ import { setDataSaver } from '../service/cards/dataSaverSlice';
 import { useLocation } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import { PrimeReactContext } from 'primereact/api';
+import './NavbarIcon.css';
 
 export default function Navbar() {
   // Gets filters from redux store
@@ -18,31 +19,59 @@ export default function Navbar() {
   // Used to dispatch actions to redux store. See filterSlice.ts for supported actions and their expected payload.
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  //const [search, setSearch] = useState<string>("")
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
   const page = location.pathname == '/';
   const deckPage = location.pathname == '/decks';
 
-  const handleSearchChange = (e: { target: { value: string } }) => {
-    addFilter({ field: 'name', values: [e.target.value] });
-  };
+  //Darkmode handling
   const { changeTheme } = useContext(PrimeReactContext);
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     // Load dark mode preference from localStorage on component mount
     const storedDarkMode = localStorage.getItem('darkMode');
-    return storedDarkMode !== null ? JSON.parse(storedDarkMode) : false;
+    return storedDarkMode != null ? JSON.parse(storedDarkMode) : false;
   });
+  useEffect(() => {
+    // Save dark mode preference to localStorage when it changes
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+  }, [darkMode]);
+  useEffect(() => {
+    // Check darkMode on component mount and call changeTheme if true
+    const themeLink = document.getElementById('theme-link');
+    if (darkMode && themeLink instanceof HTMLLinkElement) {
+      themeLink.href = '/themes/viva-dark/theme.css';
+    } else if (themeLink instanceof HTMLLinkElement) {
+      themeLink.href = '/themes/lara-light-indigo/theme.css';
+    }
+  }, [darkMode]);
+  function toggleTheme() {
+    if (darkMode) {
+      setDarkMode(false);
+      changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
+    } else {
+      setDarkMode(true);
+      changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
+    }
+  }
+  const activeFilterColor = 'bg-teal-100';
+
+  //Searchbar handling
+  const handleSearchChange = (e: { target: { value: string } }) => {
+    addFilter({ field: 'name', values: [e.target.value] });
+  };
 
   const debouncedResults = useMemo(() => {
     return debounce(handleSearchChange, 300);
   }, [handleSearchChange]);
+
   useEffect(() => {
     return () => {
       debouncedResults.cancel();
     };
   });
+  const searchBar = <InputText id="search" placeholder="Search" type="search" onChange={debouncedResults} />;
 
+  //Filterchange handling
   function addFilter(filter: { field: string; values: string[] }) {
     // Check if filter already exists
     if (filters[filter.field]?.includes(filter.values[0])) {
@@ -54,28 +83,22 @@ export default function Navbar() {
     dispatch({ type: 'filters/addFilter', payload: filter });
   }
 
-  useEffect(() => {
-    // Save dark mode preference to localStorage when it changes
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
-  }, [darkMode]);
-
-  useEffect(() => {
-    console.log('USEEFFECT');
-    // Check darkMode on component mount and call changeTheme if true
-    const themeLink = document.getElementById('theme-link');
-    if (themeLink) {
-      if (darkMode) {
-        console.log(themeLink.href);
-        themeLink.href = '/themes/viva-dark/theme.css';
-      } else {
-        themeLink.href = '/themes/lara-light-indigo/theme.css';
-      }
+  const resetFilters = () => {
+    setSort('name', sortOrder.ASC);
+    dispatch({ type: 'filters/clearFilters' });
+    const searchBarById = document.getElementById('search');
+    if (searchBarById instanceof HTMLInputElement) {
+      searchBarById.value = '';
     }
-  }, [darkMode]);
+  };
 
   const onLogout = () => {
     logout();
+    resetFilters();
     navigate('/');
+    if (location.pathname == '/') {
+      window.location.reload();
+    }
   };
 
   const switchLayout = () => {
@@ -95,31 +118,19 @@ export default function Navbar() {
     dispatch({ type: 'sort/sort', payload: { field: field, order: order } });
   }
 
-  function toggleTheme() {
-    console.log('TOGGLETHEME: ' + darkMode);
-    if (darkMode) {
-      setDarkMode(false);
-      console.log('setDarkMode(false)');
-      changeTheme?.('viva-dark', 'lara-light-indigo', 'theme-link');
-    } else {
-      setDarkMode(true);
-      console.log('setDarkMode(true)');
-      changeTheme?.('lara-light-indigo', 'viva-dark', 'theme-link');
-    }
-  }
-  const activeFilterColor = 'bg-teal-100';
-
   const items = [
     {
+      className: location.pathname == '/' ? 'bg-gray-100 shadow-1' : '',
       label: 'Home',
-      icon: 'pi pi-fw pi-home',
+      icon: <i className="pi pi-fw pi-home" />,
       command: () => {
-        navigate('/');
+        location.pathname == '/' ? resetFilters() : navigate('/'); // Reset filters if already on home page
       },
     },
     {
+      className: deckPage ? 'bg-gray-100 shadow-1' : '',
       label: 'Decks',
-      icon: 'pi pi-fw pi-database',
+      icon: <i className="pi pi-fw pi-database" />,
       command: () => {
         navigate('/decks');
       },
@@ -127,12 +138,12 @@ export default function Navbar() {
     {
       visible: page,
       label: 'Filter',
-      icon: 'pi pi-fw pi-filter',
+      icon: <i className="pi pi-fw pi-filter" />,
       className: Object.keys(filters).length > 0 ? activeFilterColor : '',
       items: [
         {
           label: 'Faction',
-          icon: 'pi pi-fw pi-prime',
+          icon: <i className="pi pi-fw pi-prime" />,
           className: filters?.faction?.length > 0 ? activeFilterColor : '',
           items: [
             {
@@ -160,7 +171,7 @@ export default function Navbar() {
         },
         {
           label: 'Rarity',
-          icon: 'pi pi-fw pi-box',
+          icon: <i className="pi pi-fw pi-box" />,
           className: filters?.rarity?.length > 0 ? activeFilterColor : '',
           items: [
             {
@@ -202,7 +213,7 @@ export default function Navbar() {
         },
         {
           label: 'Type',
-          icon: 'pi pi-fw pi-book',
+          icon: <i className="pi pi-fw pi-book" />,
           className: filters?.type?.length > 0 ? activeFilterColor : '',
           items: [
             {
@@ -249,21 +260,33 @@ export default function Navbar() {
             },
           ],
         },
+        {
+          separator: true,
+        },
+        {
+          disabled: Object.keys(filters).length > 0 ? false : true,
+          label: 'Reset filters',
+          icon: <i className="pi pi-fw pi-filter-slash" />,
+          command: () => {
+            resetFilters();
+          },
+        },
       ],
     },
     {
       visible: page,
-      label: <div data-testid="sort-menuitem">Sort</div>,
-      icon: 'pi pi-fw pi-sort-alt',
+      label: 'Sort',
+      data: <div data-testid="sort-menuitem"></div>,
+      icon: <i data-testid="sort-menuitem" className="pi pi-fw pi-sort-alt" />,
       items: [
         {
           label: 'Cost',
-          icon: 'pi pi-fw pi-money-bill',
+          icon: <i className="pi pi-fw pi-money-bill" />,
           className: sort?.field == 'cost' ? activeFilterColor : '',
           items: [
             {
               label: 'High to low',
-              icon: 'pi pi-fw pi-sort-numeric-down-alt',
+              icon: <i className="pi pi-fw pi-sort-numeric-down-alt" />,
               className: sort?.field == 'cost' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('cost', sortOrder.DESC);
@@ -271,7 +294,7 @@ export default function Navbar() {
             },
             {
               label: 'Low to high',
-              icon: 'pi pi-fw pi-sort-numeric-up',
+              icon: <i className="pi pi-fw pi-sort-numeric-up" />,
               className: sort?.field == 'cost' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('cost', sortOrder.ASC);
@@ -281,12 +304,12 @@ export default function Navbar() {
         },
         {
           label: 'Name',
-          icon: 'pi pi-fw pi-id-card',
+          icon: <i className="pi pi-fw pi-id-card" />,
           className: sort?.field == 'name' ? activeFilterColor : '',
           items: [
             {
               label: 'A-Z',
-              icon: 'pi pi-fw pi-sort-alpha-down',
+              icon: <i className="pi pi-fw pi-sort-alpha-down" />,
               className: sort?.field == 'name' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('name', sortOrder.ASC);
@@ -294,7 +317,7 @@ export default function Navbar() {
             },
             {
               label: 'Z-A',
-              icon: 'pi pi-fw pi-sort-alpha-up-alt',
+              icon: <i className="pi pi-fw pi-sort-alpha-up-alt" />,
               className: sort?.field == 'name' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('name', sortOrder.DESC);
@@ -303,13 +326,15 @@ export default function Navbar() {
           ],
         },
         {
-          label: <div data-testid="attack">Attack</div>,
-          icon: 'pi pi-fw pi-wrench',
+          label: 'Attack',
+          data: <div data-testid="attack" />,
+          icon: <i data-testid="attack" className="pi pi-fw pi-wrench" />,
           className: sort?.field == 'attack' ? activeFilterColor : '',
           items: [
             {
-              label: <div data-testid="attack-htl">High to low</div>,
-              icon: 'pi pi-fw pi-sort-numeric-down-alt',
+              label: 'High to low',
+              data: <div data-testid="attack-htl" />,
+              icon: <i data-testid="attack-htl" className="pi pi-fw pi-sort-numeric-down-alt" />,
               className: sort?.field == 'attack' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('attack', sortOrder.DESC);
@@ -317,7 +342,7 @@ export default function Navbar() {
             },
             {
               label: 'Low to high',
-              icon: 'pi pi-fw pi-sort-numeric-up',
+              icon: <i className="pi pi-fw pi-sort-numeric-up" />,
               className: sort?.field == 'attack' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('attack', sortOrder.ASC);
@@ -327,12 +352,12 @@ export default function Navbar() {
         },
         {
           label: 'Health',
-          icon: 'pi pi-fw pi-heart',
+          icon: <i className="pi pi-fw pi-heart" />,
           className: sort?.field == 'health' ? activeFilterColor : '',
           items: [
             {
               label: 'High to low',
-              icon: 'pi pi-fw pi-sort-numeric-down-alt',
+              icon: <i className="pi pi-fw pi-sort-numeric-down-alt" />,
               className: sort?.field == 'health' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('health', sortOrder.DESC);
@@ -340,7 +365,7 @@ export default function Navbar() {
             },
             {
               label: 'Low to high',
-              icon: 'pi pi-fw pi-sort-numeric-up',
+              icon: <i className="pi pi-fw pi-sort-numeric-up" />,
               className: sort?.field == 'health' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('health', sortOrder.ASC);
@@ -353,24 +378,25 @@ export default function Navbar() {
     {
       visible: page || deckPage,
       label: layout == 'grid' ? 'List' : 'Grid',
-      icon: layout == 'grid' ? 'pi pi-fw pi-list' : 'pi pi-fw pi-th-large',
+      icon: layout == 'grid' ? <i className="pi pi-fw pi-list" /> : <i className="pi pi-fw pi-th-large" />,
       command: () => {
         switchLayout();
       },
     },
     {
-      //Searchbar
       visible: page,
-      template: <InputText placeholder="Search" type="text" onChange={debouncedResults} />,
+      label: 'Searchbar',
+
+      template: searchBar,
     },
     {
-      //Profile, swap out for avatar picture at const end, end = {end}
+      className: location.pathname == '/login' || location.pathname == '/create-account' ? 'bg-gray-100 shadow-1' : '',
       label: 'Profile',
-      icon: 'pi pi-fw pi-user',
+      icon: <i className="pi pi-fw pi-user" />,
       items: [
         {
           label: user ? 'Log out' : 'Login',
-          icon: user ? 'pi pi-fw pi-user-minus' : 'pi pi-fw pi-user-plus',
+          icon: user ? <i className="pi pi-fw pi-user-minus" /> : <i className="pi pi-fw pi-user-plus" />,
           command: () => {
             user ? onLogout() : navigate('/login');
           },
@@ -380,14 +406,14 @@ export default function Navbar() {
         },
         {
           label: dataSaver ? 'Disable Data Saver' : 'Enable Data Saver',
-          icon: dataSaver ? 'pi pi-fw pi-times' : 'pi pi-fw pi-bolt',
+          icon: dataSaver ? <i className="pi pi-fw pi-times" /> : <i className="pi pi-fw pi-bolt" />,
           command: () => {
             DataSaver();
           },
         },
         {
           label: darkMode ? 'Light mode' : 'Dark mode',
-          icon: darkMode ? 'pi pi-fw pi-sun' : 'pi pi-fw pi-moon',
+          icon: darkMode ? <i className="pi pi-fw pi-sun" /> : <i className="pi pi-fw pi-moon" />,
           command: () => {
             toggleTheme();
           },
