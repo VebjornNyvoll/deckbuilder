@@ -18,7 +18,7 @@ export default function CardView() {
   const cards = useAppSelector((state) => state.cards.cards); // Access cards from Redux state
   const layout = useAppSelector((state) => state.layout.layout);
   const location = useLocation();
-  const [dialogState, setDialogState] = useState({ isOpen: false, id: undefined });
+  const [dialogState, setDialogState] = useState({ isOpen: false, id: '' });
 
   const options = {
     limit: 20,
@@ -106,7 +106,7 @@ export default function CardView() {
     };
   }, [handleScroll, scrollContainerRef]);
 
-  const openDialog = (card) => {
+  const openDialog = (card: Card) => {
     setDialogState({ isOpen: true, id: card.id });
   };
 
