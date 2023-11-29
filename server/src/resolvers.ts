@@ -80,19 +80,21 @@ const resolvers = {
     filteredCards: async (parent, args) => {
       const { limit, skip, sortBy, filters } = args;
       const query = {};
-
+      // Has filters to apply
       if (filters && filters.length > 0) {
         filters.forEach((filter) => {
+          // Check if filters are sent as an array
           if (filter.values && Array.isArray(filter.values) && filter.values.length > 0) {
-            // Case-insensitive matching for string fields
+            // Case-insensitive matching for searchbar field
             if (filter.field === 'name') {
               query[filter.field] = { $regex: new RegExp(filter.values.join('|'), 'i') };
             } else {
               // For other fields, apply default matching
               query[filter.field] = { $in: filter.values };
-            }
-          } else if (filter.value) {
-            // Case-insensitive matching for string fields
+            } 
+          } // Check if filters are sent as a single value
+          else if (filter.value) {
+            // Case-insensitive matching for searchbar field
             if (filter.field === 'name') {
               query[filter.field] = { $regex: new RegExp(filter.value, 'i') };
             } else {
