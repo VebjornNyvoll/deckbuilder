@@ -193,7 +193,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
       </button>
 
       <OverlayPanel ref={op} dismissable showCloseIcon={true}>
-        <CardOverlayComponent cardId={card.id}/>
+        <CardOverlayComponent cardId={card.id} />
       </OverlayPanel>
     </div>
   );
