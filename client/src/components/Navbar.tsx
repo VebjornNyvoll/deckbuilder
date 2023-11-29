@@ -83,6 +83,9 @@ export default function Navbar() {
   const onLogout = () => {
     logout();
     navigate('/');
+    if (location.pathname == '/') {
+      window.location.reload();
+    }
   };
 
   const switchLayout = () => {
