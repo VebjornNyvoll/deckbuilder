@@ -8,18 +8,29 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { GridItem, ListItem, CardPopUp, Card } from '../components/CardItem';
 import { DeckService } from '../service/DeckService';
-import { useAppSelector } from '../service/hooks';
+import { useAppSelector, useAppDispatch } from '../service/hooks';
+import { showDecks } from '../service/navbar/deckSlice';
+import { Sidebar } from 'primereact/sidebar';
 
 export default function Deck() {
   const [visible, setVisible] = useState<boolean>(false);
   const [errors, setErrors] = useState([]);
   const layout = useAppSelector((state) => state.layout.layout);
   const [dialogState, setDialogState] = useState({ isOpen: false, id: '' });
+  const [sidebarVisible, setSidebarVisible] = useState<boolean>(true);
 
   interface IDeck {
     id: string;
     deckName: string;
   }
+
+  const dispatch = useAppDispatch();
+  const showExtraNavItem = useAppSelector((state) => state.deck.triggerShowDeckEvent);
+  useEffect(() => {
+    if (showExtraNavItem) {
+      setSidebarVisible(true);
+    }
+  }, [showExtraNavItem, dispatch]);
 
   const [deckData, setData] = useState(Array<IDeck>);
 
@@ -158,23 +169,29 @@ export default function Deck() {
 
   return (
     <>
-      {/* <p>{cards}</p> */}
       <div className="flex">
         <Toast ref={toast} />
-        <Menu id="deckMenu" model={items} />
-        <Dialog
-          header="Create new deck"
-          footer={footerContent}
-          modal={false}
-          visible={visible}
-          onHide={() => setVisible(false)}
-          draggable={false}
-          resizable={false}
-          position="left"
+        <Sidebar
+          visible={sidebarVisible}
+          onHide={() => {
+            setSidebarVisible(false);
+            dispatch(showDecks(false));
+          }}
         >
-          <InputText placeholder="Deck name" className="w-full mb-3" id="deckName" />
-        </Dialog>
-
+          <Menu id="deckMenu" model={items} />
+          <Dialog
+            header="Create new deck"
+            footer={footerContent}
+            modal={false}
+            visible={visible}
+            onHide={() => setVisible(false)}
+            draggable={false}
+            resizable={false}
+            position="left"
+          >
+            <InputText placeholder="Deck name" className="w-full mb-3" id="deckName" />
+          </Dialog>
+        </Sidebar>
         <div className="w-12">
           <DataView
             value={cards}
