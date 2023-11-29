@@ -98,6 +98,9 @@ export default function Navbar() {
     logout();
     resetFilters();
     navigate('/');
+    if (location.pathname == '/') {
+      window.location.reload();
+    }
   };
 
   const switchLayout = () => {
