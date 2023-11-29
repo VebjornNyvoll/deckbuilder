@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SelectButton } from 'primereact/selectbutton';
+import { useState } from 'react';
+import { SelectButton, SelectButtonChangeEvent } from 'primereact/selectbutton';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import '../Filters.css';
@@ -8,7 +8,7 @@ import filters from '../data/filters.json';
 export default function FilterComponent() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [filterValue, setFilterValue] = useState('');
-  const [filterInput, setFilterInput] = useState(null);
+  const [filterInput, setFilterInput] = useState<string | null>(null);
   const [comparison, setComparison] = useState(null);
   const [sorting, setSorting] = useState(null);
   const sortOptions = [
@@ -26,7 +26,7 @@ export default function FilterComponent() {
     value: filter,
   }));
 
-  const onFilterChange = (e) => {
+  const onFilterChange = (e: SelectButtonChangeEvent) => {
     const filterData = e.value;
     setSelectedFilter(filterData); // Save the entire filter object
 

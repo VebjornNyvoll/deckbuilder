@@ -1,4 +1,4 @@
-import { Schema, model, connect } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { IUser } from '../interfaces/user';
 import { deckSchema } from './Deck.js';
 
