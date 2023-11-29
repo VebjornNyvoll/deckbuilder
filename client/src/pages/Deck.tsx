@@ -76,6 +76,7 @@ export default function Deck() {
     });
   });
 
+  // footer for creating a new deck
   const footerContent = (
     <div>
       <Button
@@ -97,6 +98,7 @@ export default function Deck() {
   );
 
   const items = [
+    //Show all decks available
     {
       label: 'My decks',
       items: deckData.map((deck) => ({
@@ -158,7 +160,6 @@ export default function Deck() {
 
   return (
     <>
-      {/* <p>{cards}</p> */}
       <div className="flex">
         <Toast ref={toast} />
         <Menu id="deckMenu" model={items} />

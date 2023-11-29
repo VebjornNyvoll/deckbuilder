@@ -25,7 +25,7 @@ const LOGIN = gql`
 function Login() {
   const navigate = useNavigate();
   const context = useContext(AuthContext);
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const { onChange, values } = useForm({
     username: '',
@@ -61,7 +61,7 @@ function Login() {
       navigate('/');
     },
     onError({ graphQLErrors }) {
-      setErrors(graphQLErrors);
+      setErrors([graphQLErrors[0].message]);
     },
     variables: { username: values.username, password: values.password },
   });

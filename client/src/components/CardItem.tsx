@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
-import CardTooltip from './CardTooltip';
 import { Dialog } from 'primereact/dialog';
 import { CardOverlayComponent } from './CardOverlayComponent';
 import { OverlayPanel } from 'primereact/overlaypanel';
@@ -226,6 +225,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
         role="button"
         onClick={handleItemClick}
       >
+        {/* Cardset with book icon and faction display*/}
         <div className="flex align-items-center justify-content-between gap-2">
           <div className="flex align-items-center gap-2">
             <i className="pi pi-book"></i>{' '}
@@ -240,12 +240,12 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           ></Tag>
         </div>
 
+        {/* Card image and name */}
         <div className="flex flex-column align-items-center gap-3 py-5">
           {!dataSaver && <img className={'w-9 shadow-2 border-round'} src={card.img} alt={card.name} />}
           <div className="text-l font-bold">{card.name}</div>
           {dataSaver && (
             <>
-              <CardTooltip card={card}></CardTooltip>
               <p className="p-0 m-0 align-items-center">
                 {card.attack ? 'Attack: ' + card.attack.toString() : 'No attack'}
               </p>
@@ -254,6 +254,8 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
           )}
         </div>
       </button>
+
+      {/* Card type and add button */}
       <div
         style={{ borderTop: 'none' }}
         className="flex align-items-center p-4 justify-content-between border-1 surface-border surface-card"

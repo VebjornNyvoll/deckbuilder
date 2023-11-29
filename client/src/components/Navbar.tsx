@@ -8,7 +8,6 @@ import { setDataSaver } from '../service/cards/dataSaverSlice';
 import { useLocation } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import { PrimeReactContext } from 'primereact/api';
-import './NavbarIcon.css';
 
 export default function Navbar() {
   // Gets filters from redux store
@@ -20,11 +19,12 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
+  // Define where we are in the application
   const location = useLocation();
   const page = location.pathname == '/';
   const deckPage = location.pathname == '/decks';
 
-  //Darkmode handling
+  //Dark mode handling
   const { changeTheme } = useContext(PrimeReactContext);
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     // Load dark mode preference from localStorage on component mount
@@ -36,7 +36,7 @@ export default function Navbar() {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
   useEffect(() => {
-    // Check darkMode on component mount and call changeTheme if true
+    // Check darkMode on component mount and change themeLink.href if true
     const themeLink = document.getElementById('theme-link');
     if (darkMode && themeLink instanceof HTMLLinkElement) {
       themeLink.href = '/themes/viva-dark/theme.css';
@@ -71,7 +71,7 @@ export default function Navbar() {
   });
   const searchBar = <InputText id="search" placeholder="Search" type="search" onChange={debouncedResults} />;
 
-  //Filterchange handling
+  //Filter handling
   function addFilter(filter: { field: string; values: string[] }) {
     // Check if filter already exists
     if (filters[filter.field]?.includes(filter.values[0])) {

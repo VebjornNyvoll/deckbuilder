@@ -11,6 +11,7 @@ export function CardOverlayComponent(props: { cardId: string }) {
   const { cardId } = props;
   const context = useContext(AuthContext);
 
+  //gql for adding a card to a deck
   const CARD_TO_DECK = gql`
     mutation AddCards($cardIds: [ID!]!, $deckId: ID!) {
       addCards(cardIds: $cardIds, deckId: $deckId) {
@@ -21,7 +22,7 @@ export function CardOverlayComponent(props: { cardId: string }) {
       }
     }
   `;
-
+  //gql for getting all decks that a card can be added to
   const GET_DECKS = gql`
     query Decks {
       user {
@@ -107,6 +108,7 @@ export function CardOverlayComponent(props: { cardId: string }) {
         maxHeight: '400px',
       }}
     >
+      {/* datatable for primereact overlay panel to use*/}
       <Toast ref={toast} />
       <DataTable
         sortOrder={-1}
