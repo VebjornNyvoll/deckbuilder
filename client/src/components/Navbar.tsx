@@ -120,31 +120,36 @@ export default function Navbar() {
 
   const items = [
     {
+      id: 'menuitem-home',
       label: 'Home',
-      icon: <i className="pi pi-fw pi-home" />,
+      icon: "pi pi-fw pi-home",
       command: () => {
         location.pathname == '/' ? resetFilters() : navigate('/'); // Reset filters if already on home page
       },
     },
     {
+      id: 'menuitem-decks',
       label: 'Decks',
-      icon: <i className="pi pi-fw pi-database" />,
+      icon: "pi pi-fw pi-database",
       command: () => {
         navigate('/decks');
       },
     },
     {
+      id: 'menuitem-filter',
       visible: page,
       label: 'Filter',
-      icon: <i className="pi pi-fw pi-filter" />,
+      icon: "pi pi-fw pi-filter",
       className: Object.keys(filters).length > 0 ? activeFilterColor : '',
       items: [
         {
+          id: 'menuitem-faction',
           label: 'Faction',
-          icon: <i className="pi pi-fw pi-prime" />,
+          icon: "pi pi-fw pi-prime",
           className: filters?.faction?.length > 0 ? activeFilterColor : '',
           items: [
             {
+              id: 'menuitem-neutral',
               label: 'Neutral',
               className: filters?.faction?.includes('Neutral') ? activeFilterColor : '',
               command: () => {
@@ -152,6 +157,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-alliance',
               label: 'Alliance',
               className: filters?.faction?.includes('Alliance') ? activeFilterColor : '',
               command: () => {
@@ -159,6 +165,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-horde',
               label: 'Horde',
               className: filters?.faction?.includes('Horde') ? activeFilterColor : '',
               command: () => {
@@ -168,11 +175,13 @@ export default function Navbar() {
           ],
         },
         {
+          id: 'menuitem-rarity',
           label: 'Rarity',
-          icon: <i className="pi pi-fw pi-box" />,
+          icon: "pi pi-fw pi-box",
           className: filters?.rarity?.length > 0 ? activeFilterColor : '',
           items: [
             {
+              id: 'menuitem-free',
               label: 'Free',
               className: filters?.rarity?.includes('Free') ? activeFilterColor : '',
               command: () => {
@@ -180,6 +189,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-common',
               label: 'Common',
               className: filters?.rarity?.includes('Common') ? activeFilterColor : '',
               command: () => {
@@ -187,6 +197,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-rare',
               label: 'Rare',
               className: filters?.rarity?.includes('Rare') ? activeFilterColor : '',
               command: () => {
@@ -194,6 +205,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-epic',
               label: 'Epic',
               className: filters?.rarity?.includes('Epic') ? activeFilterColor : '',
               command: () => {
@@ -201,6 +213,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-legendary',
               label: 'Legendary',
               className: filters?.rarity?.includes('Legendary') ? activeFilterColor : '',
               command: () => {
@@ -210,11 +223,13 @@ export default function Navbar() {
           ],
         },
         {
+          id: 'menuitem-type',
           label: 'Type',
-          icon: <i className="pi pi-fw pi-book" />,
+          icon: "pi pi-fw pi-book",
           className: filters?.type?.length > 0 ? activeFilterColor : '',
           items: [
             {
+              id: 'menuitem-spell',
               label: 'Spell',
               className: filters?.type?.includes('Spell') ? activeFilterColor : '',
               command: () => {
@@ -222,6 +237,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-minion',
               label: 'Minion',
               className: filters?.type?.includes('Minion') ? activeFilterColor : '',
               command: () => {
@@ -229,6 +245,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-hero',
               label: 'Hero',
               className: filters?.type?.includes('Hero') ? activeFilterColor : '',
               command: () => {
@@ -236,6 +253,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-hero-power',
               label: 'Hero power',
               className: filters?.type?.includes('Hero Power') ? activeFilterColor : '',
               command: () => {
@@ -243,6 +261,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-weapon',
               label: 'Weapons',
               className: filters?.type?.includes('Weapon') ? activeFilterColor : '',
               command: () => {
@@ -250,6 +269,7 @@ export default function Navbar() {
               },
             },
             {
+              id: 'menuitem-location',
               label: 'Location',
               className: filters?.type?.includes('Location') ? activeFilterColor : '',
               command: () => {
@@ -262,9 +282,10 @@ export default function Navbar() {
           separator: true,
         },
         {
-          disabled: Object.keys(filters).length > 0 ? false : true,
+          id: 'menuitem-reset-filters',
+          disabled: Object.keys(filters).length <= 0,
           label: 'Reset filters',
-          icon: <i className="pi pi-fw pi-filter-slash" />,
+          icon: "pi pi-fw pi-filter-slash",
           command: () => {
             resetFilters();
           },
@@ -272,27 +293,30 @@ export default function Navbar() {
       ],
     },
     {
+      id: 'menuitem-sort',
       visible: page,
       label: 'Sort',
-      data: <div data-testid="sort-menuitem"></div>,
-      icon: <i data-testid="sort-menuitem" className="pi pi-fw pi-sort-alt" />,
+      icon: "pi pi-fw pi-sort-alt",
       items: [
         {
+          id: 'menuitem-cost',
           label: 'Cost',
-          icon: <i className="pi pi-fw pi-money-bill" />,
+          icon: "pi pi-fw pi-money-bill",
           className: sort?.field == 'cost' ? activeFilterColor : '',
           items: [
             {
+              id: 'menuitem-cost-htl',
               label: 'High to low',
-              icon: <i className="pi pi-fw pi-sort-numeric-down-alt" />,
+              icon: "pi pi-fw pi-sort-numeric-down-alt",
               className: sort?.field == 'cost' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('cost', sortOrder.DESC);
               },
             },
             {
+              id: 'menuitem-cost-lth',
               label: 'Low to high',
-              icon: <i className="pi pi-fw pi-sort-numeric-up" />,
+              icon: "pi pi-fw pi-sort-numeric-up",
               className: sort?.field == 'cost' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('cost', sortOrder.ASC);
@@ -301,21 +325,24 @@ export default function Navbar() {
           ],
         },
         {
+          id: 'menuitem-name',
           label: 'Name',
-          icon: <i className="pi pi-fw pi-id-card" />,
+          icon: "pi pi-fw pi-id-card",
           className: sort?.field == 'name' ? activeFilterColor : '',
           items: [
             {
+              id: 'menuitem-name-az',
               label: 'A-Z',
-              icon: <i className="pi pi-fw pi-sort-alpha-down" />,
+              icon: "pi pi-fw pi-sort-alpha-down",
               className: sort?.field == 'name' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('name', sortOrder.ASC);
               },
             },
             {
+              id: 'menuitem-name-za',
               label: 'Z-A',
-              icon: <i className="pi pi-fw pi-sort-alpha-up-alt" />,
+              icon: "pi pi-fw pi-sort-alpha-up-alt",
               className: sort?.field == 'name' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('name', sortOrder.DESC);
@@ -324,23 +351,24 @@ export default function Navbar() {
           ],
         },
         {
+          id: 'menuitem-attack',
           label: 'Attack',
-          data: <div data-testid="attack" />,
-          icon: <i data-testid="attack" className="pi pi-fw pi-wrench" />,
+          icon: "pi pi-fw pi-wrench",
           className: sort?.field == 'attack' ? activeFilterColor : '',
           items: [
             {
+              id: 'menuitem-attack-htl',
               label: 'High to low',
-              data: <div data-testid="attack-htl" />,
-              icon: <i data-testid="attack-htl" className="pi pi-fw pi-sort-numeric-down-alt" />,
+              icon: "pi pi-fw pi-sort-numeric-down-alt",
               className: sort?.field == 'attack' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('attack', sortOrder.DESC);
               },
             },
             {
+              id: 'menuitem-attack-lth',
               label: 'Low to high',
-              icon: <i className="pi pi-fw pi-sort-numeric-up" />,
+              icon: "pi pi-fw pi-sort-numeric-up",
               className: sort?.field == 'attack' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('attack', sortOrder.ASC);
@@ -349,21 +377,24 @@ export default function Navbar() {
           ],
         },
         {
+          id: 'menuitem-health',
           label: 'Health',
-          icon: <i className="pi pi-fw pi-heart" />,
+          icon: "pi pi-fw pi-heart",
           className: sort?.field == 'health' ? activeFilterColor : '',
           items: [
             {
+              id: 'menuitem-health-htl',
               label: 'High to low',
-              icon: <i className="pi pi-fw pi-sort-numeric-down-alt" />,
+              icon: "pi pi-fw pi-sort-numeric-down-alt",
               className: sort?.field == 'health' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('health', sortOrder.DESC);
               },
             },
             {
+              id: 'menuitem-health-lth',
               label: 'Low to high',
-              icon: <i className="pi pi-fw pi-sort-numeric-up" />,
+              icon: "pi pi-fw pi-sort-numeric-up",
               className: sort?.field == 'health' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('health', sortOrder.ASC);
@@ -374,26 +405,30 @@ export default function Navbar() {
       ],
     },
     {
+      id: 'menuitem-layout',
       visible: page || deckPage,
       label: layout == 'grid' ? 'List' : 'Grid',
-      icon: layout == 'grid' ? <i className="pi pi-fw pi-list" /> : <i className="pi pi-fw pi-th-large" />,
+      icon: layout == 'grid' ? "pi pi-fw pi-list" : "pi pi-fw pi-th-large",
       command: () => {
         switchLayout();
       },
     },
     {
+      id: 'menuitem-searchbar',
       visible: page,
       label: 'Searchbar',
 
       template: searchBar,
     },
     {
+      id: 'menuitem-profile',
       label: 'Profile',
-      icon: <i className="pi pi-fw pi-user" />,
+      icon: "pi pi-fw pi-user",
       items: [
         {
+          id: 'menuitem-login-logout',
           label: user ? 'Log out' : 'Login',
-          icon: user ? <i className="pi pi-fw pi-user-minus" /> : <i className="pi pi-fw pi-user-plus" />,
+          icon: user ? "pi pi-fw pi-user-minus" : "pi pi-fw pi-user-plus",
           command: () => {
             user ? onLogout() : navigate('/login');
           },
@@ -402,15 +437,17 @@ export default function Navbar() {
           separator: true,
         },
         {
+          id: 'menuitem-data-saver',
           label: dataSaver ? 'Disable Data Saver' : 'Enable Data Saver',
-          icon: dataSaver ? <i className="pi pi-fw pi-times" /> : <i className="pi pi-fw pi-bolt" />,
+          icon: dataSaver ? "pi pi-fw pi-times" : "pi pi-fw pi-bolt",
           command: () => {
             DataSaver();
           },
         },
         {
+          id: 'menuitem-theme-change',
           label: darkMode ? 'Light mode' : 'Dark mode',
-          icon: darkMode ? <i className="pi pi-fw pi-sun" /> : <i className="pi pi-fw pi-moon" />,
+          icon: darkMode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
           command: () => {
             toggleTheme();
           },
