@@ -69,7 +69,9 @@ export default function Navbar() {
       debouncedResults.cancel();
     };
   });
-  const searchBar = <InputText id="search" placeholder="Search" type="search" onChange={debouncedResults} />;
+  const searchBar = (
+    <InputText id="search"  placeholder="Search" type="search" onChange={debouncedResults}   />
+    );
 
   //Filterchange handling
   function addFilter(filter: { field: string; values: string[] }) {
@@ -84,8 +86,8 @@ export default function Navbar() {
   }
 
   const resetFilters = () => {
-    setSort('name', sortOrder.ASC);
-    dispatch({ type: 'filters/clearFilters' });
+    setSort('name', sortOrder.ASC)
+    dispatch({ type: 'filters/clearFilters'});
     const searchBarById = document.getElementById('search');
     if (searchBarById instanceof HTMLInputElement) {
       searchBarById.value = '';
@@ -121,13 +123,15 @@ export default function Navbar() {
   const items = [
     {
       id: 'menuitem-home',
+      className: location.pathname == '/' ? 'bg-gray-100 shadow-1' : '',
       label: 'Home',
       icon: "pi pi-fw pi-home",
       command: () => {
-        location.pathname == '/' ? resetFilters() : navigate('/'); // Reset filters if already on home page
+        location.pathname == '/'? resetFilters() : navigate('/'); // Reset filters if already on home page
       },
     },
     {
+      className: deckPage ? 'bg-gray-100 shadow-1' : '',
       id: 'menuitem-decks',
       label: 'Decks',
       icon: "pi pi-fw pi-database",
@@ -422,6 +426,7 @@ export default function Navbar() {
     },
     {
       id: 'menuitem-profile',
+      className: location.pathname == '/login' || location.pathname == '/create-account' ? 'bg-gray-100 shadow-1' : '',
       label: 'Profile',
       icon: "pi pi-fw pi-user",
       items: [
