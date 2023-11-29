@@ -139,7 +139,7 @@ export const ListItem: React.FC<CardItemProps> = ({ card, onClick }) => {
         onClick={handleItemClick}
         aria-haspopup
         aria-labelledby={idString + 'set ' + idString + 'faction ' + idString + 'name'}
-        className="col-12 border-1 surface-border surface-card border-round "
+        className="col-12 border-1 surface-border surface-card border-round cursor-pointer"
       >
         <div className="flex rem flex-row xl:align-items-start p-4 gap-4">
           {!dataSaver && (
@@ -220,7 +220,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
     <div className="col-12 sm:col-6 lg:col-4 xl:col-3 p-2">
       <button
         style={{ width: '100%', borderBottom: "none", paddingBottom: "0"}}
-        className="p-4 border-1 surface-border surface-card"
+        className="p-4 border-1 surface-border surface-card cursor-pointer"
         aria-haspopup
         aria-labelledby={idString + 'set ' + idString + 'faction ' + idString + 'name'}
         role="button"
