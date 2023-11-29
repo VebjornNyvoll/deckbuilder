@@ -91,7 +91,7 @@ const resolvers = {
             } else {
               // For other fields, apply default matching
               query[filter.field] = { $in: filter.values };
-            } 
+            }
           } // Check if filters are sent as a single value
           else if (filter.value) {
             // Case-insensitive matching for searchbar field

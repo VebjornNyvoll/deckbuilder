@@ -226,7 +226,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
         onClick={handleItemClick}
       >
         {/* Cardset with book icon and faction display*/}
-        <div className="flex align-items-center justify-content-between gap-2">   
+        <div className="flex align-items-center justify-content-between gap-2">
           <div className="flex align-items-center gap-2">
             <i className="pi pi-book"></i>{' '}
             <span id={idString + 'set'} className="font-semibold text-xs">
@@ -255,7 +255,7 @@ export const GridItem: React.FC<CardItemProps> = ({ card, onClick }) => {
         </div>
       </button>
 
-      {/* Card type and add button */}      
+      {/* Card type and add button */}
       <div
         style={{ borderTop: 'none' }}
         className="flex align-items-center p-4 justify-content-between border-1 surface-border surface-card"

@@ -108,7 +108,7 @@ export function CardOverlayComponent(props: { cardId: string }) {
         maxHeight: '400px',
       }}
     >
-      { /* datatable for primereact overlay panel to use*/}
+      {/* datatable for primereact overlay panel to use*/}
       <Toast ref={toast} />
       <DataTable
         sortOrder={-1}

@@ -14,7 +14,7 @@ export default function CardView() {
   const dispatch = useAppDispatch();
   const filters = useAppSelector((state) => state.filters);
   const sort = useAppSelector((state) => state.sort);
-  const cards = useAppSelector((state) => state.cards.cards); 
+  const cards = useAppSelector((state) => state.cards.cards);
   const layout = useAppSelector((state) => state.layout.layout);
 
   // CardpopUp is a dialog that shows the card details
@@ -31,9 +31,9 @@ export default function CardView() {
   };
 
   useEffect(() => {
-    options.limit = 20; 
-    options.skip = 0; 
-    options.sortBy = sort; 
+    options.limit = 20;
+    options.skip = 0;
+    options.sortBy = sort;
     loadInitialCards();
   }, [filters, sort]);
 
@@ -49,17 +49,17 @@ export default function CardView() {
     CardService.getFilteredCards(filters, options)
       .then((data) => {
         if (data.cards) {
-          dispatch(setCards(data.cards)); 
+          dispatch(setCards(data.cards));
           setHasMore(true);
         } else {
-          dispatch(setCards([])); 
+          dispatch(setCards([]));
           setHasMore(false);
         }
         setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching cards:', error);
-        dispatch(setCards([])); 
+        dispatch(setCards([]));
         setHasMore(false);
         setLoading(false);
       });
@@ -136,7 +136,7 @@ export default function CardView() {
 
   return (
     // RemoveScroll is used to prevent the whole page from scrolling when the user scrolls through the cards
-    <RemoveScroll> 
+    <RemoveScroll>
       <div className="card" ref={scrollContainerRef} style={{ height: 'calc(100vh - 62px)', overflow: 'auto' }}>
         <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
         {dialogState.id && <CardPopUp cardId={dialogState.id} open={dialogState.isOpen} onClose={closeDialog} />}
