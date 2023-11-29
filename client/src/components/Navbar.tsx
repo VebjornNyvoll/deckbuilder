@@ -86,6 +86,7 @@ export default function Navbar() {
   }
 
   const resetFilters = () => {
+    setSort('name', sortOrder.ASC)
     dispatch({ type: 'filters/clearFilters'});
     const searchBarById = document.getElementById('search');
     if (searchBarById instanceof HTMLInputElement) {
@@ -121,9 +122,7 @@ export default function Navbar() {
       label: 'Home',
       icon: <i className="pi pi-fw pi-home" />,
       command: () => {
-        setSort('name', sortOrder.ASC);
-        resetFilters();
-        navigate('/');
+        location.pathname == '/'? resetFilters() : navigate('/'); // Reset filters if already on home page
       },
     },
     {
