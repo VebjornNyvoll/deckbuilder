@@ -69,9 +69,7 @@ export default function Navbar() {
       debouncedResults.cancel();
     };
   });
-  const searchBar = (
-    <InputText id="search"  placeholder="Search" type="search" onChange={debouncedResults}   />
-    );
+  const searchBar = <InputText id="search" placeholder="Search" type="search" onChange={debouncedResults} />;
 
   //Filterchange handling
   function addFilter(filter: { field: string; values: string[] }) {
@@ -86,8 +84,8 @@ export default function Navbar() {
   }
 
   const resetFilters = () => {
-    setSort('name', sortOrder.ASC)
-    dispatch({ type: 'filters/clearFilters'});
+    setSort('name', sortOrder.ASC);
+    dispatch({ type: 'filters/clearFilters' });
     const searchBarById = document.getElementById('search');
     if (searchBarById instanceof HTMLInputElement) {
       searchBarById.value = '';
@@ -125,16 +123,16 @@ export default function Navbar() {
       id: 'menuitem-home',
       className: location.pathname == '/' ? 'bg-gray-100 shadow-1' : '',
       label: 'Home',
-      icon: "pi pi-fw pi-home",
+      icon: 'pi pi-fw pi-home',
       command: () => {
-        location.pathname == '/'? resetFilters() : navigate('/'); // Reset filters if already on home page
+        location.pathname == '/' ? resetFilters() : navigate('/'); // Reset filters if already on home page
       },
     },
     {
       className: deckPage ? 'bg-gray-100 shadow-1' : '',
       id: 'menuitem-decks',
       label: 'Decks',
-      icon: "pi pi-fw pi-database",
+      icon: 'pi pi-fw pi-database',
       command: () => {
         navigate('/decks');
       },
@@ -143,13 +141,13 @@ export default function Navbar() {
       id: 'menuitem-filter',
       visible: page,
       label: 'Filter',
-      icon: "pi pi-fw pi-filter",
+      icon: 'pi pi-fw pi-filter',
       className: Object.keys(filters).length > 0 ? activeFilterColor : '',
       items: [
         {
           id: 'menuitem-faction',
           label: 'Faction',
-          icon: "pi pi-fw pi-prime",
+          icon: 'pi pi-fw pi-prime',
           className: filters?.faction?.length > 0 ? activeFilterColor : '',
           items: [
             {
@@ -181,7 +179,7 @@ export default function Navbar() {
         {
           id: 'menuitem-rarity',
           label: 'Rarity',
-          icon: "pi pi-fw pi-box",
+          icon: 'pi pi-fw pi-box',
           className: filters?.rarity?.length > 0 ? activeFilterColor : '',
           items: [
             {
@@ -229,7 +227,7 @@ export default function Navbar() {
         {
           id: 'menuitem-type',
           label: 'Type',
-          icon: "pi pi-fw pi-book",
+          icon: 'pi pi-fw pi-book',
           className: filters?.type?.length > 0 ? activeFilterColor : '',
           items: [
             {
@@ -289,7 +287,7 @@ export default function Navbar() {
           id: 'menuitem-reset-filters',
           disabled: Object.keys(filters).length <= 0,
           label: 'Reset filters',
-          icon: "pi pi-fw pi-filter-slash",
+          icon: 'pi pi-fw pi-filter-slash',
           command: () => {
             resetFilters();
           },
@@ -300,18 +298,18 @@ export default function Navbar() {
       id: 'menuitem-sort',
       visible: page,
       label: 'Sort',
-      icon: "pi pi-fw pi-sort-alt",
+      icon: 'pi pi-fw pi-sort-alt',
       items: [
         {
           id: 'menuitem-cost',
           label: 'Cost',
-          icon: "pi pi-fw pi-money-bill",
+          icon: 'pi pi-fw pi-money-bill',
           className: sort?.field == 'cost' ? activeFilterColor : '',
           items: [
             {
               id: 'menuitem-cost-htl',
               label: 'High to low',
-              icon: "pi pi-fw pi-sort-numeric-down-alt",
+              icon: 'pi pi-fw pi-sort-numeric-down-alt',
               className: sort?.field == 'cost' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('cost', sortOrder.DESC);
@@ -320,7 +318,7 @@ export default function Navbar() {
             {
               id: 'menuitem-cost-lth',
               label: 'Low to high',
-              icon: "pi pi-fw pi-sort-numeric-up",
+              icon: 'pi pi-fw pi-sort-numeric-up',
               className: sort?.field == 'cost' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('cost', sortOrder.ASC);
@@ -331,13 +329,13 @@ export default function Navbar() {
         {
           id: 'menuitem-name',
           label: 'Name',
-          icon: "pi pi-fw pi-id-card",
+          icon: 'pi pi-fw pi-id-card',
           className: sort?.field == 'name' ? activeFilterColor : '',
           items: [
             {
               id: 'menuitem-name-az',
               label: 'A-Z',
-              icon: "pi pi-fw pi-sort-alpha-down",
+              icon: 'pi pi-fw pi-sort-alpha-down',
               className: sort?.field == 'name' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('name', sortOrder.ASC);
@@ -346,7 +344,7 @@ export default function Navbar() {
             {
               id: 'menuitem-name-za',
               label: 'Z-A',
-              icon: "pi pi-fw pi-sort-alpha-up-alt",
+              icon: 'pi pi-fw pi-sort-alpha-up-alt',
               className: sort?.field == 'name' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('name', sortOrder.DESC);
@@ -357,13 +355,13 @@ export default function Navbar() {
         {
           id: 'menuitem-attack',
           label: 'Attack',
-          icon: "pi pi-fw pi-wrench",
+          icon: 'pi pi-fw pi-wrench',
           className: sort?.field == 'attack' ? activeFilterColor : '',
           items: [
             {
               id: 'menuitem-attack-htl',
               label: 'High to low',
-              icon: "pi pi-fw pi-sort-numeric-down-alt",
+              icon: 'pi pi-fw pi-sort-numeric-down-alt',
               className: sort?.field == 'attack' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('attack', sortOrder.DESC);
@@ -372,7 +370,7 @@ export default function Navbar() {
             {
               id: 'menuitem-attack-lth',
               label: 'Low to high',
-              icon: "pi pi-fw pi-sort-numeric-up",
+              icon: 'pi pi-fw pi-sort-numeric-up',
               className: sort?.field == 'attack' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('attack', sortOrder.ASC);
@@ -383,13 +381,13 @@ export default function Navbar() {
         {
           id: 'menuitem-health',
           label: 'Health',
-          icon: "pi pi-fw pi-heart",
+          icon: 'pi pi-fw pi-heart',
           className: sort?.field == 'health' ? activeFilterColor : '',
           items: [
             {
               id: 'menuitem-health-htl',
               label: 'High to low',
-              icon: "pi pi-fw pi-sort-numeric-down-alt",
+              icon: 'pi pi-fw pi-sort-numeric-down-alt',
               className: sort?.field == 'health' && sort?.order == sortOrder.DESC ? activeFilterColor : '',
               command: () => {
                 setSort('health', sortOrder.DESC);
@@ -398,7 +396,7 @@ export default function Navbar() {
             {
               id: 'menuitem-health-lth',
               label: 'Low to high',
-              icon: "pi pi-fw pi-sort-numeric-up",
+              icon: 'pi pi-fw pi-sort-numeric-up',
               className: sort?.field == 'health' && sort?.order == sortOrder.ASC ? activeFilterColor : '',
               command: () => {
                 setSort('health', sortOrder.ASC);
@@ -412,7 +410,7 @@ export default function Navbar() {
       id: 'menuitem-layout',
       visible: page || deckPage,
       label: layout == 'grid' ? 'List' : 'Grid',
-      icon: layout == 'grid' ? "pi pi-fw pi-list" : "pi pi-fw pi-th-large",
+      icon: layout == 'grid' ? 'pi pi-fw pi-list' : 'pi pi-fw pi-th-large',
       command: () => {
         switchLayout();
       },
@@ -428,12 +426,12 @@ export default function Navbar() {
       id: 'menuitem-profile',
       className: location.pathname == '/login' || location.pathname == '/create-account' ? 'bg-gray-100 shadow-1' : '',
       label: 'Profile',
-      icon: "pi pi-fw pi-user",
+      icon: 'pi pi-fw pi-user',
       items: [
         {
           id: 'menuitem-login-logout',
           label: user ? 'Log out' : 'Login',
-          icon: user ? "pi pi-fw pi-user-minus" : "pi pi-fw pi-user-plus",
+          icon: user ? 'pi pi-fw pi-user-minus' : 'pi pi-fw pi-user-plus',
           command: () => {
             user ? onLogout() : navigate('/login');
           },
@@ -444,7 +442,7 @@ export default function Navbar() {
         {
           id: 'menuitem-data-saver',
           label: dataSaver ? 'Disable Data Saver' : 'Enable Data Saver',
-          icon: dataSaver ? "pi pi-fw pi-times" : "pi pi-fw pi-bolt",
+          icon: dataSaver ? 'pi pi-fw pi-times' : 'pi pi-fw pi-bolt',
           command: () => {
             DataSaver();
           },
@@ -452,7 +450,7 @@ export default function Navbar() {
         {
           id: 'menuitem-theme-change',
           label: darkMode ? 'Light mode' : 'Dark mode',
-          icon: darkMode ? "pi pi-fw pi-sun" : "pi pi-fw pi-moon",
+          icon: darkMode ? 'pi pi-fw pi-sun' : 'pi pi-fw pi-moon',
           command: () => {
             toggleTheme();
           },

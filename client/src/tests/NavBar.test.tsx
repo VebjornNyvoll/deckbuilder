@@ -92,8 +92,6 @@ describe('Navbar test', async () => {
       await wait(400);
       const actions = store.getActions();
 
-      console.log('Actions in the store:', actions);
-
       if (actions.length > 0) {
         const expectedPayload = { type: 'sort/sort', payload: { field: 'attack', order: -1 } };
         const firstAction = actions[0];
