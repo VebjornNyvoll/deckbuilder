@@ -6,7 +6,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
-import { GridItem, ListItem } from '../components/CardItem';
+import { GridItem, ListItem, CardPopUp, Card } from '../components/CardItem';
 import { DeckService } from '../service/DeckService';
 import { useAppSelector } from '../service/hooks';
 
@@ -14,6 +14,7 @@ export default function Deck() {
   const [visible, setVisible] = useState<boolean>(false);
   const [errors, setErrors] = useState([]);
   const layout = useAppSelector((state) => state.layout.layout);
+  const [dialogState, setDialogState] = useState({ isOpen: false, id: '' });
 
   interface IDeck {
     id: string;
@@ -28,6 +29,14 @@ export default function Deck() {
     });
   };
 
+  const openDialog = (card: Card) => {
+    setDialogState({ isOpen: true, id: card.id });
+  };
+
+  const closeDialog = () => {
+    setDialogState({ isOpen: false, id: undefined });
+  };
+
   const [cards, setCards] = useState([]);
 
   const itemTemplate = (card: Card, layout: string) => {
@@ -39,9 +48,9 @@ export default function Deck() {
       return;
     }
     if (layout === 'list') {
-      return <ListItem card={card} onClick={handleClick} />;
+      return <ListItem card={card} onClick={() => openDialog(card)} />;
     } else if (layout === 'grid') {
-      return <GridItem card={card} onClick={handleClick} />;
+      return <GridItem card={card} onClick={() => openDialog(card)} />;
     }
   };
 
@@ -178,6 +187,7 @@ export default function Deck() {
             itemTemplate={itemTemplate}
             layout={layout}
           />
+          {dialogState.id && <CardPopUp cardId={dialogState.id} open={dialogState.isOpen} onClose={closeDialog} />}
         </div>
       </div>
       {errors.map(function (error) {
