@@ -1,56 +1,23 @@
-/// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+import { env } from '../../custom.config';
 
+/// <reference types="cypress" />
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
-      deleteCurrentUser: () => void;
+      deleteCurrentUser: (token: string) => Chainable<Element>;
+      getToken: (username: string, password: string) => Chainable<{ token: string; error: boolean }>;
     }
   }
 }
 
-Cypress.Commands.add('deleteCurrentUser', () => {
+Cypress.Commands.add('deleteCurrentUser', (token: string) => {
   cy.request({
     method: 'POST',
     headers: {
-      Authorization: `${localStorage.getItem('token')}`,
+      Authorization: `${token}`,
     },
-    url: 'http://localhost:4000/graphql',
+    url: env.REACT_APP_BACKEND_URL,
     body: {
       query: `mutation Mutation {
                 deleteCurrentUser {
@@ -68,6 +35,36 @@ Cypress.Commands.add('deleteCurrentUser', () => {
       cy.log('User deleted successfully:', response.body.data.deleteCurrentUser.username);
     }
   });
+});
+Cypress.Commands.add('getToken', (username, password) => {
+  return cy
+    .request({
+      method: 'POST',
+      url: env.REACT_APP_BACKEND_URL,
+      body: {
+        query: `
+        mutation Login($username: String!, $password: String!) {
+          login(username: $username, password: $password) {
+            token
+            error {
+              error
+              message
+            }
+          }
+        }`,
+        variables: {
+          username: username,
+          password: password,
+        },
+      },
+    })
+    .then((response) => {
+      if (response.body.data.login.error.error) {
+        return { token: null, error: true };
+      } else {
+        return { token: response.body.data.login.token, error: false };
+      }
+    });
 });
 
 export {};

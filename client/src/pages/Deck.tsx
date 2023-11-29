@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { DataView } from 'primereact/dataview';
 import { Menu } from 'primereact/menu';
 import { classNames } from 'primereact/utils';
@@ -29,6 +29,7 @@ export default function Deck() {
     });
   };
 
+  const [cards, setCards] = useState([]);
   const openDialog = (card: Card) => {
     setDialogState({ isOpen: true, id: card.id });
   };
@@ -37,13 +38,7 @@ export default function Deck() {
     setDialogState({ isOpen: false, id: undefined });
   };
 
-  const [cards, setCards] = useState([]);
-
   const itemTemplate = (card: Card, layout: string) => {
-    const handleClick = (card: Card) => {
-      openDialog(card);
-    };
-
     if (!card) {
       return;
     }

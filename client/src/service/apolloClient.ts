@@ -1,8 +1,9 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { env } from '../../custom.config';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/Hearthstone',
+  uri: env.REACT_APP_BACKEND_URL,
 });
 
 const authLink = setContext((_, { headers }) => {

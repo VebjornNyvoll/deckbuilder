@@ -1,7 +1,8 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { env } from '../../custom.config';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/Hearthstone',
+  uri: env.REACT_APP_BACKEND_URL,
   cache: new InMemoryCache(),
 });
 

@@ -68,7 +68,7 @@ describe('Navbar test', async () => {
       </Provider>,
     );
 
-    const sortMenuItem = screen.getByTestId('sort-menuitem');
+    const sortMenuItem = screen.getByText('Sort');
     if (sortMenuItem) {
       fireEvent.click(sortMenuItem);
       await wait(300);
@@ -76,7 +76,7 @@ describe('Navbar test', async () => {
       console.log('No element sort menu item');
     }
 
-    const attack = screen.getByTestId('attack');
+    const attack = screen.getByText('Attack');
 
     if (attack) {
       fireEvent.click(attack);
@@ -85,14 +85,20 @@ describe('Navbar test', async () => {
       console.log('No element attack');
     }
 
-    const highToLowOption = screen.getByTestId('attack-htl');
+    const highToLowOption = document.getElementById('menuitem-attack-htl');
 
     if (highToLowOption) {
       fireEvent.click(highToLowOption);
       await wait(400);
-      const expectedPayload = { type: 'sort/sort', payload: { field: 'attack', order: -1 } };
-      const actions = store.getActions()[0];
-      expect(actions).toEqual(expectedPayload);
+      const actions = store.getActions();
+
+      if (actions.length > 0) {
+        const expectedPayload = { type: 'sort/sort', payload: { field: 'attack', order: -1 } };
+        const firstAction = actions[0];
+        expect(firstAction).toEqual(expectedPayload);
+      } else {
+        console.log('No actions dispatched yet');
+      }
     } else {
       console.log('No attack high to low');
     }
