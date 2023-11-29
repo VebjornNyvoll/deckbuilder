@@ -172,6 +172,7 @@ export default function Deck() {
       <div className="flex">
         <Toast ref={toast} />
         <Sidebar
+          position="right"
           visible={sidebarVisible}
           onHide={() => {
             setSidebarVisible(false);
@@ -187,7 +188,7 @@ export default function Deck() {
             onHide={() => setVisible(false)}
             draggable={false}
             resizable={false}
-            position="left"
+            position="right"
           >
             <InputText placeholder="Deck name" className="w-full mb-3" id="deckName" />
           </Dialog>
