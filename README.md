@@ -4,7 +4,7 @@
 
 ## Concept
 
-![Alt text](readme/img/image.png)
+![Screenshot of main page](readme/img/image.png)
 This project is a deckbuilding application for the digital collectible card game Hearthstone. In the game, users can get different cards and build decks using them. Our application makes designing such decks significantly easier and gives the users access to all cards so they can design their dream decks!
 
 The database has been created by scraping the [Hearthstone API](https://hearthstoneapi.com/) before using a custom Python script to clean the data. The main page loads different cards for the user to look at and add to their decks by hittng the plus button. The users can filter and search for cards to find the card they're looking for. Users may also click on a card to get more info about it.
@@ -13,37 +13,11 @@ In the /decks page, users can look at their decks, create new decks and delete d
 
 The project's styling mostly comes from the component library PrimeReact and we use PrimeFlex as our utility library. PrimeFlex is very similar to Tailwind which is why the syntax will probably be familiar to a lot of people.
 
-## How to run the project
+## How to run the frontend locally
 
-The project assumes the user has Node v.20.6.0 or higher. The project is also reliant on a MongoDB database which the user has to initialize with card data. If you'd like to avoid setting up the database locally, [you may access our VM's database using this url.](http://it2810-66.idi.ntnu.no:4000/Hearthstone) We highly reccommend connecting to the VM database instead of creating one locally as it saves you a lot of time.
+The project assumes the user has Node v.20.6.0 or higher. The client is set up to automatically use the backend and database from the virtual machine. This means you can simply run the client and avoid having to boot the server at all! If you prefer to host the server and database locally however you can of course do so.
 
-If you'd like to create your own local version however, here's how to do it:
-
-### Set up local database
-
-1. Copy the contents of the file [allcards3.json from the allcards branch](../../allcards/all_cards/allcards3.json).
-2. Download [MongoDB Compass GUI](https://www.mongodb.com/try/download/compass) that suits your OS.
-3. Create a new connection to whatever URI you set in your `.env` file. (The next chapter explains how the `.env` file should be set up.) Here's an example of how our connection page looks:
-
-![mongodb://localhost:27017/ connection](/readme/img/mongodb-connection.png){width=35% height=35%}
-
-4. Create a database named "Hearthstone".
-5. Create a collection named "cards" and then click "Add data" within that collection and select "Import Json".
-6. Import the contents of the allcards3.json file you copied earlier.
-7. Create another collection within the "Hearthstone" database called "users" and leave it empty. It will be filled when you beigin creating accounts.
-8. Your database is now ready to roll!
-
-The repository is split into two parts: client and server. This is because we want the frontend to be as independent as possible of the backend. After cloning the project you should run the command `npm i` in [our root folder.](/../../)
-
-Subsequently after cloning the project users have to cd into both [the client](/client) and [the server directory](/server), for instance using a split terminal. You then need to run `npm i` in both directories. **Beware: ** The server can be initialized using the command `npm start` and in the client folder the command is `npm run dev`. To run the server you also need a `.env` file in the server folder created by yourself. We do not store this in Gitlab for security reasons as well as to allow users to select their own ports. Your `.env` file should look like this:
-
-```
-PORT = 4000
-MONGOOSE_URI = mongodb://localhost:27017/Hearthstone
-JWT_SECRET = TotallySecretJWT
-```
-
-You can replace port with whatever port you want (although we highly recommend using a port above 1024 due to Linux constraints). You also need to update references to port 4000 in the code. `MONGOOSE_URI` will be your MongoDB connect URI. `JWT_SECRET` can be literally anything you want, but we highly recommend choosing something random (and definitely not TotallySecretJWT).
+After cloning the project you should run the command `npm i` in [our root folder.](/../../) before navigating to the [the client directory.](/client) You also have to run `npm i` in this client folder to get all required dependencies. Finally, just write 'npm run dev' in the client folder and you're done!
 
 ## Folder structure
 
@@ -51,7 +25,39 @@ In [client/src](/client/src) components are naturally placed into the [component
 
 [App.tsx](/client/src/App.tsx) is used for routing between pages and isn't really a page on its own. That's why it's not within the pages folder. This file is useful to visit if you wonder how routing works in this project and also to see how we wrap different providers. For instance, you will find our authentication provider and our Redux store provider here.
 
-[Services](/client/src/service/) are used to help other components, pages etc. For instance [CardService.tsx](/client/src/service/CardService.tsx) is a service for conducting card queries and [RequireAuth](/client/src/service/RequireAuth.tsx) is a wrapper used in [App.tsx](/client/src/App.tsx) for pages like /decks that require users to be authenticated to access. The RequireAuth wrapper automatically checks whether users are authenticated when they attempt to such pages and redirect them to the login page if they are not.
+[Services](/client/src/service/) are used to help other components, pages etc. For instance [CardService.tsx](/client/src/service/CardService.tsx) is a service for conducting card queries and [RequireAuth](/client/src/service/RequireAuth.tsx) is a wrapper used in [App.tsx](/client/src/App.tsx) for pages like /decks that require users to be authenticated to access. The RequireAuth wrapper automatically checks whether users are authenticated when they attempt to such pages and redirect them to the login page if they are not. This is especially handy for future developers of the project as they may want to lock more pages (client-side) than the decks page and doing that is really easy with this setup.
+
+## How to run the backend locally
+
+### Set up local database
+
+1. Copy the contents of the file [allcards3.json from the allcards branch](../../allcards/all_cards/allcards3.json).
+2. Download the [MongoDB Compass GUI](https://www.mongodb.com/try/download/compass) that suits your OS.
+3. Create a new connection to whatever URI you set in your `.env` file. (The next chapter explains how the `.env` file should be set up.) Here's an example of how our connection page looks:
+
+![mongodb://localhost:27017/ connection](/readme/img/mongodb-connection.png){width=35% height=35%}
+
+4. Create a database named "Hearthstone".
+5. Create a collection named "cards" and then click "Add data" within that collection and select "Import Json".
+6. Import the contents of the allcards3.json file you copied earlier.
+7. Create another collection within the "Hearthstone" database called "users" and leave it empty. It will be filled when you begin creating accounts.
+8. Your database is now ready to roll!
+
+### Set up local server
+
+After cloning the project you should run the command `npm i` in [our root folder.](/../../) before navigating to the [the server directory.](/server) You also have to run `npm i` in this server folder to get all required dependencies.
+
+The server can be initialized using the command `npm start`, but beware! There is some setup to do first. To run the server you also need a `.env` file in the server folder created by yourself. We do not store this in Gitlab for security reasons as well as to allow users to select their own ports. Your `.env` file should look like this:
+
+```
+PORT = 4000
+MONGOOSE_URI = mongodb://localhost:27017/Hearthstone
+JWT_SECRET = TotallySecretJWT
+```
+
+You can replace port with whatever port you want to run the server on (although we highly recommend using a port above 1024 due to Linux constraints). `MONGOOSE_URI` will be your MongoDB connect URI which you get by following the database setup guide shown previously. `JWT_SECRET` can be literally anything you want, but we highly recommend choosing something random (and definitely not TotallySecretJWT).
+
+Finally you have to open [custom.config.ts](/client/custom.config.ts) in our [client directory.](/client/) Here you need to change `REACT_BACKEND_URL` to `http://localhost:YOUR_PORT/Hearthstone` and of course you replace `YOUR_PORT` with the port you selected in your `.env` file. This makes the client actually use your server instead of the server currently hosted on the VM. Warning: This also makes the tests in the client run on your local server instead of the VM server which means you must have your local server running when performing tests if you have changed this to your local server.
 
 ## Accessibility
 
@@ -99,23 +105,18 @@ You may wonder "What does this Data Saver even do?" and that's a wonderful quest
 
 ## Let's talk testing!
 
-As the well known saying says "No good component goes untested" so of course we've added some tests to our project. We use [Cypress for our End-To-End tests](https://www.cypress.io/) and [Vitest for our component tests.](https://vitest.dev/) Let's talk end-to-end tests first because it looks super sick when it runs so of course you'd want to try that first!
+As the well known saying says "No good component goes untested" so of course we've added some tests to our project. We use [Cypress for our End-To-End tests](https://www.cypress.io/) and [Vitest for our component tests.](https://vitest.dev/) We've prioritized testing our most vital features through component tests and our end-to-end test runs pretty much everything possible in our project.
 
 ### End to end
 
-Make sure you've done the neccessary steps from [How to run the project](#how-to-run-the-project). Then all you need to do is have the client and server running and finally in the [client folder](/client/) use the command `npx cypress open`. This will lead you to a crazy-looking interface, but no worries, we'll guide you through it.
+Make sure you've done the neccessary steps from [How to run the frontend locally.](#how-to-run-the-frontend-locally) Then we highly recommend you open [custom.config.ts](/client/custom.config.ts) in our client folder. This config allows you to change what username and password will be used by the tests. We delete accounts during testing and therefore **highly recommend** that you come up with a unique username that's not already on the database before running these tests. As mentioned previously, this config file also allows you to choose your local server instead of the VM if you prefer.
 
-The first page that will greet you is this "What's new in Cypress" page. All you need to do here is press the blue **Continue** button!
-![What's new in Cypress Page](/readme/img/cypress-1.png)
+Then all you need to do is have the client and server running (if you're using a local server) and finally in the [client folder](/client/) use the command `npx cypress run`. This will begin the end-to-end tests automatically and log the results throughout.
 
-Next up we have this "Welcome to Cypress" page. As you might've guessed you'll choose "E2E Testing" here as it will say configured. If this page doesn't show "Configured" for "E2E Testing" something has gone wrong when you set up the project and you should probably retrace your steps.
-![Welcome to Cypress page](/readme/img/cypress-2.png)
-
-All right, finally you get some options because it's time to choose a browser! We've tried Chrome, Edge and Electron here and they've all worked well. We've also used Firefox in our localhost even though we haven't tried it in Cypress, it should work as well. We'll leave this choice up to you, but I personally enjoy using Chrome to show other people that my computer has 16 gigs of ram as Chrome hogs it. 😎
-![Choose Browser page](/readme/img/cypress-3.png)
-
-It's time for the most confusing page yet if you're not used to Cypress. On this page you need to click the **spec** button in the middle of the screen and the test will immediately begin running so make sure you have your client and server running before hitting it! After that you can sit back, relax and watch Cypress do all the testing for you! Life as a medstudentvurderingsansvarlig sure is sweet, huh? ![Specs page](/readme/img/cypress-4.png)
+You may get an error if user deletion is not successful. This could happen if the end-to-end tests were stopped prematurely for instance or your user was already taken. All you need to do is rerun the tests using `npx cypress run` and you should be fine.
 
 ### Component testing
 
-Our component tests are so easy to run it's almost hillarious. As long as you've completed the project setup like before all you need to do is be in the [client directory](/client) and write `npm run test`. Just like that our tests will run some nice component tests for you and tell you that they're all fine and dandy! However, if they're not fine and dandy it's quite likely something has gone wrong with your project setup. If you find your project setup to be okay, please give us feedback with some error logs and we'll check it out!
+Our component tests are so easy to run it's almost hillarious. As long as you've completed the project setup like before all you need to do is be in the [client directory](/client) and write `npm run test`. This will run all our Vitest tests even including snapshots!
+
+Just like that our component tests will run for you and tell you that the components are all fine and dandy! However, if they're not fine and dandy it's quite likely something has gone wrong with your project setup. If you find your project setup to be okay, please give us feedback with some error logs and we'll check it out!
