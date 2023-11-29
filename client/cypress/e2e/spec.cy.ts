@@ -1,152 +1,186 @@
-import {beforeEach} from "vitest";
+import "cypress-localstorage-commands";
 
 describe('E2E test', () => {
+
   beforeEach(()=> {
+    cy.restoreLocalStorage();
     cy.visit('/').viewport(1920, 1080).wait(1000);
     cy.wait(500);
   });
-  it('filters',() => {
-    /* ==== Generated with Cypress Studio ==== */
-    cy.get('#pr_id_1_2 > :nth-child(1)').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0_0 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2 > :nth-child(1)').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_1 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_1_2 > .p-menuitem-link').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2 > :nth-child(1) > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_2 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_2_0 > .p-menuitem-link').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2 > :nth-child(1) > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0 > [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0_0 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2 > :nth-child(1) > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0_1 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2 > :nth-child(1) > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_2 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_2_0 > .p-menuitem-link').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2 > :nth-child(1) > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_1 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_1_2 > .p-menuitem-link').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2 > :nth-child(1) > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0 > [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_2_0_1 > .p-menuitem-link').click();
-    cy.wait(1000);
+
+  afterEach(() => {
+    cy.saveLocalStorage();
   });
-  it('sort',()=> {
-    cy.get('[data-testid="sort-menuitem"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_0 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_0_0 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('[data-testid="sort-menuitem"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_0 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_0_1 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('[data-testid="sort-menuitem"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_1 > [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_1_1 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('[data-testid="sort-menuitem"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_2 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('[data-testid="attack-htl"]').click();
-    cy.wait(1000);
-    cy.get('[data-testid="sort-menuitem"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_3 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_3_0 > .p-menuitem-link > .p-menuitem-icon').click();
-    cy.wait(1000);
-    cy.get('[data-testid="sort-menuitem"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_3 > [aria-haspopup="true"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_3_1 > .p-menuitem-link').click();
-    cy.wait(1000);
-    cy.get('[data-testid="sort-menuitem"]').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_1 > [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('#pr_id_1_3_1_0 > .p-menuitem-link > .p-menuitem-icon').click();
-    cy.wait(1000);
+
+
+
+  it("Reset current state of user", () => {
+    cy.getToken('cypress@testing', 'cypress@testing').then((response) => {
+      cy.log('Response ' + response.error);
+      if (!response.error) {
+        cy.deleteCurrentUser(response.token);
+      }
+    });
+    cy.clearLocalStorage();
   });
-  it('login', ()=> {
-    cy.get('[data-testid="loginUsername"]').clear('cypress@testing');
-    cy.get('[data-testid="loginUsername"]').type('cypress@testing');
-    cy.wait(500);
-    cy.get('[data-testid="loginPassword"]').clear('T');
-    cy.get('[data-testid="loginPassword"]').type('Test');
-    cy.wait(500);
-    cy.get('[data-testid="loginSubmit"]').click();
-    cy.wait(1000);
+
+  it('signup', ()=> {
+      cy.get('.p-menuitem-text').contains('Profile').click();
+      cy.get('.p-menuitem-text').contains('Login').click();
+      cy.get('a.font-medium.no-underline.ml-2.text-blue-500.cursor-pointer').contains('Create today!').click();
+      cy.get('[data-testid="createAccountUsername"]').clear();
+      cy.get('[data-testid="createAccountPassword"]').clear();
+      cy.get('[data-testid="createAccountUsername"]').type('cypress@testing');
+      cy.get('[data-testid="createAccountPassword"]').type('cypress@testing');
+      cy.get('.p-checkbox-box').click();
+      cy.wait(500);
+      cy.get('.p-button-label.p-c').contains('Create account').click();
+      cy.wait(1000);
+      cy.saveLocalStorage("SignupState");
   });
-    /* ==== End Cypress Studio ==== */
-    /* ==== Generated with Cypress Studio ==== */
+
   it('test decks', ()=> {
-    cy.get('#pr_id_1_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.restoreLocalStorage("SignupState");
+    cy.window().then((win) => {
+      const token = win.localStorage.getItem('token');
+      cy.log('Generated jwt token: ' + token);
+    });
+    cy.get('.p-menuitem-text').contains('Decks').click();
     cy.wait(1000);
     cy.get('[data-testid="newDeckButton"] > .p-2').click();
     cy.wait(1000);
-    cy.get('#deckName').clear('T');
+    cy.get('#deckName').clear();
     cy.get('#deckName').type('Testing deck');
     cy.wait(500);
     cy.get('[data-testid="createDeckButton"] > .p-button-label').click();
     cy.wait(1000);
-    cy.get('#pr_id_1_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.get('#CFM_648tbtn > .p-button-icon').click();
     cy.wait(1000);
     cy.get('.p-button-sm').click();
     cy.wait(1000);
-    cy.get('#pr_id_1_1 > .p-menuitem-link').click();
+    cy.get('#pr_id_2_1 > .p-menuitem-link').click();
     cy.wait(1000);
     cy.get('.p-button-label').click();
     cy.wait(1000);
-    cy.get('#pr_id_1_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
-    cy.get('#pr_id_1_6 > [aria-haspopup="true"]').click();
+    cy.get('#pr_id_2_6 > [aria-haspopup="true"]').click();
     cy.wait(1000);
-    cy.get('#pr_id_1_6_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_6_0 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
-    cy.get('#pr_id_1_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_1 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
   });
+  
+
+
+  it('filters',() => {
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get('#pr_id_2_2 > :nth-child(1)').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2 > :nth-child(1)').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_1 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_1_2 > .p-menuitem-link').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_2 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_2_0 > .p-menuitem-link').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_2 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_2_0 > .p-menuitem-link').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_1 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_1_2 > .p-menuitem-link').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2 > :nth-child(1) > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_2_0_1 > .p-menuitem-link').click();
+    cy.wait(1000);
+  });
+  it('sort',()=> {
+    cy.get('[data-testid="sort-menuitem"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_0 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_0_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('[data-testid="sort-menuitem"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_0 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_0_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('[data-testid="sort-menuitem"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_1 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_1_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('[data-testid="sort-menuitem"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_2 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('[data-testid="attack-htl"]').click();
+    cy.wait(1000);
+    cy.get('[data-testid="sort-menuitem"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_3 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_3_0 > .p-menuitem-link > .p-menuitem-icon').click();
+    cy.wait(1000);
+    cy.get('[data-testid="sort-menuitem"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_3 > [aria-haspopup="true"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_3_1 > .p-menuitem-link').click();
+    cy.wait(1000);
+    cy.get('[data-testid="sort-menuitem"]').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_1 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('#pr_id_2_3_1_0 > .p-menuitem-link > .p-menuitem-icon').click();
+    cy.wait(1000);
+  });
+  
+
+ 
   it('add card to deck', ()=> {
-    cy.get('#pr_id_1_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.restoreLocalStorage("SignupState");
+    cy.get('#pr_id_2_1 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.get('.p-button-label').click();
     cy.wait(1000);
-    cy.get('#pr_id_1_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.window().then((win) => {
       const event = new MouseEvent('mousemove', {
@@ -167,39 +201,36 @@ describe('E2E test', () => {
     cy.wait(1000);
   });
   it('delete deck',()=>{
-    cy.get('#pr_id_1_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.restoreLocalStorage("SignupState");
+    cy.get('#pr_id_2_1 > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.get('.p-button-label').click();
     cy.wait(1000);
     cy.get('[data-testid="newDeckButton"] > .p-2').click();
     cy.wait(500);
-    cy.get('#deckName').clear('D');
-    cy.get('#deckName').type('Delete');
+    cy.get('#deckName').type('DeleteDeckTest');
     cy.wait(500);
     cy.get('.p-dialog-header').click();
     cy.wait(1000);
     cy.get('[data-testid="createDeckButton"] > .p-button-icon').click();
     cy.wait(1000);
     cy.get('#TSC_955tbtn > .p-button-icon').click();
-    cy.get('.p-row-odd > :nth-child(2) > .p-button-sm > .p-button-label').click();
-    cy.get('#deckMenu_1 > .card > .p-menuitem-link > .p-button-label').click();
-    cy.get('#deckMenu_1 > .card > .pi').click();
-    cy.get('.p-menuitem-link > .p-button-label').click();
-    cy.get('#pr_id_1_0 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#pr_id_1_6 > [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.get('#pr_id_1_6_2 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#pr_id_1_6 > [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.get('#pr_id_1_6_3 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#pr_id_1_1 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.wait(1000);
+    cy.get('button[aria-label="DeleteDeckTest"]').siblings('i.pi.pi-trash').click();
+    cy.wait(1000);
+
+    cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_6 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.get('#pr_id_2_6_2 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_6 > [aria-haspopup="true"] > .p-menuitem-text').click();
+    cy.get('#pr_id_2_6_3 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_1 > .p-menuitem-link > .p-menuitem-text').click();
     cy.get('.p-button-label').click();
     cy.get('[aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.get('#pr_id_1_6_2 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#pr_id_1_6 > [aria-haspopup="true"]').click();
-    cy.get('#pr_id_1_6_3 > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#pr_id_1_0 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_6_2 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_6 > [aria-haspopup="true"]').click();
+    cy.get('#pr_id_2_6_3 > .p-menuitem-link > .p-menuitem-text').click();
+    cy.get('#pr_id_2_0 > .p-menuitem-link > .p-menuitem-text').click();
     /* ==== End Cypress Studio ==== */
-  });
-  after(() => {
-    cy.deleteCurrentUser();
   });
 });
