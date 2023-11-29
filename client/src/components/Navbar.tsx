@@ -8,6 +8,8 @@ import { setDataSaver } from '../service/cards/dataSaverSlice';
 import { useLocation } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import { PrimeReactContext } from 'primereact/api';
+import { Button } from 'primereact/button';
+import { showDecks } from '../service/navbar/deckSlice';
 
 export default function Navbar() {
   // Gets filters from redux store
@@ -23,6 +25,7 @@ export default function Navbar() {
   const location = useLocation();
   const page = location.pathname == '/';
   const deckPage = location.pathname == '/decks';
+  const decksShown = useAppSelector((state) => state.deck.triggerShowDeckEvent);
 
   //Dark mode handling
   const { changeTheme } = useContext(PrimeReactContext);
@@ -459,9 +462,15 @@ export default function Navbar() {
     },
   ];
 
+  const end = <Button onClick={() => dispatch(showDecks(true))}>{decksShown ? 'Hide decks' : 'Show decks'}</Button>;
+
   return (
     <div className="card relative z-2">
-      <Menubar model={items.filter((item) => item !== null)} />
+      {location.pathname == '/decks' ? (
+        <Menubar model={items.filter((item) => item !== null)} end={end}></Menubar>
+      ) : (
+        <Menubar model={items.filter((item) => item !== null)}></Menubar>
+      )}
     </div>
   );
 }
