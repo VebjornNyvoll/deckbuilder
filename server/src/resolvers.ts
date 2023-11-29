@@ -16,8 +16,8 @@ const resolvers = {
       }
       return user;
     },
-    users: async (parent, args) => await User.find({}),
-    cards: async (parent, args) => await Cards.find({}),
+    users: async () => await User.find({}),
+    cards: async () => await Cards.find({}),
     getPaginatedCards: async (parent, args) => {
       const { limit = 10, skip = 0 } = args;
       const cards = await Cards.find().skip(skip).limit(limit);
@@ -79,7 +79,7 @@ const resolvers = {
 
     filteredCards: async (parent, args) => {
       const { limit, skip, sortBy, filters } = args;
-      let query = {};
+      const query = {};
 
       if (filters && filters.length > 0) {
         filters.forEach((filter) => {
@@ -110,7 +110,7 @@ const resolvers = {
 
       try {
         // Sorting logic
-        let sortOption = {};
+        const sortOption = {};
         if (sortBy) {
           sortOption[sortBy.field] = sortBy.order;
         }

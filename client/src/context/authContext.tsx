@@ -10,10 +10,10 @@ if (
   localStorage.getItem('token') != 'undefined' &&
   localStorage.getItem('token') != 'null'
 ) {
-  const token = localStorage.getItem('token');
+  const token = '' + localStorage.getItem('token');
   const decodedToken = jwtDecode<JwtPayload>(token);
 
-  if (decodedToken.exp * 1000 < Date.now()) {
+  if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
     localStorage.removeItem('token');
   } else {
     initialState.user = decodedToken;
@@ -22,8 +22,9 @@ if (
 
 const AuthContext = createContext({
   user: null,
-  login: (userData: any) => {},
+  login: () => {},
   logout: () => {},
+  token: null,
 });
 
 function authReducer(state, action) {
@@ -46,7 +47,7 @@ function authReducer(state, action) {
 function AuthProvider(props) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const login = (userData) => {
+  const login = (userData: { token: string }) => {
     localStorage.setItem('token', userData.token);
     dispatch({
       type: 'LOGIN',
