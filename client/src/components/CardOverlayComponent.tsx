@@ -93,7 +93,7 @@ export function CardOverlayComponent(props: { cardId: string }) {
   };
 
   if (loading) return <p data-testid={cardId}>Loading decks...</p>;
-  if (error) return <p>Error loading decks</p>;
+  if (error) return <p>Make sure to log in to find your decks!</p>;
 
   const nameBodyTemplate = (rowData: Deck) => <span style={{ cursor: 'pointer' }}>{rowData.deckName}</span>;
 
@@ -108,7 +108,7 @@ export function CardOverlayComponent(props: { cardId: string }) {
       }}
     >
       <Toast ref={toast} />
-      <DataTable sortOrder={-1} sortField={'name'} value={decks} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
+      <DataTable sortOrder={-1} emptyMessage='No decks found. Go to "Decks" to create one.' sortField={'name'} value={decks} tableStyle={{ width: '100%', maxWidth: '30rem' }}>
         <Column sortable field="name" header="Deck" body={nameBodyTemplate}></Column>
         <Column body={addButtonTemplate}></Column>
       </DataTable>

@@ -172,7 +172,7 @@ export default function Deck() {
         </Dialog>
 
         <div className="w-12">
-          <DataView value={cards} itemTemplate={itemTemplate} layout={layout} />
+          <DataView value={cards} emptyMessage='Please select a deck from the sidebar.' itemTemplate={itemTemplate} layout={layout} />
         </div>
       </div>
       {errors.map(function (error) {
