@@ -38,7 +38,6 @@ export function CardOverlayComponent(props: { cardId: string }) {
     id: string;
   }
 
-
   const { loading, error, data } = useQuery(GET_DECKS);
   const decks =
     data?.user?.decks?.map((deck: Deck) => ({
