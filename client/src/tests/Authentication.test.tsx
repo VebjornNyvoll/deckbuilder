@@ -27,6 +27,9 @@ const initialState = {
   cards: {
     cards: [],
   },
+  deck: {
+    triggerShowDeckEvent: false,
+  },
 };
 const mockStore = configureStore();
 const store = mockStore(initialState);
