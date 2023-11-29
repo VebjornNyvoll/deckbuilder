@@ -122,6 +122,7 @@ export default function Navbar() {
 
   const items = [
     {
+      className: location.pathname == '/' ? 'bg-gray-100 shadow-1' : '',
       label: 'Home',
       icon: <i className="pi pi-fw pi-home" />,
       command: () => {
@@ -129,6 +130,7 @@ export default function Navbar() {
       },
     },
     {
+      className: deckPage ? 'bg-gray-100 shadow-1' : '',
       label: 'Decks',
       icon: <i className="pi pi-fw pi-database" />,
       command: () => {
@@ -390,6 +392,7 @@ export default function Navbar() {
       template: searchBar,
     },
     {
+      className: location.pathname == '/login' || location.pathname == '/create-account' ? 'bg-gray-100 shadow-1' : '',
       label: 'Profile',
       icon: <i className="pi pi-fw pi-user" />,
       items: [
