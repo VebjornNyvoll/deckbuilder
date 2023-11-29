@@ -55,18 +55,23 @@ export default function Navbar() {
   }
   const activeFilterColor = 'bg-teal-100';
 
-  //Searchbar handling
+  //Searchbar handling  
   const handleSearchChange = (e: { target: { value: string } }) => {
     addFilter({ field: 'name', values: [e.target.value] });
   };
+  
   const debouncedResults = useMemo(() => {
     return debounce(handleSearchChange, 300);
   }, [handleSearchChange]);
+
   useEffect(() => {
     return () => {
       debouncedResults.cancel();
     };
   });
+  const searchBar = (
+    <InputText id="search"  placeholder="Search" type="search" onChange={debouncedResults}   />
+    );
 
   //Filterchange handling
   function addFilter(filter: { field: string; values: string[] }) {
@@ -80,8 +85,18 @@ export default function Navbar() {
     dispatch({ type: 'filters/addFilter', payload: filter });
   }
 
+  const resetFilters = () => {
+    setSort('name', sortOrder.ASC)
+    dispatch({ type: 'filters/clearFilters'});
+    const searchBarById = document.getElementById('search');
+    if (searchBarById instanceof HTMLInputElement) {
+      searchBarById.value = '';
+    }
+  };
+
   const onLogout = () => {
     logout();
+    resetFilters();
     navigate('/');
   };
 
@@ -107,7 +122,7 @@ export default function Navbar() {
       label: 'Home',
       icon: <i className="pi pi-fw pi-home" />,
       command: () => {
-        navigate('/');
+        location.pathname == '/'? resetFilters() : navigate('/'); // Reset filters if already on home page
       },
     },
     {
@@ -242,6 +257,17 @@ export default function Navbar() {
             },
           ],
         },
+        {
+          separator: true,
+        },
+        {
+          disabled: Object.keys(filters).length > 0 ? false : true,
+          label: 'Reset filters',
+          icon: <i className="pi pi-fw pi-filter-slash" />,
+          command: () => {
+            resetFilters();
+          },
+        }
       ],
     },
     {
@@ -357,7 +383,8 @@ export default function Navbar() {
     {
       visible: page,
       label: 'Searchbar',
-      template: <InputText placeholder="Search" type="search" onChange={debouncedResults} />,
+      
+      template: searchBar,
     },
     {
       label: 'Profile',
