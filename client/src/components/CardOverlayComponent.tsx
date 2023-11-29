@@ -82,7 +82,7 @@ export const CardOverlayComponent = ({ cardId }) => {
   };
 
   if (loading) return <p data-testid={cardId}>Loading decks...</p>;
-  if (error) return <p>Make sure to have a user first!</p>;
+  if (error) return <p>Make sure to log in to find your decks!</p>;
 
   const nameBodyTemplate = (rowData) => <span style={{ cursor: 'pointer' }}>{rowData.name}</span>;
 
