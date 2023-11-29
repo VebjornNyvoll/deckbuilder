@@ -8,7 +8,7 @@ import { setDataSaver } from '../service/cards/dataSaverSlice';
 import { useLocation } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import { PrimeReactContext } from 'primereact/api';
-import './NavbarIcon.css';
+import './navbarIcon.css';
 
 export default function Navbar() {
   // Gets filters from redux store
@@ -55,11 +55,11 @@ export default function Navbar() {
   }
   const activeFilterColor = 'bg-teal-100';
 
-  //Searchbar handling
+  //Searchbar handling  
   const handleSearchChange = (e: { target: { value: string } }) => {
     addFilter({ field: 'name', values: [e.target.value] });
   };
-
+  
   const debouncedResults = useMemo(() => {
     return debounce(handleSearchChange, 300);
   }, [handleSearchChange]);
@@ -69,7 +69,9 @@ export default function Navbar() {
       debouncedResults.cancel();
     };
   });
-  const searchBar = <InputText id="search" placeholder="Search" type="search" onChange={debouncedResults} />;
+  const searchBar = (
+    <InputText id="search"  placeholder="Search" type="search" onChange={debouncedResults}   />
+    );
 
   //Filterchange handling
   function addFilter(filter: { field: string; values: string[] }) {
@@ -84,8 +86,8 @@ export default function Navbar() {
   }
 
   const resetFilters = () => {
-    setSort('name', sortOrder.ASC);
-    dispatch({ type: 'filters/clearFilters' });
+    setSort('name', sortOrder.ASC)
+    dispatch({ type: 'filters/clearFilters'});
     const searchBarById = document.getElementById('search');
     if (searchBarById instanceof HTMLInputElement) {
       searchBarById.value = '';
@@ -124,7 +126,7 @@ export default function Navbar() {
       label: 'Home',
       icon: <i className="pi pi-fw pi-home" />,
       command: () => {
-        location.pathname == '/' ? resetFilters() : navigate('/'); // Reset filters if already on home page
+        location.pathname == '/'? resetFilters() : navigate('/'); // Reset filters if already on home page
       },
     },
     {
@@ -270,7 +272,7 @@ export default function Navbar() {
           command: () => {
             resetFilters();
           },
-        },
+        }
       ],
     },
     {
@@ -386,7 +388,7 @@ export default function Navbar() {
     {
       visible: page,
       label: 'Searchbar',
-
+      
       template: searchBar,
     },
     {
