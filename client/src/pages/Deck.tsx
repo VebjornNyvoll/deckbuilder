@@ -87,6 +87,7 @@ export default function Deck() {
     });
   });
 
+  // footer for creating a new deck
   const footerContent = (
     <div>
       <Button
@@ -108,6 +109,7 @@ export default function Deck() {
   );
 
   const items = [
+    //Show all decks available
     {
       label: 'My decks',
       items: deckData.map((deck) => ({

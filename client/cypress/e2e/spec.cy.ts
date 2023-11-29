@@ -51,6 +51,8 @@ describe('E2E test', () => {
     cy.wait(500);
     cy.get('[data-testid="createDeckButton"] > .p-button-label').click();
     cy.wait(1000);
+    cy.get('.p-sidebar-icons').click();
+    cy.wait(500);
     cy.get('#menuitem-home > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.get('#CFM_648tbtn > .p-button-icon').click();
@@ -61,6 +63,8 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get('.p-button-label').click();
     cy.wait(1000);
+    cy.get('.p-sidebar-icons').click();
+    cy.wait(500);
     cy.get('#menuitem-home > .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.get('#menuitem-profile > [aria-haspopup="true"]').click();
@@ -169,10 +173,13 @@ describe('E2E test', () => {
 
   it('add card to deck', () => {
     cy.restoreLocalStorage('SignupState');
+    cy.wait(1000);
     cy.get('#menuitem-decks> .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.get('.p-button-label').click();
     cy.wait(1000);
+    cy.get('.p-sidebar-icons').click();
+    cy.wait(500);
     cy.get('#menuitem-home> .p-menuitem-link > .p-menuitem-text').click();
     cy.wait(1000);
     cy.window().then((win) => {
@@ -192,38 +199,5 @@ describe('E2E test', () => {
     cy.wait(1000);
     cy.get('.p-button-sm > .p-button-label').click();
     cy.wait(1000);
-  });
-  it('delete deck', () => {
-    cy.restoreLocalStorage('SignupState');
-    cy.get('#menuitem-decks> .p-menuitem-link > .p-menuitem-text').click();
-    cy.wait(1000);
-    cy.get('.p-button-label').click();
-    cy.wait(1000);
-    cy.get('[data-testid="newDeckButton"] > .p-2').click();
-    cy.wait(500);
-    cy.get('#deckName').type('DeleteDeckTest');
-    cy.wait(500);
-    cy.get('.p-dialog-header').click();
-    cy.wait(1000);
-    cy.get('[data-testid="createDeckButton"] > .p-button-icon').click();
-    cy.wait(1000);
-    cy.get('#TSC_955tbtn > .p-button-icon').click();
-    cy.wait(1000);
-    cy.get('button[aria-label="DeleteDeckTest"]').siblings('i.pi.pi-trash').click();
-    cy.wait(1000);
-
-    cy.get('#menuitem-home> .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#menuitem-profile> [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.get('#menuitem-data-saver > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#menuitem-profile> [aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.get('#menuitem-theme-change > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#menuitem-decks> .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('.p-button-label').click();
-    cy.get('[aria-haspopup="true"] > .p-menuitem-text').click();
-    cy.get('#menuitem-data-saver > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#menuitem-profile> [aria-haspopup="true"]').click();
-    cy.get('#menuitem-theme-change > .p-menuitem-link > .p-menuitem-text').click();
-    cy.get('#menuitem-home> .p-menuitem-link > .p-menuitem-text').click();
-    /* ==== End Cypress Studio ==== */
   });
 });

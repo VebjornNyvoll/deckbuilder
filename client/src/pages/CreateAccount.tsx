@@ -63,7 +63,7 @@ function CreateAccount() {
       navigate('/');
     },
     onError({ graphQLErrors }) {
-      setErrors([graphQLErrors.toString()]);
+      setErrors([graphQLErrors[0].message]);
     },
     variables: { username: values.username, password: values.password },
   });
