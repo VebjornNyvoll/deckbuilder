@@ -55,18 +55,23 @@ export default function Navbar() {
   }
   const activeFilterColor = 'bg-teal-100';
 
-  //Searchbar handling
+  //Searchbar handling  
   const handleSearchChange = (e: { target: { value: string } }) => {
     addFilter({ field: 'name', values: [e.target.value] });
   };
+  
   const debouncedResults = useMemo(() => {
     return debounce(handleSearchChange, 300);
   }, [handleSearchChange]);
+
   useEffect(() => {
     return () => {
       debouncedResults.cancel();
     };
   });
+  const searchBar = (
+    <InputText  placeholder="Search" type="search" onChange={debouncedResults}   />
+    );
 
   //Filterchange handling
   function addFilter(filter: { field: string; values: string[] }) {
@@ -80,8 +85,17 @@ export default function Navbar() {
     dispatch({ type: 'filters/addFilter', payload: filter });
   }
 
+  const resetFilters = () => {
+    Object.keys(filters).forEach((filter) => {
+      filters[filter].forEach((value) => {
+        dispatch({ type: 'filters/removeFilter', payload: { field: filter, values: [value] } });
+      });
+    });
+  };
+
   const onLogout = () => {
     logout();
+    resetFilters();
     navigate('/');
   };
 
@@ -107,6 +121,8 @@ export default function Navbar() {
       label: 'Home',
       icon: <i className="pi pi-fw pi-home" />,
       command: () => {
+        setSort('name', sortOrder.ASC);
+        resetFilters();
         navigate('/');
       },
     },
@@ -242,6 +258,16 @@ export default function Navbar() {
             },
           ],
         },
+        {
+          separator: true,
+        },
+        {
+          label: 'Reset filters',
+          icon: <i className="pi pi-fw pi-filter-slash" />,
+          command: () => {
+            resetFilters();
+          },
+        }
       ],
     },
     {
@@ -357,7 +383,8 @@ export default function Navbar() {
     {
       visible: page,
       label: 'Searchbar',
-      template: <InputText placeholder="Search" type="search" onChange={debouncedResults} />,
+      
+      template: searchBar,
     },
     {
       label: 'Profile',
