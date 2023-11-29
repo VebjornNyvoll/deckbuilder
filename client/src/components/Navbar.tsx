@@ -29,7 +29,7 @@ export default function Navbar() {
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     // Load dark mode preference from localStorage on component mount
     const storedDarkMode = localStorage.getItem('darkMode');
-    return storedDarkMode !== null ? JSON.parse(storedDarkMode) : false;
+    return storedDarkMode != null ? JSON.parse(storedDarkMode) : false;
   });
   useEffect(() => {
     // Save dark mode preference to localStorage when it changes
@@ -38,9 +38,9 @@ export default function Navbar() {
   useEffect(() => {
     // Check darkMode on component mount and call changeTheme if true
     const themeLink = document.getElementById('theme-link');
-    if (darkMode && themeLink instanceof HTMLAnchorElement) {
+    if (darkMode && themeLink instanceof HTMLLinkElement) {
       themeLink.href = '/themes/viva-dark/theme.css';
-    } else if (themeLink instanceof HTMLAnchorElement) {
+    } else if (themeLink instanceof HTMLLinkElement) {
       themeLink.href = '/themes/lara-light-indigo/theme.css';
     }
   }, [darkMode]);
